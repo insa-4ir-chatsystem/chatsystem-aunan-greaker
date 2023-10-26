@@ -11,14 +11,14 @@ public class ContactList {
     public ContactList() {
         contactDict = new Hashtable<>();
 
-        //Step 1: Send UDP broacast to network
+        //Step 1: Send UDP broadcast to network
 
         //Step 2: Listen to response and add replies to contactDict
         
     }
 
     public void updateContactList() {
-        //Step 1: Send UDP broacast to network
+        //Step 1: Send UDP broadcast to network
 
         //Step 2: Listen to response and add replies to contactDict
     }
@@ -40,7 +40,7 @@ public class ContactList {
         return names;
     }
 
-    public ArrayList<String> getAllIPs() {
+    public ArrayList<String> getAllIps() {
         ArrayList<String> ips = new ArrayList<>();
         Enumeration<String> k = contactDict.elements();
         while (k.hasMoreElements()) {
@@ -49,7 +49,7 @@ public class ContactList {
         return ips;
     }
 
-    public String getIP(String name) {
+    public String getIp(String name) {
         return contactDict.get(name);
     }
 
