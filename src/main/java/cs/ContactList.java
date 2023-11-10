@@ -10,15 +10,14 @@ public class ContactList {
 
     public ContactList() {
         contactDict = new Hashtable<>();
-
-        //Step 1: Send UDP broadcast to network
-
-        //Step 2: Listen to response and add replies to contactDict
+        this.updateContactList();
         
     }
 
     public void updateContactList() {
         //Step 1: Send UDP broadcast to network
+    		// All Connected users should reply with their username and ip
+    	
 
         //Step 2: Listen to response and add replies to contactDict
     }
