@@ -8,7 +8,13 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 public class ChooseUsernameGUI {
+	public static String myUsername;
 	private JTextField usernameField;
+	
+	public static boolean AvailableUsername(String username) {
+		ContactList contactList = new ContactList();
+        return contactList.getAllNames().contains(username);
+	}
 	
 	public ChooseUsernameGUI() {
 		final JFrame frame = new JFrame();
@@ -23,17 +29,13 @@ public class ChooseUsernameGUI {
 
 	    loginButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-	            String username = usernameField.getText();
-	            ArrayList<String> contactList = new ArrayList<String> ();
-	            /*contactList = new ContactList();
-	            boolean usernameTaken = contactList.getAllNames.contains(username);
-	            if (!usernameTaken && username != "") {
+            	myUsername = usernameField.getText();
+	            if (!AvailableUsername(myUsername) && myUsername != "") {
 	            	frame.dispose();
-	            	new ChatSystemGUI(username);
+	            	new ChatSystemGUI(myUsername);
 	            } else {
 	                JOptionPane.showMessageDialog(frame, "This username is already taken, please choose another one");	            	            
 	            }
-	            */
 	        }
 	    });
 	    
