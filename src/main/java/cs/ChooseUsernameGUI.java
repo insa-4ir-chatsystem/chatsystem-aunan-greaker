@@ -24,16 +24,14 @@ public class ChooseUsernameGUI {
 	    loginButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
 	            String username = usernameField.getText();
-	            ArrayList<String> contactList = new ArrayList<String> ();
-	            /*contactList = new ContactList();
-	            boolean usernameTaken = contactList.getAllNames.contains(username);
+	            ContactList contactList = new ContactList();
+	            boolean usernameTaken = contactList.getAllNames().contains(username);
 	            if (!usernameTaken && username != "") {
 	            	frame.dispose();
 	            	new ChatSystemGUI(username);
 	            } else {
 	                JOptionPane.showMessageDialog(frame, "This username is already taken, please choose another one");	            	            
 	            }
-	            */
 	        }
 	    });
 	    
