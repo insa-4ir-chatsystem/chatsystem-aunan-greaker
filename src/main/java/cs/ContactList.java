@@ -1,5 +1,6 @@
 package cs;
 
+import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.Enumeration;
@@ -17,9 +18,23 @@ public class ContactList {
     public void updateContactList() {
         //Step 1: Send UDP broadcast to network
     		// All Connected users should reply with their username and ip
-    	
+    	try {
+			(new UdpBroadcastSender(8888)).start();
+		} catch (SocketException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
         //Step 2: Listen to response and add replies to contactDict
+    	try {
+			UdpReplyListener listener = new UdpReplyListener(8888);
+			// Might need to add a wait/sleep here
+			listener.quit();
+			listener.getUsers();
+		} catch (SocketException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
 
     public void addContact(String name, String ip) {
