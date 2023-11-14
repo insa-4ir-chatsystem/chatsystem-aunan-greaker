@@ -9,14 +9,16 @@ import java.util.Hashtable;
 import org.junit.Test;
 
 public class UdpReplyListenerTest {
-
+	int timeoutMS = 5000;
 	@Test
 	public void zeroReplyTest() {
 		Dictionary<String, String> expected = new Hashtable<>();
 		UdpReplyListener listener = null;
 		try {
-			listener = new UdpReplyListener(8888);
-			listener.quit();
+			listener = new UdpReplyListener(8888, timeoutMS);
+			listener.start();
+			//Thread.sleep(timeoutMS);
+			//listener.quit();
 		} catch (SocketException e) {
 			// TODO Auto-generated catch block
 			fail(e.toString());
@@ -30,10 +32,11 @@ public class UdpReplyListenerTest {
 		expected.put("Daniel", "127.0.0.1");
 		UdpReplyListener listener = null;
 		try {
-			listener = new UdpReplyListener(8888);
-			Thread.sleep(5000);
-			listener.quit();
-		} catch (SocketException | InterruptedException e) {
+			listener = new UdpReplyListener(8888, timeoutMS);
+			listener.start();
+			//Thread.sleep(timeoutMS+ 1000);
+			//listener.quit();
+		} catch (SocketException e) {
 			// TODO Auto-generated catch block
 			fail(e.toString());
 		}

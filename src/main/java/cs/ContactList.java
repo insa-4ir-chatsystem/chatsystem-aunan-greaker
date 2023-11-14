@@ -27,10 +27,8 @@ public class ContactList {
 
         //Step 2: Listen to response and add replies to contactDict
     	try {
-			UdpReplyListener listener = new UdpReplyListener(8888);
-			// Might need to add a wait/sleep here
-			listener.quit();
-			listener.getUsers();
+			UdpReplyListener listener = new UdpReplyListener(8888, 1000);
+			listener.getUsers(); // Sleeps until ReplyListener socket timesout
 		} catch (SocketException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
