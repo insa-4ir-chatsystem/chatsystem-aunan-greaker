@@ -9,18 +9,18 @@ import java.util.Dictionary;
 import java.util.Hashtable;
 
 public class UdpReplyListener extends Thread {
-	private Dictionary<String, String> users;
+	private Dictionary<String, String> replies;
 	private DatagramSocket socket;
 	private boolean listening;
 	
 	public UdpReplyListener(int port, int timeoutMS) throws SocketException {
 		listening = true;
-		users = new Hashtable<>();
+		replies = new Hashtable<>();
 		socket = new DatagramSocket(port);
 		socket.setSoTimeout(timeoutMS);
 	}
 	
-	public Dictionary<String, String> getUsers(){
+	public Dictionary<String, String> getReplies(){
 		while (listening) {
 			try {
 				Thread.sleep(100);
@@ -29,31 +29,25 @@ public class UdpReplyListener extends Thread {
 				e.printStackTrace();
 			}
 		}
-		return users;
+		return this.replies;
 	}
 	
 		
 	@Override
 	public void run() {
 		while(listening) {
-			byte[] buf = new byte[500];
+			byte[] buf = new byte[20];
 			DatagramPacket inPacket = new DatagramPacket(buf, buf.length);
 			try {
-				System.out.println("Listening for packet");
 				socket.receive(inPacket); // Blocks until packet received
-				System.out.println("Packet received");
-				users.put(inPacket.getData().toString(), inPacket.getAddress().toString());
+				replies.put(new String(inPacket.getData(), 0, inPacket.getLength()), inPacket.getAddress().getHostAddress());
 			} catch (SocketTimeoutException e) {
-				System.out.println("SocketTimedout");
 				listening = false;
 			} catch (IOException e) {
 				e.printStackTrace();
 				listening = false;
 			}
-			
-			
 		}
 		socket.close();
-		System.out.println("Socket closed");
 	}
 }

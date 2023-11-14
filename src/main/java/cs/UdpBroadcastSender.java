@@ -3,19 +3,20 @@ import java.net.*;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ArrayList;
 import java.io.IOException;
 
 public class UdpBroadcastSender extends Thread{
 	Enumeration<NetworkInterface> networkinterfaces = NetworkInterface.getNetworkInterfaces();
-	List<InetAddress> broadcastAddresseList; // List of all BroadcastAddresses we need to send UDP to
 	private int port;
 	private DatagramSocket socket;
-	private byte[] outBuf = new byte[256];
+	private byte[] outBuf;
 	
-	// Sends and Udp packet on all broadcast addresses possible on port specified in parameter.
-	public UdpBroadcastSender(int port) throws SocketException {
+	// Sends and Udp packet with msg on all broadcast addresses possible on port specified in parameter.
+	public UdpBroadcastSender(String msg, int port) throws SocketException {
 		this.port = port;
-		socket = new DatagramSocket(8888); // Corresponds to sender socket port used for sending the broadcast, not to be confused with receiving port
+		this.outBuf = msg.getBytes();
+		socket = new DatagramSocket(9999); // Corresponds to sender socket port used for sending the broadcast, not to be confused with receiving port
 		socket.setBroadcast(true); //Enables Broadcasting
 	}
 	
@@ -24,18 +25,18 @@ public class UdpBroadcastSender extends Thread{
 		// Gets the broadcast addresses from all interfaceAddresses in all the networkInterfaces
 		while(networkinterfaces.hasMoreElements()) {
 			Iterator<InterfaceAddress> interfaceAddressIter = networkinterfaces.nextElement().getInterfaceAddresses().iterator();
-			interfaceAddressIter.forEachRemaining((interfaceAddress) ->
-			broadcastAddresseList.add(interfaceAddress.getBroadcast()));
+			interfaceAddressIter.forEachRemaining((interfaceAddress) -> {
+				try {
+					socket.send(new DatagramPacket(outBuf, outBuf.length, interfaceAddress.getBroadcast(), port));
+					System.out.println(interfaceAddress.getBroadcast().toString());
+				} catch (IllegalArgumentException e) {
+					// Broadcast address likely was null because of IPv6 an interface
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			});
 		}
-		// Sends a broadcastPacket on all broadcast addresses in broadcastAddresseList
-		Iterator<InetAddress> broadCastAddressIter = broadcastAddresseList.iterator();
-		broadCastAddressIter.forEachRemaining((broadcastAddress) -> {
-			try {
-				socket.send(new DatagramPacket(outBuf, outBuf.length, broadcastAddress, port));
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		});
+		socket.close();
 	}
 }
