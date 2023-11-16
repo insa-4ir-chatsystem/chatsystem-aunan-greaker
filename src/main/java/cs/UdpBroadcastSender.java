@@ -28,7 +28,6 @@ public class UdpBroadcastSender extends Thread{
 			interfaceAddressIter.forEachRemaining((interfaceAddress) -> {
 				try {
 					socket.send(new DatagramPacket(outBuf, outBuf.length, interfaceAddress.getBroadcast(), port));
-					System.out.println(interfaceAddress.getBroadcast().toString());
 				} catch (IllegalArgumentException e) {
 					// Broadcast address likely was null because of IPv6 an interface
 				} catch (IOException e) {

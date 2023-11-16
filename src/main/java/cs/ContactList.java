@@ -11,11 +11,11 @@ public class ContactList {
 
     public ContactList() {
         contactDict = new Hashtable<>();
-        //this.updateContactList();
+        this.updateContactDict();
         
     }
 
-    public void updateContactList() {
+    public void updateContactDict() {
         //Step 1: Send UDP broadcast to network
     		// All Connected users should reply with their username and ip
     	try {
@@ -27,8 +27,9 @@ public class ContactList {
 
         //Step 2: Listen to response and add replies to contactDict
     	try {
-			UdpReplyListener listener = new UdpReplyListener(8888, 1000);
-			listener.getReplies(); // Blocks until ReplyListener socket timesout
+			UdpReplyListener listener = new UdpReplyListener(8889, 1000);
+			listener.start();
+			contactDict = listener.getReplies(); // Blocks until ReplyListener socket timesout
 		} catch (SocketException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -59,6 +60,10 @@ public class ContactList {
             ips.add(k.nextElement());
         }
         return ips;
+    }
+    
+    public Dictionary<String, String> getContactDict(){
+    	return this.contactDict;
     }
 
     public String getIp(String name) {
