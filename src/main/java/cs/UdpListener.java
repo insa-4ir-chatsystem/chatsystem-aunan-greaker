@@ -3,8 +3,8 @@ package cs;
 import java.io.IOException;
 import java.net.*;
 
-public class UdpClient {	
-	public UdpClient(String username) throws SocketException { 
+public class UdpListener {	
+	public UdpListener(String username) throws SocketException { 
 	    byte[] buf = new byte[256];
 	    DatagramSocket socket = new DatagramSocket(8888);
 	    while (true) {
@@ -20,7 +20,7 @@ public class UdpClient {
 	        
 	        InetAddress senderAddress = inPacket.getAddress();
 	        int senderPort = inPacket.getPort();
-	        DatagramPacket outPacket = new DatagramPacket(ChooseUsernameGUI.myUsername.getBytes(), buf.length, senderAddress, senderPort);
+	        DatagramPacket outPacket = new DatagramPacket(ChooseUsernameGUI.myUsername.getBytes(), ChooseUsernameGUI.myUsername.getBytes().length, senderAddress, senderPort);
 	        try {
 				socket.send(outPacket);
 			} catch (IOException e) {
