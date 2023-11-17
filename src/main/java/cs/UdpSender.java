@@ -17,10 +17,10 @@ public class UdpSender {
 	}
 	
 	// The send function can be called after initializing the class to execute the send functionality of the socket to send the message constructed in the instance of the class.
-	public void send(byte[] buf, InetAddress destinationAddr) throws IOException{
+	public void send(byte[] buf, InetAddress sendToAddress) throws IOException{  
 		DatagramSocket socket = new DatagramSocket(fromPort);
 		socket.setBroadcast(true);
-	    DatagramPacket packet = new DatagramPacket(buf, buf.length, destinationAddr, toPort);
+	    DatagramPacket packet = new DatagramPacket(buf, buf.length, sendToAddress, toPort);
 	    socket.send(packet);
 	    socket.close();
 	}
