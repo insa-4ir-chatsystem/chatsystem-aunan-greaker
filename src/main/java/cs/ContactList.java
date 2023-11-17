@@ -1,5 +1,7 @@
 package cs;
 
+import java.net.DatagramPacket;
+import java.net.InetAddress;
 import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.Dictionary;
@@ -7,7 +9,7 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 
 public class ContactList {
-    private Dictionary<String, String> contactDict;
+    private Dictionary<String, InetAddress> contactDict;
 
     public ContactList() {
         contactDict = new Hashtable<>();
@@ -18,25 +20,29 @@ public class ContactList {
     public void updateContactDict() {
         //Step 1: Send UDP broadcast to network
     		// All Connected users should reply with their username and ip
-    	try {
-			(new UdpBroadcastSender("BroadcastMsg", 8888)).start();
-		} catch (SocketException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+    	UdpSender sender = new UdpSender(8888, 8889);
+    	sender.sendBroadcast("BroadcastMsg".getBytes());
 
         //Step 2: Listen to response and add replies to contactDict
     	try {
 			UdpListener listener = new UdpListener(8889, 1000);
 			listener.start();
-			//contactDict = listener.getReplies();
+			
+			// While there are packets in the stack pops them and adds them to contactList.
+			while(!listener.isPacketStackEmpty()) {
+				DatagramPacket packet = listener.popPacketStack();
+				String username = new String(packet.getData(), 0, packet.getLength());
+				InetAddress ip = packet.getAddress();
+				contactDict.put(username, ip);
+			}
 		} catch (SocketException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+    	
     }
 
-    public void addContact(String name, String ip) {
+    public void addContact(String name, InetAddress ip) {
         contactDict.put(name, ip);
     }
 
@@ -53,20 +59,20 @@ public class ContactList {
         return names;
     }
 
-    public ArrayList<String> getAllIps() {
-        ArrayList<String> ips = new ArrayList<>();
-        Enumeration<String> k = contactDict.elements();
+    public ArrayList<InetAddress> getAllIps() {
+        ArrayList<InetAddress> ips = new ArrayList<>();
+        Enumeration<InetAddress> k = contactDict.elements();
         while (k.hasMoreElements()) {
             ips.add(k.nextElement());
         }
         return ips;
     }
     
-    public Dictionary<String, String> getContactDict(){
+    public Dictionary<String, InetAddress> getContactDict(){
     	return this.contactDict;
     }
 
-    public String getIp(String name) {
+    public InetAddress getIp(String name) {
         return contactDict.get(name);
     }
 
