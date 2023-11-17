@@ -2,12 +2,20 @@ package cs;
 
 import static org.junit.Assert.*;
 import java.util.ArrayList;
-
+import java.util.Dictionary;
+import java.util.Hashtable;
 
 import org.junit.Test;
 
 public class ContactListTest {
 
+	@Test
+	public void newEmptyContactListTest() {
+		Dictionary<String, String> expected = new Hashtable<>();
+		ContactList contactList = new ContactList();
+		assertEquals(expected, contactList.getContactDict());
+	}
+	
 	@Test
 	public void getNameTest() {
 		ContactList contactDict = new ContactList();
