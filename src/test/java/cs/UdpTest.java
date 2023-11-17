@@ -14,17 +14,11 @@ public class UdpTest {
 
 	@Test
 	public void UdpSenderTest() {
+		UdpSender sender = new UdpSender(8888, 9999);
 		try {
-			UdpSender sender = new UdpSender("This is a test".getBytes(), InetAddress.getLocalHost(), 8888, 9999);
-			try {
-				sender.send();
-			} catch (IOException e) {
-				fail("Failed with IOException: " + e);
-			}
-		} catch (SocketException e) {
-			fail("Failed with SocketException: " + e);
-		} catch (UnknownHostException e) {
-			fail("Failed with UnknownHostException: " + e);
+			sender.send("this is a test".getBytes(), InetAddress.getLocalHost());
+		} catch (IOException e) {
+			fail("Failed with IOException: " + e);
 		}
 	}
 	
@@ -42,8 +36,8 @@ public class UdpTest {
 		UdpListener listener = new UdpListener(8888, 100);
 		listener.start();
 		try {
-			UdpSender sender = new UdpSender("TestPacket".getBytes(), InetAddress.getLocalHost(), 8888, 9999);
-			sender.send();
+			UdpSender sender = new UdpSender(8888, 9999);
+			sender.send("TestPacket".getBytes(), InetAddress.getLocalHost());
 		} catch (IOException e) {
 			fail("Failed because of UdpSender. " + e);
 		}

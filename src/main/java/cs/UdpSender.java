@@ -8,20 +8,16 @@ import java.util.Iterator;
 
 // Class containing all methods for sending UDP packets, and getting local broadcast addresses
 public class UdpSender {	
-	private byte[] buf = new byte[256];
-	private DatagramSocket socket;
-	private InetAddress sendToAddress;
 	private int toPort;
+	private int fromPort;
 	
-	public UdpSender(byte[] buf, InetAddress sendToAddress, int toPort, int fromPort) throws SocketException { 
-		this.buf = buf;
-		this.sendToAddress = sendToAddress;
+	public UdpSender(int toPort, int fromPort) { 
 		this.toPort = toPort;
-	    socket = new DatagramSocket(fromPort); 
+		this.fromPort = fromPort; 
 	}
 	
 	// The send function can be called after initializing the class to execute the send functionality of the socket to send the message constructed in the instance of the class.
-	public void send() throws IOException{
+	public void send(byte[] buf, InetAddress sendToAddress) throws IOException{
 	    /*while (true) {
 	        DatagramPacket packet  = new DatagramPacket(buf, buf.length);        
 	        try {
@@ -37,13 +33,23 @@ public class UdpSender {
 	        System.out.println("Received: " + received);
 	        */
 	        
+		DatagramSocket socket = new DatagramSocket(fromPort);
+		socket.setBroadcast(true);
 	    DatagramPacket packet = new DatagramPacket(buf, buf.length, sendToAddress, toPort);
 	    socket.send(packet);
 	    socket.close();
 	}
 	//}
 	
-	// Gets the broadcast addresses from all interfaceAddresses in all the networkInterfaces
+	// Sends the message buf on all local broadcast addresses found in the getAllLocalBroadcastAddresses function of this class
+	public void sendBroadcast(byte[] buf) throws IOException {
+		ArrayList<InetAddress> broadcastAddresses = getAllLocalBroadcastAddresses();
+		while (!broadcastAddresses.isEmpty()) {
+			send(buf, broadcastAddresses.get(0));
+		}
+	}
+	
+	// Gets the local broadcast addresses from all interfaceAddresses in all the networkInterfaces, and adds them to an arraylist that is returned at the end of the function
 	public static ArrayList<InetAddress> getAllLocalBroadcastAddresses() throws SocketException {
 		
 		ArrayList<InetAddress> returnList = new ArrayList<InetAddress>();
