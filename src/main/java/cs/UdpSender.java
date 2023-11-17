@@ -13,14 +13,11 @@ public class UdpSender {
 	private InetAddress sendToAddress;
 	private int toPort;
 	
-	
-	// An instance of this class should consist of a byte[] containing the message to be sent, 
-	// the InetAddress of the message IP destination, and the number of the port on which the message should be sent to.
-	public UdpSender(byte[] buf, InetAddress sendToAddress, int toPort, int sendPort) throws SocketException { 
+	public UdpSender(byte[] buf, InetAddress sendToAddress, int toPort, int fromPort) throws SocketException { 
 		this.buf = buf;
 		this.sendToAddress = sendToAddress;
 		this.toPort = toPort;
-	    socket = new DatagramSocket(sendPort); 
+	    socket = new DatagramSocket(fromPort); 
 	}
 	
 	// The send function can be called after initializing the class to execute the send functionality of the socket to send the message constructed in the instance of the class.
