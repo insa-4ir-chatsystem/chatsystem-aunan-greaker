@@ -13,11 +13,11 @@ public class UdpSender {
 	private InetAddress sendToAddress;
 	private int toPort;
 	
-	public UdpSender(byte[] buf, InetAddress sendToAddress, int toPort, int sendPort) throws SocketException { 
+	public UdpSender(byte[] buf, InetAddress sendToAddress, int toPort, int fromPort) throws SocketException { 
 		this.buf = buf;
 		this.sendToAddress = sendToAddress;
 		this.toPort = toPort;
-	    socket = new DatagramSocket(sendPort); 
+	    socket = new DatagramSocket(fromPort); 
 	}
 	
 	// The send function can be called after initializing the class to execute the send functionality of the socket to send the message constructed in the instance of the class.
@@ -39,6 +39,7 @@ public class UdpSender {
 	        
 	    DatagramPacket packet = new DatagramPacket(buf, buf.length, sendToAddress, toPort);
 	    socket.send(packet);
+	    socket.close();
 	}
 	//}
 	

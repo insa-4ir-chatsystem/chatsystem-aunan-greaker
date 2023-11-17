@@ -12,7 +12,7 @@ import org.junit.Test;
 public class UdpTest {
 
 	@Test
-	public void UdpSendertest() {
+	public void UdpSenderTest() {
 		try {
 			UdpSender sender = new UdpSender("This is a test".getBytes(), InetAddress.getLocalHost(), 8888, 9999);
 			try {
@@ -27,4 +27,17 @@ public class UdpTest {
 		}
 	}
 
+	@Test
+	public void UdpListenerTest() throws SocketException, InterruptedException {
+		UdpListener listener = new UdpListener(8888, 100);
+		listener.start();
+		try {
+			UdpSender sender = new UdpSender("TestPacket".getBytes(), InetAddress.getLocalHost(), 8888, 9999);
+			sender.send();
+		} catch (IOException e) {
+			fail("Failed because of UdpSender. " + e);
+		}
+		Thread.sleep(100);
+		assertFalse(listener.isPacketStackEmpty());
+	}
 }
