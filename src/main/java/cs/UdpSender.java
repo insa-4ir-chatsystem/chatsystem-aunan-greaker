@@ -17,29 +17,13 @@ public class UdpSender {
 	}
 	
 	// The send function can be called after initializing the class to execute the send functionality of the socket to send the message constructed in the instance of the class.
-	public void send(byte[] buf, InetAddress sendToAddress) throws IOException{
-	    /*while (true) {
-	        DatagramPacket packet  = new DatagramPacket(buf, buf.length);        
-	        try {
-	        	System.out.println("Waiting for packet");
-				socket.receive(inPacket);
-				
-				System.out.println("Packet recieved!");
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-	        String received = new String(inPacket.getData(), 0, inPacket.getLength());
-	        System.out.println("Received: " + received);
-	        */
-	        
+	public void send(byte[] buf, InetAddress destinationAddr) throws IOException{
 		DatagramSocket socket = new DatagramSocket(fromPort);
 		socket.setBroadcast(true);
-	    DatagramPacket packet = new DatagramPacket(buf, buf.length, sendToAddress, toPort);
+	    DatagramPacket packet = new DatagramPacket(buf, buf.length, destinationAddr, toPort);
 	    socket.send(packet);
 	    socket.close();
 	}
-	//}
 	
 	// Sends the message buf on all local broadcast addresses found in the getAllLocalBroadcastAddresses function of this class
 	public void sendBroadcast(byte[] buf) throws IOException {

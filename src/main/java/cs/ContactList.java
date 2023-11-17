@@ -1,5 +1,6 @@
 package cs;
 
+import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.SocketException;
@@ -13,7 +14,7 @@ public class ContactList {
 
     public ContactList() {
         contactDict = new Hashtable<>();
-        this.updateContactDict();
+        //this.updateContactDict();
         
     }
 
@@ -21,7 +22,12 @@ public class ContactList {
         //Step 1: Send UDP broadcast to network
     		// All Connected users should reply with their username and ip
     	UdpSender sender = new UdpSender(8888, 8889);
-    	sender.sendBroadcast("BroadcastMsg".getBytes());
+    	try {
+			sender.sendBroadcast("BroadcastMsg".getBytes());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
         //Step 2: Listen to response and add replies to contactDict
     	try {
@@ -76,7 +82,7 @@ public class ContactList {
         return contactDict.get(name);
     }
 
-    public String getName(String ip) {
+    public String getName(InetAddress ip) {
         Enumeration<String> k = contactDict.keys();
         while (k.hasMoreElements()) {
             String key = k.nextElement();
