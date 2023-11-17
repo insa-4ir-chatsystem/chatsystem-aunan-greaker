@@ -2,17 +2,20 @@ package cs;
 
 import java.io.IOException;
 import java.net.*;
+import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.Iterator;
 
-
-// An instance of this class should consist of a byte[] containing the message to be sent, the InetAddress of the message IP destination, and the number of the port on which the message should be sent to.
-// This class consists of a constructor and a function 'send' which constructs the datagrampacket containing the information provided in the class construction, and sends it on the datagramsocket 'socket', defined in the class constructor.
+// Class containing all methods for sending UDP packets, and getting local broadcast addresses
 public class UdpSender {	
 	private byte[] buf = new byte[256];
 	private DatagramSocket socket;
 	private InetAddress sendToAddress;
 	private int toPort;
 	
+	
+	// An instance of this class should consist of a byte[] containing the message to be sent, 
+	// the InetAddress of the message IP destination, and the number of the port on which the message should be sent to.
 	public UdpSender(byte[] buf, InetAddress sendToAddress, int toPort, int sendPort) throws SocketException { 
 		this.buf = buf;
 		this.sendToAddress = sendToAddress;
@@ -39,24 +42,25 @@ public class UdpSender {
 	        
 	    DatagramPacket packet = new DatagramPacket(buf, buf.length, sendToAddress, toPort);
 	    socket.send(packet);
+	    socket.close();
 	}
 	//}
 	
 	// Gets the broadcast addresses from all interfaceAddresses in all the networkInterfaces
-	/*public static getAllLocalBroadcastAddresses() {
+	public static ArrayList<InetAddress> getAllLocalBroadcastAddresses() throws SocketException {
+		
+		ArrayList<InetAddress> returnList = new ArrayList<InetAddress>();
+		Enumeration<NetworkInterface> networkinterfaces = NetworkInterface.getNetworkInterfaces();
+		
 		while(networkinterfaces.hasMoreElements()) {
 			Iterator<InterfaceAddress> interfaceAddressIter = networkinterfaces.nextElement().getInterfaceAddresses().iterator();
 			interfaceAddressIter.forEachRemaining((interfaceAddress) -> {
-				try {
-					socket.send(new DatagramPacket(outBuf, outBuf.length, interfaceAddress.getBroadcast(), port));
-				} catch (IllegalArgumentException e) {
-					// Broadcast address likely was null because of IPv6 an interface
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+				if (interfaceAddress.getBroadcast() != null) {
+					returnList.add(interfaceAddress.getBroadcast());
 				}
 			});
-		}*/
-	
+		}
+		return returnList;
+	}
 }
 

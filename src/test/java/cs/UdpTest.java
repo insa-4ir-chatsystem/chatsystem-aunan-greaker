@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 
 import org.junit.Test;
 
@@ -24,6 +25,15 @@ public class UdpTest {
 			fail("Failed with SocketException: " + e);
 		} catch (UnknownHostException e) {
 			fail("Failed with UnknownHostException: " + e);
+		}
+	}
+	
+	@Test
+	public void getAllLocalBroadcastAddressesTest() {
+		try {
+			UdpSender.getAllLocalBroadcastAddresses();
+		} catch (SocketException e) {
+			fail("Failed with SocketException: " + e);
 		}
 	}
 
