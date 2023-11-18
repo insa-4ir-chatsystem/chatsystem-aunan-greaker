@@ -17,10 +17,10 @@ public class UdpSender {
 	}
 	
 	// The send function can be called after initializing the class to execute the send functionality of the socket to send the message constructed in the instance of the class.
-	public void send(byte[] buf, InetAddress sendToAddress) throws IOException{  
+	public void send(byte[] buf, InetAddress destinationAddr) throws IOException{  
 		DatagramSocket socket = new DatagramSocket(fromPort);
 		socket.setBroadcast(true);
-	    DatagramPacket packet = new DatagramPacket(buf, buf.length, sendToAddress, toPort);
+	    DatagramPacket packet = new DatagramPacket(buf, buf.length, destinationAddr, toPort);
 	    socket.send(packet);
 	    socket.close();
 	}
@@ -29,7 +29,7 @@ public class UdpSender {
 	public void sendBroadcast(byte[] buf) throws IOException {
 		ArrayList<InetAddress> broadcastAddresses = getAllLocalBroadcastAddresses();
 		while (!broadcastAddresses.isEmpty()) {
-			send(buf, broadcastAddresses.get(0));
+			send(buf, broadcastAddresses.get(0)); // Funker ikke, bruk foreach i stedenfor while (https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/ArrayList.html#forEach(java.util.function.Consumer))
 		}
 	}
 	
