@@ -5,9 +5,7 @@ import static org.junit.Assert.*;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.SocketException;
-import java.net.UnknownHostException;
-import java.util.ArrayList;
-
+import java.util.*;
 import org.junit.Test;
 
 public class UdpTest {
@@ -19,6 +17,22 @@ public class UdpTest {
 			sender.send("this is a test".getBytes(), InetAddress.getLocalHost());
 		} catch (IOException e) {
 			fail("Failed with IOException: " + e);
+		}
+	}
+	
+	@Test
+	public void sendBroadcastTest() throws IOException, InterruptedException {
+		String expected = "BroadcastTestMsg";
+		UdpListener listener = new UdpListener(8888, 200);
+		listener.start();
+		UdpSender sender = new UdpSender(8888, 9876);
+		sender.sendBroadcast("BroadcastTestMsg".getBytes());
+		Thread.sleep(200);
+		System.out.println("listener: " + (new String(listener.peekPacketStack().getData(), 0, listener.peekPacketStack().getLength())));
+		try {
+			assertEquals(expected, (new String(listener.peekPacketStack().getData(), 0, listener.peekPacketStack().getLength())));
+		} catch (EmptyStackException e) {
+			fail("No Msg received");
 		}
 	}
 	

@@ -1,3 +1,9 @@
+/*
+ * The ContactList class handles the phase of making a contactList of all online users using the chatsystem on the local network.
+ * The ContactList is stored as a dictionary in contactDict that can be accessed from the outside using getContactList.
+ * The contactList can also be partially accessed using getName(), getAllNames(), getIp(), getAllIps().
+ * */
+
 package cs;
 
 import java.io.IOException;
@@ -14,11 +20,10 @@ public class ContactList {
 
     public ContactList() {
         contactDict = new Hashtable<>();
-        //this.updateContactDict();
-        
     }
 
-    public void updateContactDict() {
+    // Creates a contactDict by sending an UDP broadcast and listening to the responses.
+    public void makeContactDict() {
         //Step 1: Send UDP broadcast to network
     		// All Connected users should reply with their username and ip
     	UdpSender sender = new UdpSender(8888, 8889);
@@ -31,7 +36,7 @@ public class ContactList {
 
         //Step 2: Listen to response and add replies to contactDict
     	try {
-			UdpListener listener = new UdpListener(8889, 1000);
+			UdpListener listener = new UdpListener(8899, 100);
 			listener.start();
 			
 			// While there are packets in the stack pops them and adds them to contactList.

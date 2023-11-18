@@ -28,9 +28,14 @@ public class UdpSender {
 	// Sends the message buf on all local broadcast addresses found in the getAllLocalBroadcastAddresses function of this class
 	public void sendBroadcast(byte[] buf) throws IOException {
 		ArrayList<InetAddress> broadcastAddresses = getAllLocalBroadcastAddresses();
-		while (!broadcastAddresses.isEmpty()) {
-			send(buf, broadcastAddresses.get(0)); // Funker ikke, bruk foreach i stedenfor while (https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/ArrayList.html#forEach(java.util.function.Consumer))
-		}
+		broadcastAddresses.forEach((broadAddr) -> {
+			try {
+				send(buf, broadAddr);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		});
 	}
 	
 	// Gets the local broadcast addresses from all interfaceAddresses in all the networkInterfaces, and adds them to an arraylist that is returned at the end of the function

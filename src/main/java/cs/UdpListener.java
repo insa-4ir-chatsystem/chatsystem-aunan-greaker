@@ -14,10 +14,8 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
-import java.util.Dictionary;
 import java.util.EmptyStackException;
 import java.util.Stack;
-import java.util.List;
 
 public class UdpListener extends Thread {
 	private Stack<DatagramPacket> receivedPacketStack;
@@ -28,6 +26,7 @@ public class UdpListener extends Thread {
 		listening = true;
 		receivedPacketStack = new Stack<DatagramPacket>();
 		socket = new DatagramSocket(port);
+		//this.start();
 	}
 	
 	public UdpListener(int port, int timeoutMS) throws SocketException {
@@ -60,9 +59,7 @@ public class UdpListener extends Thread {
 			DatagramPacket inPacket = new DatagramPacket(buf, buf.length);
 			try {
 				socket.receive(inPacket); // Blocks until packet received
-				System.out.println("Waiting for packet");
 				receivedPacketStack.push(inPacket);
-				System.out.println("Received packet");
 			} catch (SocketTimeoutException e) {
 				listening = false;
 			} catch (IOException e) {
