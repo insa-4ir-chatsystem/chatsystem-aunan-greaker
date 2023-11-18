@@ -12,7 +12,7 @@ public class ChooseUsernameGUI {
 	private JTextField usernameField;
 	
 	public static boolean AvailableUsername(String username) {
-		ContactList contactList = new ContactList();
+		ContactList contactList = new ContactList(username);
         return contactList.getAllNames().contains(username);
 	}
 	

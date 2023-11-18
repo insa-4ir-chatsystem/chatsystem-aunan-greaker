@@ -16,19 +16,27 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 
 public class ContactList {
+	private final int destPort = 8888;
+	private final int srcPort = 8889;
     private Dictionary<String, InetAddress> contactDict;
+    private String username;
 
-    public ContactList() {
+    public ContactList(String username) {
+    	this.username = username;
         contactDict = new Hashtable<>();
     }
 
-    // Creates a contactDict by sending an UDP broadcast and listening to the responses.
+    /* Creates a contactDict by sending an UDP broadcast to destPort and listening to the responses on the srcPort.
+     * 
+     */
     public void makeContactDict() {
+    	
+    	contactDict.put(username, InetAddress.getLoopbackAddress()); // Adds itself to contactDict first
         //Step 1: Send UDP broadcast to network
     		// All Connected users should reply with their username and ip
-    	UdpSender sender = new UdpSender(8888, 8889);
+    	UdpSender sender = new UdpSender(destPort, srcPort);
     	try {
-			sender.sendBroadcast("BroadcastMsg".getBytes());
+			sender.sendBroadcast(username.getBytes());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -36,7 +44,7 @@ public class ContactList {
 
         //Step 2: Listen to response and add replies to contactDict
     	try {
-			UdpListener listener = new UdpListener(8899, 100);
+			UdpListener listener = new UdpListener(srcPort, 100);
 			listener.start();
 			
 			// While there are packets in the stack pops them and adds them to contactList.
