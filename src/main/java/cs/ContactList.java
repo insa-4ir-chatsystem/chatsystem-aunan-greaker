@@ -32,17 +32,8 @@ public class ContactList {
     public void makeContactDict() {
     	
     	contactDict.put(username, InetAddress.getLoopbackAddress()); // Adds itself to contactDict first
-        //Step 1: Send UDP broadcast to network
-    		// All Connected users should reply with their username and ip
-    	UdpSender sender = new UdpSender(destPort, srcPort);
-    	try {
-			sender.sendBroadcast(username.getBytes());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-        //Step 2: Listen to response and add replies to contactDict
+    	
+        //Step 1: Listen to response and add replies to contactDict
     	try {
 			UdpListener listener = new UdpListener(srcPort, 100);
 			listener.start();
@@ -55,6 +46,16 @@ public class ContactList {
 				contactDict.put(username, ip);
 			}
 		} catch (SocketException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	
+        //Step 2: Send UDP broadcast to network
+    		// All Connected users should reply with their username and ip
+    	UdpSender sender = new UdpSender(destPort, srcPort);
+    	try {
+			sender.sendBroadcast(username.getBytes());
+		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
