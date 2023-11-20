@@ -1,5 +1,6 @@
 package cs;
 
+import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.SocketException;
@@ -26,11 +27,21 @@ public class OnJoinHandler extends Thread{
 		// To be running in background while we are logged in
 		while(isOnline) {
 			while(!broadcastListener.isPacketStackEmpty()) {
+				// Adds joining users to contactList
 				DatagramPacket packet = broadcastListener.popPacketStack();
 				String joiningUser = new String(packet.getData(), 0, packet.getLength());
 				InetAddress ip = packet.getAddress();
 				contactList.getContactDict().put(joiningUser, ip);
 				System.out.println( joiningUser + "@"+ ip.toString() + " is now online.");
+				
+				// Replies to Udp broadcast
+				UdpSender udpSender = new UdpSender(ContactList.srcPort, 8888);
+				try {
+					udpSender.send(Main.username.getBytes(), ip);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
 	}
