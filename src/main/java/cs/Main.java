@@ -16,8 +16,8 @@ public class Main {
 		System.out.println("Created contactList object susccesfully");
 		System.out.println("Running makeContactDict...");
 		contactList.makeContactDict();
-		System.out.println("Sleeping for 5 seconds...");
-		Thread.sleep(5000);
+		System.out.println("Sleeping for 2 seconds...");
+		Thread.sleep(2000);
 		System.out.println("Accessing contactDict...");
 		System.out.println(contactList.getContactDict().toString());
 		
