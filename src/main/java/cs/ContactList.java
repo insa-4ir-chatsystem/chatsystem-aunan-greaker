@@ -54,12 +54,12 @@ public class ContactList {
 			listener.start();
 			
 			// While there are packets in the stack pops them and adds them to contactList.
-			while(!listener.isPacketStackEmpty()) {
-				DatagramPacket packet = listener.popPacketStack();
-				String username = new String(packet.getData(), 0, packet.getLength());
-				InetAddress ip = packet.getAddress();
-				contactDict.put(username, ip);
+			while(listener.isPacketStackEmpty()) {
 			}
+			DatagramPacket packet = listener.popPacketStack();
+			String username = new String(packet.getData(), 0, packet.getLength());
+			InetAddress ip = packet.getAddress();
+			contactDict.put(username, ip);
 		} catch (SocketException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
