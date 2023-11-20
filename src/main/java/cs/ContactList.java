@@ -45,13 +45,11 @@ public class ContactList {
         //Step 2: Listen to response and add replies to contactDict
 
     	try {
-			UdpListener listener = new UdpListener(srcPort, 1000);
+			UdpListener listener = new UdpListener(srcPort, 2000);
 			listener.start();
+			Thread.sleep(2000); // Waits for listener to timeout
 			
 			// While there are packets in the stack pops them and adds them to contactList.
-			if (listener.isPacketStackEmpty()) {
-				Thread.sleep(1000);
-			}
 			while(!listener.isPacketStackEmpty()) {
 				DatagramPacket packet = listener.popPacketStack();
 				String username = new String(packet.getData(), 0, packet.getLength());
