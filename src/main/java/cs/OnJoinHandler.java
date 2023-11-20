@@ -31,7 +31,7 @@ public class OnJoinHandler extends Thread{
 				DatagramPacket packet = broadcastListener.popPacketStack();
 				String joiningUser = new String(packet.getData(), 0, packet.getLength());
 				InetAddress ip = packet.getAddress();
-				contactList.getContactDict().put(joiningUser, ip);
+				contactList.addContact(joiningUser, ip);
 				System.out.println( joiningUser + "@"+ ip.toString() + " is now online.");
 				
 				// Replies to Udp broadcast
