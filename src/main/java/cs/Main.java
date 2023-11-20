@@ -22,6 +22,8 @@ public class Main {
 		
 		System.out.println("Now online");
 		System.out.println("Listening for other users...");
-		new OnJoinHandler(contactList).start();
+		OnJoinHandler onJoinHandlerThread = new OnJoinHandler(contactList);
+		onJoinHandlerThread.setDaemon(false);
+		onJoinHandlerThread.start();
 	}
 }
