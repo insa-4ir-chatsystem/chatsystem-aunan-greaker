@@ -43,24 +43,22 @@ public class ContactList {
 		}
 
         //Step 2: Listen to response and add replies to contactDict
+
     	try {
-			Thread.sleep(100);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-    	try {
-			UdpListener listener = new UdpListener(srcPort, 100);
+			UdpListener listener = new UdpListener(srcPort, 1000);
 			listener.start();
 			
 			// While there are packets in the stack pops them and adds them to contactList.
-			while(listener.isPacketStackEmpty()) {
+			if (listener.isPacketStackEmpty()) {
+				Thread.sleep(1000);
 			}
-			DatagramPacket packet = listener.popPacketStack();
-			String username = new String(packet.getData(), 0, packet.getLength());
-			InetAddress ip = packet.getAddress();
-			contactDict.put(username, ip);
-		} catch (SocketException e) {
+			while(!listener.isPacketStackEmpty()) {
+				DatagramPacket packet = listener.popPacketStack();
+				String username = new String(packet.getData(), 0, packet.getLength());
+				InetAddress ip = packet.getAddress();
+				contactDict.put(username, ip);
+			}
+		} catch (SocketException | InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
