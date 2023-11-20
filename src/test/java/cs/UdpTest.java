@@ -28,7 +28,6 @@ public class UdpTest {
 		UdpSender sender = new UdpSender(8888, 9876);
 		sender.sendBroadcast("BroadcastTestMsg".getBytes());
 		Thread.sleep(200);
-		System.out.println("listener: " + (new String(listener.peekPacketStack().getData(), 0, listener.peekPacketStack().getLength())));
 		try {
 			assertEquals(expected, (new String(listener.peekPacketStack().getData(), 0, listener.peekPacketStack().getLength())));
 		} catch (EmptyStackException e) {
