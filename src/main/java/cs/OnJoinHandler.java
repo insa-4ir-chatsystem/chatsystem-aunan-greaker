@@ -16,7 +16,7 @@ public class OnJoinHandler extends Thread{
 	@Override
 	public void run() {
 		try {
-			broadcastListener = new UdpListener(8888);
+			broadcastListener = new UdpListener(ContactList.destPort);
 			broadcastListener.start();
 		} catch (SocketException e) {
 			// TODO Auto-generated catch block

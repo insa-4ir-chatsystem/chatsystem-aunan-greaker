@@ -16,7 +16,7 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 
 public class ContactList {
-	private final int destPort = 24071; // The port on whch all javaChatProgram instances must listen for Broadcast.
+	public static final int destPort = 24071; // The port on whch all javaChatProgram instances must listen for Broadcast.
 	private final int srcPort = 8889;
     private Dictionary<String, InetAddress> contactDict;
     private String username;
