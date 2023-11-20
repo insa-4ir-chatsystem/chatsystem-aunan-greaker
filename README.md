@@ -1,26 +1,18 @@
-# ~~Burn~~ Replace with your own after reading
+The finished project aims to connect users of the program in a chat system. This project aims to acheive;
+  * The connecting and contact discovery phase
+  * The messaging: Peer2peer messaging
+  * The implementation of a chat system interface
+  * Handling of the history of message
 
-This private repository is created for you so that your teachers have access to it.
+In this first release, the goal is to do the connecting and contact discovery phase of the project. This includes;
+  * The log-in and choosing of your own username
+  * Verification that the chosen username is available on the network
+  * Initial creation of the contact list, containing yourself and other users already online when the log-in happened
+  * Dynamic update of the contact list when new user join on the same network
 
-## Identify yourself
+To run the jar for this project, after downloading it to your path of choice on your computer on;
 
-Before anything, **complete the `metadata.yml` with your own information.** 
+WINDOWS: Open the terminal window (cmd), and type the command "java -jar 'your/path/of/choice/jarFile.jar'"
 
-This is the file that we will use to identify the teacher responsible for the repository and assign the grades to the participating students.
-
-## Take ownership
-
-As long as you make sure to keep the `metadata.yml` file at the root of this repository, you are free to do anything. Our suggestion would be to have it organized into something like the following:
-
-    .gitignore
-    metadata.yml
-    pom.xml
-    README.md
-    src/
-      main/
-      test/
-    doc/
-      uml/
-      report.pdf
-
-In particular, you will soon have to replace this README with something that describes your own project.
+// sjekk dette, test dette i linux
+LINUX: Open the terminal window (bash), and type the command "./your/path/of/choice/jarFile"
