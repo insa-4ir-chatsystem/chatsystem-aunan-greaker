@@ -10,13 +10,14 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.Hashtable;
 
 public class ContactList {
-	public static final int destPort = 24071; // The port on which all javaChatProgram instances must listen for Broadcast.
+	public static final int broadcastPort = 24071; // The port on which all javaChatProgram instances must listen for Broadcast.
 	public static final int srcPort = 24072;
     private Dictionary<String, InetAddress> contactDict;
     private String username;
@@ -31,10 +32,8 @@ public class ContactList {
      */
     public void makeContactDict() {
     	
-    	contactDict.put(username, InetAddress.getLoopbackAddress()); // Adds itself to contactDict first
-        //Step 1: Send UDP broadcast to network
-    		// All Connected users should reply with their username and ip
-    	UdpSender sender = new UdpSender(destPort, srcPort);
+        //Send UDP broadcast to network
+    	UdpSender sender = new UdpSender(broadcastPort, srcPort);
     	try {
 			sender.sendBroadcast(username.getBytes());
 		} catch (IOException e) {
@@ -42,12 +41,12 @@ public class ContactList {
 			e.printStackTrace();
 		}
 
-        //Step 2: Listen to response and add replies to contactDict
+        //Step 2: Listen for responses and add replies to contactDict
 
     	try {
 			UdpListener listener = new UdpListener(srcPort, 2000);
 			listener.start();
-			Thread.sleep(2000); // Waits for listener to timeout
+			while(listener.isAlive()) {} // Waits for listener to timeout
 			
 			// While there are packets in the stack pops them and adds them to contactList.
 			while(!listener.isPacketStackEmpty()) {
@@ -56,7 +55,8 @@ public class ContactList {
 				InetAddress ip = packet.getAddress();
 				contactDict.put(username, ip);
 			}
-		} catch (SocketException | InterruptedException e) {
+			contactDict.put(username, InetAddress.getLocalHost()); // Adds itself to contactDict
+		} catch (SocketException | UnknownHostException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

@@ -1,6 +1,5 @@
 package cs;
 import java.awt.BorderLayout;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -8,7 +7,7 @@ import javax.swing.*;
 
 public class ChatSystemGUI {
 	private JTextField messageField;
-	private GroupLayout group;
+	//private GroupLayout group; Kommenterte ut fordi eclipse ga warning
 	
 	public ChatSystemGUI(String username) {
 		final JFrame frame = new JFrame();
@@ -22,7 +21,7 @@ public class ChatSystemGUI {
 
 	    sendButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-	            String message = messageField.getText();
+	            //String message = messageField.getText(); Kommenterte ut fordi eclipse ga warning
 	        }
 	    });
 	    

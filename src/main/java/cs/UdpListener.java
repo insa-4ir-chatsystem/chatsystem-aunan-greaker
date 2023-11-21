@@ -51,6 +51,10 @@ public class UdpListener extends Thread {
 		return receivedPacketStack.empty();
 	}
 	
+	public Boolean isListening() {
+		return listening;
+	}
+	
 		
 	@Override
 	public void run() {

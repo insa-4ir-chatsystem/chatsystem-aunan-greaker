@@ -18,7 +18,7 @@ public class OnJoinHandler extends Thread{
 	@Override
 	public void run() {
 		try {
-			broadcastListener = new UdpListener(ContactList.destPort);
+			broadcastListener = new UdpListener(ContactList.broadcastPort);
 			broadcastListener.start();
 		} catch (SocketException e) {
 			// TODO Auto-generated catch block
@@ -30,6 +30,7 @@ public class OnJoinHandler extends Thread{
 			while(!broadcastListener.isPacketStackEmpty()) {
 				// Adds joining users to contactList
 				DatagramPacket packet = broadcastListener.popPacketStack();
+				int srcPort = packet.getPort();
 				String joiningUser = new String(packet.getData(), 0, packet.getLength());
 				InetAddress ip = packet.getAddress();
 				contactList.addContact(joiningUser, ip);
@@ -40,7 +41,7 @@ public class OnJoinHandler extends Thread{
 				}
 				
 				// Replies to Udp broadcast
-				UdpSender udpSender = new UdpSender(ContactList.srcPort, 8888);
+				UdpSender udpSender = new UdpSender(srcPort, 8888);
 				try {
 					udpSender.send(Main.username.getBytes(), ip);
 				} catch (IOException e) {
