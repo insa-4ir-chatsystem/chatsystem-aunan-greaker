@@ -14,10 +14,9 @@ public class Main {
 		
 			contactList = new ContactList(username);
 			contactList.makeContactDict();
-			Thread.sleep(2000);
 			validUsername = true;
 			for (int i = 0; contactList.getContactDict().size() > i; i++) {
-				if (contactList.getAllNames().get(i) == username) {
+				if (contactList.getAllNames().get(i).equals(username)) {
 					validUsername = false;
 					System.out.println("The username you chose is already taken! Please choose another username");
 				}
