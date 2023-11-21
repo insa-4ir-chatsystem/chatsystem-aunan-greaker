@@ -7,11 +7,10 @@ public class Main {
 	public static String username;
 	public static void main (String[] args) throws SocketException, InterruptedException {
 		Boolean validUsername = false;
+		Scanner input = new Scanner(System.in);  // Create a Scanner object
 		while (!validUsername) {
-		    Scanner input = new Scanner(System.in);  // Create a Scanner object
 		    System.out.print("Enter username: ");
 		    username = input.nextLine();  // Read user input
-		    input.close();
 		
 			contactList = new ContactList(username);
 			contactList.makeContactDict();
@@ -24,6 +23,7 @@ public class Main {
 				}
 			}
 		}
+	    input.close();
 		//Username available test
 		System.out.println("Now online with " + contactList.getContactDict().toString());
 		System.out.println("Listening for other users that might join...");

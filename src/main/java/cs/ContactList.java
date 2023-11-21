@@ -44,7 +44,7 @@ public class ContactList {
         //Step 2: Listen for responses and add replies to contactDict
 
     	try {
-			UdpListener listener = new UdpListener(srcPort, 2000);
+			UdpListener listener = new UdpListener(srcPort, 5000);
 			listener.start();
 			while(listener.isAlive()) {} // Waits for listener to timeout
 			
@@ -55,8 +55,8 @@ public class ContactList {
 				InetAddress ip = packet.getAddress();
 				contactDict.put(username, ip);
 			}
-			contactDict.put(username, InetAddress.getLocalHost()); // Adds itself to contactDict
-		} catch (SocketException | UnknownHostException e) {
+			//contactDict.put(username, InetAddress.getLocalHost()); // Adds itself to contactDict
+		} catch (SocketException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

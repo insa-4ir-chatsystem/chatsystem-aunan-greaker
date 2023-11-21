@@ -64,6 +64,7 @@ public class UdpListener extends Thread {
 			try {
 				socket.receive(inPacket); // Blocks until packet received
 				receivedPacketStack.push(inPacket);
+				System.out.println("Received packet from: " + inPacket.getAddress().toString());
 			} catch (SocketTimeoutException e) {
 				listening = false;
 			} catch (IOException e) {
