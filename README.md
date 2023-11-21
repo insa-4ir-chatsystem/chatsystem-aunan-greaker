@@ -10,9 +10,9 @@ In this first release, the goal is to do the connecting and contact discovery ph
   * Initial creation of the contact list, containing yourself and other users already online when the log-in happened
   * Dynamic update of the contact list when new user join on the same network
 
-To run the jar for this project, after downloading it to your path of choice on your computer on;
+To run the project on your computer on;
 
-WINDOWS: Open the terminal window (cmd), and type the command "java -jar 'your/path/of/choice/jarFile.jar'"
+WINDOWS: Open the terminal window (cmd), and type the command "mvn clean package". Once the tests have passed and the compilation is complete, tap the command "java -jar 'your/path/of/choice/jarFile.jar'". This should start the program.
 
 // sjekk dette, test dette i linux
 LINUX: Open the terminal window (bash), and type the command "./your/path/of/choice/jarFile"

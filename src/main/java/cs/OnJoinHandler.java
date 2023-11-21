@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.SocketException;
+import java.util.ArrayList;
 
 public class OnJoinHandler extends Thread{
 	private Boolean isOnline;
@@ -32,7 +33,11 @@ public class OnJoinHandler extends Thread{
 				String joiningUser = new String(packet.getData(), 0, packet.getLength());
 				InetAddress ip = packet.getAddress();
 				contactList.addContact(joiningUser, ip);
-				System.out.println( joiningUser + "@"+ ip.toString() + " is now online.");
+				System.out.println( joiningUser + "@"+ ip.toString() + " is now online.\n" + "Updated contactlist:\n");
+				ArrayList<String> updatedContactList = contactList.getAllNames();
+				for (int i = 0; updatedContactList.size() > i; i++) {
+					System.out.println(updatedContactList.get(i));
+				}
 				
 				// Replies to Udp broadcast
 				UdpSender udpSender = new UdpSender(ContactList.srcPort, 8888);
