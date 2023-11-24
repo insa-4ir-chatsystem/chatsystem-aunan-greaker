@@ -14,6 +14,5 @@ To run the project on your computer on;
 
 WINDOWS: Open the terminal window (cmd), navigate to the project root directory and run 'mvn clean package'. Once the tests have passed and the compilation is complete, tap the command 'java -jar target/ChatSystem-jar-with-dependencies.jar'. This should start the program.
 
-// sjekk dette, test dette i linux
 LINUX: Open the terminal window (bash), navigate to the project root directory and run 'mvn package' and 'mvn exec:java -Dexec.mainClass="cs.Main"'.
 
