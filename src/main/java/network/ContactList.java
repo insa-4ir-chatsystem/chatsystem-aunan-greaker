@@ -46,6 +46,7 @@ public class ContactList {
 			UdpListener listener = new UdpListener(srcPort, 5000);
 			listener.start();
 			while(listener.isAlive()) {} // Waits for listener to timeout
+			Thread.sleep(5000);
 			
 			// While there are packets in the stack pops them and adds them to contactList.
 			while(!listener.isPacketStackEmpty()) {
@@ -56,6 +57,9 @@ public class ContactList {
 			}
 			//contactDict.put(username, InetAddress.getLocalHost()); // Adds itself to contactDict
 		} catch (SocketException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
