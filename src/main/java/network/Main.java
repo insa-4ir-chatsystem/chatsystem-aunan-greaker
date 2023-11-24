@@ -15,7 +15,6 @@ public class Main {
 		
 			contactList = new ContactList(username);
 			contactList.makeContactDict();
-			Thread.sleep(5000);
 			validUsername = true;
 			for (int i = 0; contactList.getContactDict().size() > i; i++) {
 				if (contactList.getAllNames().get(i).equals(username)) {

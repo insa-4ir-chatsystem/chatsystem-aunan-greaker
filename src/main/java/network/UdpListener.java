@@ -21,10 +21,8 @@ public class UdpListener extends Thread {
 	private Stack<DatagramPacket> receivedPacketStack;
 	private DatagramSocket socket;
 	private boolean listening;
-	private int port;
 	
 	public UdpListener(int port) throws SocketException {
-		this.port = port;
 		listening = true;
 		receivedPacketStack = new Stack<DatagramPacket>();
 		socket = new DatagramSocket(port);
@@ -60,15 +58,16 @@ public class UdpListener extends Thread {
 	@Override
 	public void run() {
 		while(listening) {
-			byte[] buf = new byte[20];
+			byte[] buf = new byte[200];
 			DatagramPacket inPacket = new DatagramPacket(buf, buf.length);
 			try {
-				System.out.println("listening on port: " + port);
+				System.out.println(" starting listening on port: " + socket.getLocalPort());
 				socket.receive(inPacket); // Blocks until packet received
 				receivedPacketStack.push(inPacket);
-				System.out.println("Received packet from: " + inPacket.getAddress().toString());
+				System.out.println("Received packet from: " + inPacket.getAddress().toString() + ":" + inPacket.getPort() + " on socketport " + socket.getLocalPort());
 			} catch (SocketTimeoutException e) {
 				listening = false;
+				socket.close();
 			} catch (IOException e) {
 				e.printStackTrace();
 				listening = false;

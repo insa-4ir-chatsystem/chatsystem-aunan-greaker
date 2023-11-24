@@ -30,7 +30,12 @@ public class ContactList {
     /* Creates a contactDict by sending an UDP broadcast to destPort and listening to the responses on the srcPort.
      * 
      */
-    public void makeContactDict() {
+    public void makeContactDict() throws SocketException {
+    	
+        //Listen for responses and add replies to contactDict
+    	UdpListener listener = new UdpListener(broadcastReplyPort, 5000);
+		listener.start();
+		//contactDict.put(username, InetAddress.getLocalHost()); // Adds itself to contactDict
     	
         //Send UDP broadcast to network
     	UdpSender sender = new UdpSender(broadcastPort, srcPort);
@@ -41,29 +46,15 @@ public class ContactList {
 			e.printStackTrace();
 		}
 
-        //Step 2: Listen for responses and add replies to contactDict
-
-    	try {
-			UdpListener listener = new UdpListener(broadcastReplyPort, 5000);
-			listener.start();
-			while(listener.isAlive()) {} // Waits for listener to timeout
-			Thread.sleep(5000);
-			
-			// While there are packets in the stack pops them and adds them to contactList.
-			while(!listener.isPacketStackEmpty()) {
-				DatagramPacket packet = listener.popPacketStack();
-				String username = new String(packet.getData(), 0, packet.getLength());
-				InetAddress ip = packet.getAddress();
-				contactDict.put(username, ip);
-			}
-			//contactDict.put(username, InetAddress.getLocalHost()); // Adds itself to contactDict
-		} catch (SocketException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+    	while(listener.isAlive()) {} // Waits for listener to timeout
+		// While there are packets in the stack pops them and adds them to contactList.
+		while(!listener.isPacketStackEmpty()) {
+			DatagramPacket packet = listener.popPacketStack();
+			String username = new String(packet.getData(), 0, packet.getLength());
+			InetAddress ip = packet.getAddress();
+			contactDict.put(username, ip);
 		}
+
     	
     }
 
