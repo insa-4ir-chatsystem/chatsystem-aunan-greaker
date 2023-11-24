@@ -26,7 +26,6 @@ public class UdpListener extends Thread {
 		listening = true;
 		receivedPacketStack = new Stack<DatagramPacket>();
 		socket = new DatagramSocket(port);
-		//this.start();
 	}
 	
 	public UdpListener(int port, int timeoutMS) throws SocketException {

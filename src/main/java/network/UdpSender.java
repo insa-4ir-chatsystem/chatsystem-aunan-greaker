@@ -22,6 +22,7 @@ public class UdpSender {
 		socket.setBroadcast(true);
 	    DatagramPacket packet = new DatagramPacket(buf, buf.length, destinationAddr, toPort);
 	    socket.send(packet);
+	    System.out.println("Sent " + buf.toString() + " @" + destinationAddr.toString());
 	    socket.close();
 	}
 	
@@ -31,6 +32,7 @@ public class UdpSender {
 		broadcastAddresses.forEach((broadAddr) -> {
 			try {
 				send(buf, broadAddr);
+				System.out.println("Sent broadcast" + buf.toString() + " @" + broadAddr.toString());
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
