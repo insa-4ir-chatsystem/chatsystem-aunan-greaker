@@ -12,7 +12,8 @@ In this first release, the goal is to do the connecting and contact discovery ph
 
 To run the project on your computer on;
 
-WINDOWS: Open the terminal window (cmd), and type the command "mvn clean package". Once the tests have passed and the compilation is complete, tap the command "java -jar 'your/path/of/choice/jarFile.jar'". This should start the program.
+WINDOWS: Open the terminal window (cmd), navigate to the project root directory and run 'mvn clean package'. Once the tests have passed and the compilation is complete, tap the command 'java -jar target/ChatSystem-jar-with-dependencies.jar'. This should start the program.
 
 // sjekk dette, test dette i linux
-LINUX: Open the terminal window (bash), and type the command "./your/path/of/choice/jarFile"
+LINUX: Open the terminal window (bash), navigate to the project root directory and run 'mvn package' and 'mvn exec:java -Dexec.mainClass="cs.Main"'.
+
