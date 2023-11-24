@@ -61,10 +61,8 @@ public class UdpListener extends Thread {
 			byte[] buf = new byte[200];
 			DatagramPacket inPacket = new DatagramPacket(buf, buf.length);
 			try {
-				System.out.println(" starting listening on port: " + socket.getLocalPort());
 				socket.receive(inPacket); // Blocks until packet received
 				receivedPacketStack.push(inPacket);
-				System.out.println("Received packet from: " + inPacket.getAddress().toString() + ":" + inPacket.getPort() + " on socketport " + socket.getLocalPort());
 			} catch (SocketTimeoutException e) {
 				listening = false;
 				socket.close();

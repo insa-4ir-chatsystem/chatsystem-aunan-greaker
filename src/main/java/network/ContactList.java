@@ -30,11 +30,12 @@ public class ContactList {
     /* Creates a contactDict by sending an UDP broadcast to destPort and listening to the responses on the srcPort.
      * 
      */
-    public void makeContactDict() throws SocketException {
+    public void makeContactDict() throws SocketException, InterruptedException {
     	
         //Listen for responses and add replies to contactDict
     	UdpListener listener = new UdpListener(broadcastReplyPort, 5000);
 		listener.start();
+		Thread.sleep(500); // Short Sleep to make sure socket is listening
 		//contactDict.put(username, InetAddress.getLocalHost()); // Adds itself to contactDict
     	
         //Send UDP broadcast to network
