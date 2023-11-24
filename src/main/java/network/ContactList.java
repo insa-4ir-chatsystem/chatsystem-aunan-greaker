@@ -17,7 +17,8 @@ import java.util.Hashtable;
 
 public class ContactList {
 	public static final int broadcastPort = 24071; // The port on which all javaChatProgram instances must listen for Broadcast.
-	public static final int srcPort = 24072;
+	public static final int broadcastReplyPort = 24072; // The port to reply to a broadcast to.
+	public static final int srcPort = 24073; // The port sending the broadcast
     private Dictionary<String, InetAddress> contactDict;
     private String username;
 
@@ -43,7 +44,7 @@ public class ContactList {
         //Step 2: Listen for responses and add replies to contactDict
 
     	try {
-			UdpListener listener = new UdpListener(srcPort, 5000);
+			UdpListener listener = new UdpListener(broadcastReplyPort, 5000);
 			listener.start();
 			while(listener.isAlive()) {} // Waits for listener to timeout
 			Thread.sleep(5000);

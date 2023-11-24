@@ -22,7 +22,7 @@ public class UdpSender {
 		socket.setBroadcast(true);
 	    DatagramPacket packet = new DatagramPacket(buf, buf.length, destinationAddr, toPort);
 	    socket.send(packet);
-	    System.out.println("Sent " + buf.toString() + " @" + destinationAddr.toString());
+	    System.out.println("Sent " + (new String(buf, 0, buf.length)) + " @" + destinationAddr.toString() + "on port" + packet.getPort());
 	    socket.close();
 	}
 	
