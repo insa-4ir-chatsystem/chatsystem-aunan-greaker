@@ -1,4 +1,4 @@
-package cs;
+package network;
 
 import static org.junit.Assert.*;
 
@@ -7,6 +7,7 @@ import java.net.InetAddress;
 import java.net.SocketException;
 import java.util.*;
 import org.junit.Test;
+
 
 public class UdpTest {
 

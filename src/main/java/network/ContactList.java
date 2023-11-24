@@ -4,7 +4,7 @@
  * The contactList can also be partially accessed using getName(), getAllNames(), getIp(), getAllIps().
  * */
 
-package cs;
+package network;
 
 import java.io.IOException;
 import java.net.DatagramPacket;

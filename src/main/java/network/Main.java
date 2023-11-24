@@ -1,4 +1,5 @@
-package cs;
+package network;
+
 import java.net.SocketException;
 import java.util.Scanner;
 

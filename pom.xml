@@ -31,7 +31,7 @@
                 	</descriptorRefs>
                 	<archive>
 			          	<manifest>
-			            	<mainClass>cs.Main</mainClass>
+			            	<mainClass>network.Main</mainClass>
 			          	</manifest>
 			        </archive>
             	</configuration>
