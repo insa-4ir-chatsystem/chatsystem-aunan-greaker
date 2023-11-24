@@ -33,6 +33,7 @@ public class OnJoinHandler extends Thread{
 				InetAddress ip = packet.getAddress();
 				contactList.addContact(joiningUser, ip);
 				System.out.println( joiningUser + " is now online (ip: " + ip.toString() + ") \n");
+				System.out.println("Listening for other users that might join...");
 				
 				// Replies to Udp broadcast
 				UdpSender udpSender = new UdpSender(ContactList.broadcastReplyPort, 9852);
