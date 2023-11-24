@@ -65,7 +65,6 @@ public class UdpListener extends Thread {
 				receivedPacketStack.push(inPacket);
 			} catch (SocketTimeoutException e) {
 				listening = false;
-				socket.close();
 			} catch (IOException e) {
 				e.printStackTrace();
 				listening = false;

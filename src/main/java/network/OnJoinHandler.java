@@ -1,3 +1,8 @@
+/*	This class extends a Thread and runs in the background listening for joining users on the broadcastPort.
+ * 	When a user joins it adds the users to its contactList and replies to the user so that the new user will know who is online.
+ * 
+ * */
+
 package network;
 
 import java.io.IOException;
