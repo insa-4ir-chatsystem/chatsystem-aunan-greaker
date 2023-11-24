@@ -24,7 +24,6 @@ public class Main {
 			}
 		}
 	    input.close();
-		//Username available test
 		System.out.println("Now online with " + contactList.getContactDict().toString());
 		System.out.println("Listening for other users that might join...");
 		OnJoinHandler onJoinHandlerThread = new OnJoinHandler(contactList);

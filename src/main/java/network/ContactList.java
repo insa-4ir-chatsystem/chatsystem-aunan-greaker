@@ -36,7 +36,6 @@ public class ContactList {
     	UdpListener listener = new UdpListener(broadcastReplyPort, 5000);
 		listener.start();
 		Thread.sleep(500); // Short Sleep to make sure socket is listening
-		//contactDict.put(username, InetAddress.getLocalHost()); // Adds itself to contactDict
     	
         //Send UDP broadcast to network
     	UdpSender sender = new UdpSender(broadcastPort, srcPort);
