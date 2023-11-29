@@ -18,30 +18,30 @@ import java.util.EmptyStackException;
 import java.util.Stack;
 
 public class UdpListener extends Thread {
-	private Stack<DatagramPacket> receivedPacketStack;
+	private Stack<UDPMessage> receivedPacketStack;
 	private final DatagramSocket socket;
 	private boolean listening;
 	
 	public UdpListener(int port) throws SocketException {
 		listening = true;
-		receivedPacketStack = new Stack<DatagramPacket>();
+		receivedPacketStack = new Stack<UDPMessage>();
 		socket = new DatagramSocket(port);
 	}
 	
 	public UdpListener(int port, int timeoutMS) throws SocketException {
 		listening = true;
-		receivedPacketStack = new Stack<DatagramPacket>();
+		receivedPacketStack = new Stack<UDPMessage>();
 		socket = new DatagramSocket(port);
 		socket.setSoTimeout(timeoutMS);
 	}
 	
 	// Pops receivedPacketStack. If stack is empty throws EmptyStackException
-	public DatagramPacket popPacketStack() throws EmptyStackException {
+	public UDPMessage popPacketStack() throws EmptyStackException {
 		return receivedPacketStack.pop();
 	}
 	
 	// Peeks receivedPacketStack. If stack is empty throws EmptyStackException
-	public DatagramPacket peekPacketStack() throws EmptyStackException {
+	public UDPMessage peekPacketStack() throws EmptyStackException {
 		return receivedPacketStack.peek();
 	}
 	
@@ -63,7 +63,9 @@ public class UdpListener extends Thread {
 			try {
 				// Waits for the next message
 				socket.receive(incomingPacket);
-				receivedPacketStack.push(incomingPacket);
+				String received = new String(incomingPacket.getData(), 0, incomingPacket.getLength());
+				UDPMessage message = new UDPMessage(received, incomingPacket.getAddress());
+				receivedPacketStack.push(message);
 			} catch (SocketTimeoutException e) {
 				listening = false;
 			} catch (IOException e) {

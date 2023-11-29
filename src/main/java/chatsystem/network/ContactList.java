@@ -49,9 +49,9 @@ public class ContactList {
     	while(listener.isAlive()) {} // Waits for listener to timeout
 		// While there are packets in the stack pops them and adds them to contactList.
 		while(!listener.isPacketStackEmpty()) {
-			DatagramPacket packet = listener.popPacketStack();
-			String username = new String(packet.getData(), 0, packet.getLength());
-			InetAddress ip = packet.getAddress();
+			UDPMessage message = listener.popPacketStack();
+			String username = message.text();
+			InetAddress ip = message.source();
 			contactDict.put(username, ip);
 		}
 

@@ -35,9 +35,9 @@ public class OnJoinHandler extends Thread{
 		while(isOnline) {
 			while(!broadcastListener.isPacketStackEmpty()) {
 				// Adds joining users to contactList
-				DatagramPacket packet = broadcastListener.popPacketStack();
-				String joiningUser = new String(packet.getData(), 0, packet.getLength());
-				InetAddress ip = packet.getAddress();
+				UDPMessage message = broadcastListener.popPacketStack();
+				String joiningUser = message.text();
+				InetAddress ip = message.source();
 				contactList.addContact(joiningUser, ip);
 				System.out.println( joiningUser + " is now online (ip: " + ip.toString() + ") \n");
 				System.out.println("Listening for other users that might join...");
