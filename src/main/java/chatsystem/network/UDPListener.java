@@ -16,10 +16,15 @@ import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.util.EmptyStackException;
 import java.util.Stack;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class UDPListener extends Thread {
+    private static final Logger LOGGER = LogManager.getLogger(UDPListener.class);
 	private Stack<UDPMessage> receivedPacketStack;
 	private final DatagramSocket socket;
     private final List<Observer> observers = new ArrayList<>();
@@ -85,6 +90,9 @@ public class UDPListener extends Thread {
 				String received = new String(incomingPacket.getData(), 0, incomingPacket.getLength());
 				UDPMessage message = new UDPMessage(received, incomingPacket.getAddress());
 				
+				// Adds message to logger
+                LOGGER.trace("Received message on port " + socket.getLocalPort() + ": '" + message.text() + "' from " + message.source());
+                
 				// Synchronized to avoid concurrent access
 		        synchronized (this.observers) {
 		        	// Calls handler for all observers

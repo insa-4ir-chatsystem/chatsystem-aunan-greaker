@@ -18,12 +18,11 @@ public class UDPTests {
         List<String> testMessages = Arrays.asList("alice", "bob", "chloe", "multi\nline string", "éàç");
 
         List<String> receivedMessages = new ArrayList<>();
-        UDPListener server = new UDPListener(TEST_PORT);
-        server.addObserver(message -> {
-            System.out.println("received: " + message.text());
+        UDPListener listener = new UDPListener(TEST_PORT);
+        listener.addObserver(message -> {
             receivedMessages.add(message.text());
         });
-        server.start();
+        listener.start();
 
         for (String msg : testMessages) {
             UDPSender.send(InetAddress.getLocalHost(), TEST_PORT, msg);
