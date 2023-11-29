@@ -38,13 +38,12 @@ public class ContactList {
 		Thread.sleep(500); // Short Sleep to make sure socket is listening
     	
         //Send UDP broadcast to network
-    	UDPSender sender = new UDPSender(broadcastPort, srcPort);
-    	try {
+		// TODO
+    	/*try {
 			sender.sendBroadcast(username.getBytes());
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		}*/
 
     	while(listener.isAlive()) {} // Waits for listener to timeout
 		// While there are packets in the stack pops them and adds them to contactList.
