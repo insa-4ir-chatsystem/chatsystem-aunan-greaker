@@ -19,7 +19,7 @@ import java.util.Stack;
 
 public class UdpListener extends Thread {
 	private Stack<DatagramPacket> receivedPacketStack;
-	private DatagramSocket socket;
+	private final DatagramSocket socket;
 	private boolean listening;
 	
 	public UdpListener(int port) throws SocketException {
@@ -59,15 +59,15 @@ public class UdpListener extends Thread {
 	public void run() {
 		while(listening) {
 			byte[] buf = new byte[200];
-			DatagramPacket inPacket = new DatagramPacket(buf, buf.length);
+			DatagramPacket incomingPacket = new DatagramPacket(buf, buf.length);
 			try {
-				socket.receive(inPacket); // Blocks until packet received
-				receivedPacketStack.push(inPacket);
+				// Waits for the next message
+				socket.receive(incomingPacket);
+				receivedPacketStack.push(incomingPacket);
 			} catch (SocketTimeoutException e) {
 				listening = false;
 			} catch (IOException e) {
 				e.printStackTrace();
-				listening = false;
 			}
 		}
 		socket.close();
