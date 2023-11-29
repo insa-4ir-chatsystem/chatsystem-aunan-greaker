@@ -3,12 +3,14 @@
  * 
  * */
 
-package network;
+package chatsystem.network;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.SocketException;
+
+import chatsystem.Main;
 
 public class OnJoinHandler extends Thread{
 	private Boolean isOnline;

@@ -8,6 +8,9 @@ import java.net.SocketException;
 import java.util.*;
 import org.junit.Test;
 
+import chatsystem.network.UdpListener;
+import chatsystem.network.UdpSender;
+
 
 public class UdpTest {
 

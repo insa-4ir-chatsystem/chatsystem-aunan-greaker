@@ -1,7 +1,8 @@
-package network;
-
+package chatsystem;
 import java.net.SocketException;
 import java.util.Scanner;
+
+import chatsystem.network.*;
 
 public class Main {
 	private static ContactList contactList;

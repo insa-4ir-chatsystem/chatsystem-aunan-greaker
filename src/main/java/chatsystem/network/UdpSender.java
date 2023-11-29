@@ -1,4 +1,4 @@
-package network;
+package chatsystem.network;
 
 import java.io.IOException;
 import java.net.*;

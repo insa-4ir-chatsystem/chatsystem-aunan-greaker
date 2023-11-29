@@ -10,6 +10,8 @@ import java.util.Hashtable;
 
 import org.junit.Test;
 
+import chatsystem.network.ContactList;
+
 public class ContactListTest {
 
 	@Test
