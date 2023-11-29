@@ -11,6 +11,7 @@ import java.net.InetAddress;
 import java.net.SocketException;
 
 import chatsystem.Main;
+import chatsystem.contacts.ContactList;
 
 public class OnJoinHandler extends Thread{
 	private Boolean isOnline;
@@ -24,7 +25,7 @@ public class OnJoinHandler extends Thread{
 	@Override
 	public void run() {
 		try {
-			broadcastListener = new UDPListener(ContactList.broadcastPort);
+			broadcastListener = new UDPListener(ContactList.BROADCAST_PORT);
 			broadcastListener.start();
 		} catch (SocketException e) {
 			// TODO Auto-generated catch block
@@ -38,13 +39,14 @@ public class OnJoinHandler extends Thread{
 				UDPMessage message = broadcastListener.popPacketStack();
 				String joiningUser = message.text();
 				InetAddress ip = message.source();
-				contactList.addContact(joiningUser, ip);
+				// TODO Fix this
+				//contactList.addContact(joiningUser, ip);
 				System.out.println( joiningUser + " is now online (ip: " + ip.toString() + ") \n");
 				System.out.println("Listening for other users that might join...");
 				
 				// Replies to Udp broadcast
 				try {
-					UDPSender.send(ip, ContactList.broadcastReplyPort, Main.username);
+					UDPSender.send(ip, ContactList.BROADCAST_REPLY_PORT, Main.username);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

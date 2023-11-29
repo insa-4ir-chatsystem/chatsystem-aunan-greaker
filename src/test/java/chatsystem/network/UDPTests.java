@@ -29,7 +29,6 @@ public class UDPTests {
         }
 
         Thread.sleep(100);
-        System.out.println(receivedMessages);
         assertEquals(testMessages.size(), receivedMessages.size());
         assertEquals(testMessages, receivedMessages);
     }

@@ -2,6 +2,7 @@ package chatsystem;
 import java.net.SocketException;
 import java.util.Scanner;
 
+import chatsystem.contacts.ContactList;
 import chatsystem.network.*;
 
 public class Main {
@@ -10,7 +11,8 @@ public class Main {
 	public static void main (String[] args) throws SocketException, InterruptedException {
 		Boolean validUsername = false;
 		Scanner input = new Scanner(System.in);  // Create a Scanner object
-		while (!validUsername) {
+		// TODO
+		/*while (!validUsername) {
 		    System.out.print("Enter username: ");
 		    username = input.nextLine();  // Read user input
 		
@@ -23,9 +25,9 @@ public class Main {
 					System.out.println("The username you chose is already taken! Please choose another username");
 				}
 			}
-		}
+		}*/
 	    input.close();
-		System.out.println("Now online with " + contactList.getContactDict().toString());
+		System.out.println("Now online with " + contactList.getAllContacts().toString());
 		System.out.println("Listening for other users that might join...");
 		OnJoinHandler onJoinHandlerThread = new OnJoinHandler(contactList);
 		onJoinHandlerThread.setDaemon(false);

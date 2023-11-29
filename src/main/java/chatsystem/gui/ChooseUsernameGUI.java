@@ -1,4 +1,5 @@
-package chatsystem.gui;
+/*
+ * package chatsystem.gui;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -6,7 +7,7 @@ import java.awt.event.ActionListener;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
-import chatsystem.network.ContactList;
+import chatsystem.contacts.ContactList;
 
 public class ChooseUsernameGUI {
 	public static String myUsername;
@@ -14,7 +15,7 @@ public class ChooseUsernameGUI {
 	
 	public static boolean AvailableUsername(String username) {
 		ContactList contactList = new ContactList(username);
-        return contactList.getAllNames().contains(username);
+        return contactList.getAllContacts().contains(username);
 	}
 	
 	public ChooseUsernameGUI() {
@@ -51,3 +52,5 @@ public class ChooseUsernameGUI {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 }
+
+*/
