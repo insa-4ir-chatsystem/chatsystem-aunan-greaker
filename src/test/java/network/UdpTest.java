@@ -8,15 +8,15 @@ import java.net.SocketException;
 import java.util.*;
 import org.junit.Test;
 
-import chatsystem.network.UdpListener;
-import chatsystem.network.UdpSender;
+import chatsystem.network.UDPListener;
+import chatsystem.network.UDPSender;
 
 
 public class UdpTest {
 
 	@Test
 	public void UdpSenderTest() {
-		UdpSender sender = new UdpSender(8888, 9999);
+		UDPSender sender = new UDPSender(8888, 9999);
 		try {
 			sender.send("this is a test".getBytes(), InetAddress.getLocalHost());
 		} catch (IOException e) {
@@ -27,9 +27,9 @@ public class UdpTest {
 	@Test
 	public void sendBroadcastTest() throws IOException, InterruptedException {
 		String expected = "BroadcastTestMsg";
-		UdpListener listener = new UdpListener(8888, 200);
+		UDPListener listener = new UDPListener(8888, 200);
 		listener.start();
-		UdpSender sender = new UdpSender(8888, 9876);
+		UDPSender sender = new UDPSender(8888, 9876);
 		sender.sendBroadcast("BroadcastTestMsg".getBytes());
 		Thread.sleep(200);
 		try {
@@ -42,7 +42,7 @@ public class UdpTest {
 	@Test
 	public void getAllLocalBroadcastAddressesTest() {
 		try {
-			UdpSender.getAllLocalBroadcastAddresses();
+			UDPSender.getAllLocalBroadcastAddresses();
 		} catch (SocketException e) {
 			fail("Failed with SocketException: " + e);
 		}
@@ -50,10 +50,10 @@ public class UdpTest {
 
 	@Test
 	public void UdpListenerTest() throws SocketException, InterruptedException {
-		UdpListener listener = new UdpListener(8888, 100);
+		UDPListener listener = new UDPListener(8888, 100);
 		listener.start();
 		try {
-			UdpSender sender = new UdpSender(8888, 9999);
+			UDPSender sender = new UDPSender(8888, 9999);
 			sender.send("TestPacket".getBytes(), InetAddress.getLocalHost());
 		} catch (IOException e) {
 			fail("Failed because of UdpSender. " + e);

@@ -14,7 +14,7 @@ import chatsystem.Main;
 
 public class OnJoinHandler extends Thread{
 	private Boolean isOnline;
-	private UdpListener broadcastListener;
+	private UDPListener broadcastListener;
 	private ContactList contactList;
 	
 	public OnJoinHandler(ContactList contactList) {
@@ -24,7 +24,7 @@ public class OnJoinHandler extends Thread{
 	@Override
 	public void run() {
 		try {
-			broadcastListener = new UdpListener(ContactList.broadcastPort);
+			broadcastListener = new UDPListener(ContactList.broadcastPort);
 			broadcastListener.start();
 		} catch (SocketException e) {
 			// TODO Auto-generated catch block
@@ -43,9 +43,8 @@ public class OnJoinHandler extends Thread{
 				System.out.println("Listening for other users that might join...");
 				
 				// Replies to Udp broadcast
-				UdpSender udpSender = new UdpSender(ContactList.broadcastReplyPort, 9852);
 				try {
-					udpSender.send(Main.username.getBytes(), ip);
+					UDPSender.send(ip, ContactList.broadcastReplyPort, Main.username);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

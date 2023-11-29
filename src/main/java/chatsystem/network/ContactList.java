@@ -33,12 +33,12 @@ public class ContactList {
     public void makeContactDict() throws SocketException, InterruptedException {
     	
         //Listen for responses
-    	UdpListener listener = new UdpListener(broadcastReplyPort, 5000);
+    	UDPListener listener = new UDPListener(broadcastReplyPort, 5000);
 		listener.start();
 		Thread.sleep(500); // Short Sleep to make sure socket is listening
     	
         //Send UDP broadcast to network
-    	UdpSender sender = new UdpSender(broadcastPort, srcPort);
+    	UDPSender sender = new UDPSender(broadcastPort, srcPort);
     	try {
 			sender.sendBroadcast(username.getBytes());
 		} catch (IOException e) {
