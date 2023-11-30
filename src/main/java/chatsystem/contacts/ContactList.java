@@ -7,9 +7,15 @@ import java.util.List;
 public class ContactList {
 	public static final int BROADCAST_PORT = 7471; // The port on which all javaChatProgram instances must listen for Broadcast.
 	public static final int BROADCAST_REPLY_PORT = 7472; // The port to reply to when receiving a broadcast.
+	private static final ContactList INSTANCE = new ContactList();
     List<Contact> contacts = new ArrayList<>();
 
-    public ContactList() {
+    /* Defines singleton constructor class */
+    public static ContactList getInstance() {
+    	return INSTANCE;
+    }
+    
+    private ContactList() {
     }
 
     public synchronized void addContact(Contact contact) throws ContactAlreadyExists {
@@ -27,5 +33,9 @@ public class ContactList {
     public synchronized List<Contact> getAllContacts() {
         // return defensive copy of the contacts to avoid anybody modifying it or doing unsynchronized access
         return new ArrayList<>(this.contacts);
+    }
+    
+    public synchronized void clear() {
+        this.contacts.clear();
     }
 }
