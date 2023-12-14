@@ -12,6 +12,7 @@ package chatsystem.network;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
+import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.util.EmptyStackException;
@@ -89,6 +90,9 @@ public class UDPListener extends Thread {
 				// Extracts message 
 				String received = new String(incomingPacket.getData(), 0, incomingPacket.getLength());
 				UDPMessage message = new UDPMessage(received, incomingPacket.getAddress());
+				if (message.source().equals(InetAddress.getLocalHost())) {
+					continue;
+				}
 				
 				// Adds message to logger
                 LOGGER.trace("Received message on port " + socket.getLocalPort() + ": '" + message.text() + "' from " + message.source());

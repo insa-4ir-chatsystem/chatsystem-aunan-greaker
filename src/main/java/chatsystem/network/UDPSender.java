@@ -6,8 +6,16 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Iterator;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import chatsystem.Main;
+import chatsystem.contacts.ContactList.Observer;
+
 /** Class containing all methods for sending UDP packets, and getting local broadcast addresses */
 public class UDPSender {	
+	
+	 private static final Logger LOGGER = LogManager.getLogger(UDPSender.class);
 	
     /** Sends a UDP message on the given address and port. */
     public static void send(InetAddress addr, int port, String message) throws IOException {
@@ -19,16 +27,14 @@ public class UDPSender {
     }
 	
 	// Sends the message buf on all local broadcast addresses found in the getAllLocalBroadcastAddresses function of this class
-	public void sendBroadcast(byte[] buf) throws IOException {
+	public static void sendBroadcast(int port, String msg) throws IOException {
 		// TODO
-		/*ArrayList<InetAddress> broadcastAddresses = getAllLocalBroadcastAddresses();
-		broadcastAddresses.forEach((broadAddr) -> {
-			try {
-				send(buf, broadAddr);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		});*/
+		ArrayList<InetAddress> broadcastAddresses = getAllLocalBroadcastAddresses();
+        for (InetAddress broadAddr : broadcastAddresses) {
+        	if (!broadAddr.equals(InetAddress.getByName("127.255.255.255"))) {
+        		send(broadAddr, port, msg);
+        	}
+        }
 	}
 	
 	// Gets the local broadcast addresses from all interfaceAddresses in all the networkInterfaces, and adds them to an arraylist that is returned at the end of the function
