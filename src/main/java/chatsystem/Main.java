@@ -1,38 +1,36 @@
 package chatsystem;
-import java.net.SocketException;
-import java.util.Scanner;
 
-import chatsystem.contacts.ContactList;
-import chatsystem.network.*;
+import chatsystem.controller.Controller;
+import chatsystem.network.UDPListener;
+import chatsystem.ui.View;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.core.config.Configurator;
+import java.net.SocketException;
 
 public class Main {
-	/*private static ContactList contactList;
-	public static String username;*/
-	public static void main (String[] args) throws SocketException, InterruptedException {
-		new chatsystem.gui.ChooseUsernameGUI();
-		// TODO
-		/*Boolean validUsername = false;
-		Scanner input = new Scanner(System.in);*/  // Create a Scanner object
-		// TODO
-		/*while (!validUsername) {
-		    System.out.print("Enter username: ");
-		    username = input.nextLine();  // Read user input
-		
-			contactList = new ContactList(username);
-			contactList.makeContactDict();
-			validUsername = true;
-			for (int i = 0; contactList.getContactDict().size() > i; i++) {
-				if (contactList.getAllNames().get(i).equals(username)) {
-					validUsername = false;
-					System.out.println("The username you chose is already taken! Please choose another username");
-				}
-			}
-		}*/
-	    /*input.close();
-		System.out.println("Now online with " + contactList.getAllContacts().toString());
-		System.out.println("Listening for other users that might join...");
-		OnJoinHandler onJoinHandlerThread = new OnJoinHandler(contactList);
-		onJoinHandlerThread.setDaemon(false);
-		onJoinHandlerThread.start();*/
-	}
+
+    private static final Logger LOGGER = LogManager.getLogger(Main.class);
+
+	public static final int BROADCAST_PORT = 7471; // The port on which all javaChatProgram instances must listen for Broadcast.
+	public static final int BROADCAST_REPLY_PORT = 7472; // The port to reply to when receiving a broadcast.
+
+    public static void main(String[] args) {
+        Configurator.setRootLevel(Level.INFO);
+        LOGGER.info("Starting ChatSystem application");
+
+        View.initialize();
+
+        try {
+            UDPListener server = new UDPListener(BROADCAST_PORT);
+
+            server.addObserver(msg -> Controller.handleContactDiscoveryMessage(msg));
+
+            server.start();
+        } catch (SocketException e) {
+            System.err.println("Could not start UDP listener: " + e.getMessage());
+            System.exit(1);
+        }
+    }
 }
