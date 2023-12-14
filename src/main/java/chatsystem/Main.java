@@ -6,11 +6,13 @@ import chatsystem.contacts.ContactList;
 import chatsystem.network.*;
 
 public class Main {
-	private static ContactList contactList;
-	public static String username;
+	/*private static ContactList contactList;
+	public static String username;*/
 	public static void main (String[] args) throws SocketException, InterruptedException {
-		Boolean validUsername = false;
-		Scanner input = new Scanner(System.in);  // Create a Scanner object
+		new chatsystem.gui.ChooseUsernameGUI();
+		// TODO
+		/*Boolean validUsername = false;
+		Scanner input = new Scanner(System.in);*/  // Create a Scanner object
 		// TODO
 		/*while (!validUsername) {
 		    System.out.print("Enter username: ");
@@ -26,11 +28,11 @@ public class Main {
 				}
 			}
 		}*/
-	    input.close();
+	    /*input.close();
 		System.out.println("Now online with " + contactList.getAllContacts().toString());
 		System.out.println("Listening for other users that might join...");
 		OnJoinHandler onJoinHandlerThread = new OnJoinHandler(contactList);
 		onJoinHandlerThread.setDaemon(false);
-		onJoinHandlerThread.start();
+		onJoinHandlerThread.start();*/
 	}
 }

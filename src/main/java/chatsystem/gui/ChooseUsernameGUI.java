@@ -1,21 +1,26 @@
-/*
- * package chatsystem.gui;
+package chatsystem.gui;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
+import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 import chatsystem.contacts.ContactList;
+import chatsystem.contacts.Contact;
 
 public class ChooseUsernameGUI {
-	public static String myUsername;
-	private JTextField usernameField;
+	//public static String myUsername;
+	//private JTextField usernameField;
 	
-	public static boolean AvailableUsername(String username) {
-		ContactList contactList = new ContactList(username);
-        return contactList.getAllContacts().contains(username);
+	private boolean UsernameIsAvailable(String username) throws UnknownHostException {
+		ContactList contactList = ContactList.getInstance();
+		Contact newContact = new Contact(username, InetAddress.getLocalHost());
+        return !contactList.hasContact(newContact);
 	}
 	
 	public ChooseUsernameGUI() {
@@ -25,19 +30,27 @@ public class ChooseUsernameGUI {
 	    panel.setBorder(new EmptyBorder(10, 10, 10, 10));
 
 	    JLabel usernameLabel = new JLabel("Username: ");
-        usernameField = new JTextField(20);
+	    JTextField usernameField = new JTextField(20);
 
 	    JButton loginButton = new JButton("Login");
 
 	    loginButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-            	myUsername = usernameField.getText();
-	            if (!AvailableUsername(myUsername) && myUsername != "") {
-	            	frame.dispose();
-	            	new ChatSystemGUI(myUsername);
-	            } else {
-	                JOptionPane.showMessageDialog(frame, "This username is already taken, please choose another one");	            	            
-	            }
+            	String myUsername = usernameField.getText();
+	            try {
+					if (UsernameIsAvailable(myUsername) && myUsername != "") {
+						frame.dispose();
+						new ChatSystemGUI(myUsername);
+					} else {
+					    JOptionPane.showMessageDialog(frame, "This username is already taken, please choose another one");	            	            
+					}
+				} catch (HeadlessException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (UnknownHostException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 	        }
 	    });
 	    
@@ -52,5 +65,3 @@ public class ChooseUsernameGUI {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 }
-
-*/

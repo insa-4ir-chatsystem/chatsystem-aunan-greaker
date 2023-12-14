@@ -15,8 +15,7 @@ public class ContactList {
     	return INSTANCE;
     }
     
-    private ContactList() {
-    }
+    private ContactList() {}
 
     public synchronized void addContact(Contact contact) throws ContactAlreadyExists {
         if (hasContact(contact)) {
@@ -27,6 +26,7 @@ public class ContactList {
     }
 
     public synchronized boolean hasContact(Contact contact) {
+    	// returns true if contact contains another user with the same username. See override of equals in 'chatsystem.contacts.Contact.java'
     	return contacts.contains(contact);
     }
 
