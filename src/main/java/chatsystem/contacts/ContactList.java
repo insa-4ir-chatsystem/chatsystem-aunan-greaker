@@ -11,8 +11,6 @@ public class ContactList {
         void nicknameChanged(Contact newContact, String previousNickname);
     }
     
-	public static final int BROADCAST_PORT = 7471; // The port on which all javaChatProgram instances must listen for Broadcast.
-	public static final int BROADCAST_REPLY_PORT = 7472; // The port to reply to when receiving a broadcast.
 	private static final ContactList INSTANCE = new ContactList();
     List<Contact> contacts = new ArrayList<>();
     List<Observer> observers = new ArrayList<>();
@@ -34,6 +32,9 @@ public class ContactList {
             throw new ContactAlreadyExists(contact);
         } else {
             contacts.add(contact);
+            for (Observer obs : observers) {
+                obs.newContactAdded(contact);
+            }
         }
     }
 
