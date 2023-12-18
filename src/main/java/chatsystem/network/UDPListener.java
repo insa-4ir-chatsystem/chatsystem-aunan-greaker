@@ -90,7 +90,10 @@ public class UDPListener extends Thread {
 				// Extracts message 
 				String received = new String(incomingPacket.getData(), 0, incomingPacket.getLength());
 				UDPMessage message = new UDPMessage(received, incomingPacket.getAddress());
+				
+				// Ignore messages on from LocalHost
 				if (message.source().equals(InetAddress.getLocalHost())) {
+					LOGGER.trace("Ignored message from LocalHost " + socket.getLocalPort() + ": '" + message.text() + "' from " + message.source());
 					continue;
 				}
 				
