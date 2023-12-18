@@ -26,7 +26,7 @@ public class Main {
 	public static String myUsername;
 	
     public static void main(String[] args) throws InterruptedException, UnknownHostException {
-    	LOGGER.trace("LocalHost " + InetAddress.getLocalHost().getHostAddress());
+    	LOGGER.trace("Current IP " + UDPSender.getCurrentIp().getHostAddress());
         Configurator.setRootLevel(Level.INFO);
         LOGGER.info("Starting ChatSystem application");
 
