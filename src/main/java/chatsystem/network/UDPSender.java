@@ -20,6 +20,7 @@ public class UDPSender {
     /** Sends a UDP message on the given address and port. */
     public static void send(InetAddress addr, int port, String message) throws IOException {
         DatagramSocket socket = new DatagramSocket(); // Will create a socket on an available port
+        socket.setBroadcast(true);
         byte[] buff = message.getBytes();
         DatagramPacket packet = new DatagramPacket(buff, buff.length, addr, port);
         socket.send(packet);
@@ -52,5 +53,28 @@ public class UDPSender {
 		}
 		return returnList;
 	}
+	
+	public static InetAddress getCurrentIp() {
+        try {
+            Enumeration<NetworkInterface> networkInterfaces = NetworkInterface
+                    .getNetworkInterfaces();
+            while (networkInterfaces.hasMoreElements()) {
+                NetworkInterface ni = (NetworkInterface) networkInterfaces
+                        .nextElement();
+                Enumeration<InetAddress> nias = ni.getInetAddresses();
+                while(nias.hasMoreElements()) {
+                    InetAddress ia= (InetAddress) nias.nextElement();
+                    if (!ia.isLinkLocalAddress() 
+                     && !ia.isLoopbackAddress()
+                     && ia instanceof Inet4Address) {
+                        return ia;
+                    }
+                }
+            }
+        } catch (SocketException e) {
+            LOGGER.error("unable to get current IP " + e.getMessage(), e);
+        }
+        return null;
+    }
 }
 
