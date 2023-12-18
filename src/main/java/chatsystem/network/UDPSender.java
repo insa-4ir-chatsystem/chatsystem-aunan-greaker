@@ -54,8 +54,9 @@ public class UDPSender {
 		return returnList;
 	}
 	
-	public static InetAddress getCurrentIp() {
+	public static ArrayList<InetAddress> getAllCurrentIp() {
         try {
+        	ArrayList<InetAddress> AllCurrentIp = new ArrayList<>();
             Enumeration<NetworkInterface> networkInterfaces = NetworkInterface
                     .getNetworkInterfaces();
             while (networkInterfaces.hasMoreElements()) {
@@ -67,10 +68,11 @@ public class UDPSender {
                     if (!ia.isLinkLocalAddress() 
                      && !ia.isLoopbackAddress()
                      && ia instanceof Inet4Address) {
-                        return ia;
+                        AllCurrentIp.add(ia);
                     }
                 }
             }
+            return AllCurrentIp;
         } catch (SocketException e) {
             LOGGER.error("unable to get current IP " + e.getMessage(), e);
         }
