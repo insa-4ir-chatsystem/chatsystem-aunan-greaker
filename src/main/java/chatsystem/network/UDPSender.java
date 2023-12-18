@@ -31,6 +31,7 @@ public class UDPSender {
 		// TODO
 		ArrayList<InetAddress> broadcastAddresses = getAllLocalBroadcastAddresses();
         for (InetAddress broadAddr : broadcastAddresses) {
+        	LOGGER.info("Found this broadcast address: " + broadAddr);
         	if (!broadAddr.equals(InetAddress.getByName("127.255.255.255"))) {
         		send(broadAddr, port, msg);
         	}
