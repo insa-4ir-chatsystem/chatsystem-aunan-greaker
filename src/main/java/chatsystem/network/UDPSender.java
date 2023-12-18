@@ -32,9 +32,7 @@ public class UDPSender {
 		ArrayList<InetAddress> broadcastAddresses = getAllLocalBroadcastAddresses();
         for (InetAddress broadAddr : broadcastAddresses) {
         	LOGGER.info("Found this broadcast address: " + broadAddr);
-        	if (!broadAddr.equals(InetAddress.getByName("127.255.255.255"))) {
-        		send(broadAddr, port, msg);
-        	}
+        	send(broadAddr, port, msg);
         }
 	}
 	
@@ -47,7 +45,7 @@ public class UDPSender {
 		while(networkinterfaces.hasMoreElements()) {
 			Iterator<InterfaceAddress> interfaceAddressIter = networkinterfaces.nextElement().getInterfaceAddresses().iterator();
 			interfaceAddressIter.forEachRemaining((interfaceAddress) -> {
-				if (interfaceAddress.getBroadcast() != null) {
+				if (interfaceAddress.getBroadcast() != null && !interfaceAddress.getAddress().equals(InetAddress.getLoopbackAddress())) {
 					returnList.add(interfaceAddress.getBroadcast());
 				}
 			});

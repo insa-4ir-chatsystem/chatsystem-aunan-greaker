@@ -25,7 +25,8 @@ public class Main {
 	public static final String ANNOUNCE_PROTOCOL = "All online users announce yourselves.";
 	public static String myUsername;
 	
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) throws InterruptedException, UnknownHostException {
+    	LOGGER.trace("LocalHost " + InetAddress.getLocalHost().getHostAddress());
         Configurator.setRootLevel(Level.INFO);
         LOGGER.info("Starting ChatSystem application");
 
@@ -50,7 +51,7 @@ public class Main {
 		    myUsername = input.nextLine();  // Read user input
 		
 		    try {
-				UDPSender.sendBroadcast(BROADCAST_PORT, ANNOUNCE_PROTOCOL); // Sends empty msg to request online users to announce themselves.
+				UDPSender.sendBroadcast(BROADCAST_PORT, ANNOUNCE_PROTOCOL); // Sends ANNOUNCE msg to request online users to announce themselves.
 			} catch (IOException e) {
 				System.err.println("Could not start send broadcast: " + e.getMessage());
 	            System.exit(1);
