@@ -42,7 +42,7 @@ public class ChooseUsernameGUI {
 						frame.dispose();
 						new ChatSystemGUI(myUsername);
 					} else {
-					    JOptionPane.showMessageDialog(frame, "This username is already taken, please choose another one");	            	            
+					    JOptionPane.showMessageDialog(frame, "This username is not available, please choose a different one");	            	            
 					}
 				} catch (HeadlessException e1) {
 					// TODO Auto-generated catch block
