@@ -39,6 +39,6 @@ Before running the program, ensure you have [Maven](https://maven.apache.org/) i
 
 1. Open the terminal window (bash).
 2. Navigate to the project root directory.
-3. Run `mvn package` and `mvn exec:java -Dexec.mainClass="network.Main"`.
+3. Run `mvn package` and `mvn exec:java -Dexec.mainClass="chatsystem.Main"`.
 
 This will start the program on your computer.
