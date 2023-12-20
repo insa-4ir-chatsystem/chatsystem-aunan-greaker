@@ -2,6 +2,7 @@ package chatsystem;
 
 import chatsystem.contacts.*;
 import chatsystem.controller.Controller;
+import chatsystem.ui.*;
 import chatsystem.network.UDPListener;
 import chatsystem.network.UDPSender;
 import chatsystem.ui.View;
@@ -25,7 +26,7 @@ public class Main {
 	public static final String ANNOUNCE_PROTOCOL = "All online users announce yourselves.";
 	public static String myUsername;
 	
-    public static void main(String[] args) throws InterruptedException, UnknownHostException {
+    public static void main(String[] args) throws InterruptedException, UnknownHostException {    	
     	LOGGER.trace("Current IP " + UDPSender.getAllCurrentIp());
         Configurator.setRootLevel(Level.INFO);
         LOGGER.info("Starting ChatSystem application");
@@ -69,6 +70,8 @@ public class Main {
 		}
 		
 		LOGGER.info("Now online with username:" + myUsername);
+		
+		new ChatSystemGUI(myUsername);
 		
     }
 }

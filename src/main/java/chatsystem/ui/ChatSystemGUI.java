@@ -1,5 +1,7 @@
 package chatsystem.ui;
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -7,15 +9,15 @@ import javax.swing.*;
 
 public class ChatSystemGUI {
 	private JTextField messageField;
-	//private GroupLayout group; Kommenterte ut fordi eclipse ga warning
 	
 	public ChatSystemGUI(String username) {
 		final JFrame frame = new JFrame();
-	    JPanel panel = new JPanel();
-	    panel.setLayout(new BorderLayout(1, 2));
+	    JPanel newMessagePanel = new JPanel();
+	    newMessagePanel.setLayout(new GridLayout(0, 2));
 
-	    JLabel messageLabel = new JLabel("Write your message here: ");
-        messageField = new JTextField(20);
+	    //JLabel messageLabel = new JLabel("Write your message here: ");
+        messageField = new JTextField(200);
+        //messageField.setBorder(BorderFactory.createLineBorder(Color.decode("#2C6791")));
 
 	    JButton sendButton = new JButton("Send");
 
@@ -25,11 +27,11 @@ public class ChatSystemGUI {
 	        }
 	    });
 	    
-	    panel.add(messageLabel);
-	    panel.add(messageField);
-        panel.add(sendButton);
+	    //panel.add(messageLabel);
+	    newMessagePanel.add(messageField);
+	    newMessagePanel.add(sendButton);
 
-        frame.add(panel, BorderLayout.CENTER);
+        frame.add(newMessagePanel, BorderLayout.CENTER);
         frame.setTitle("ChatSystem");
         frame.pack();
         frame.setVisible(true);
