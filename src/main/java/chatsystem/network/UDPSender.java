@@ -32,7 +32,6 @@ public class UDPSender {
 		// TODO
 		ArrayList<InetAddress> broadcastAddresses = getAllLocalBroadcastAddresses();
         for (InetAddress broadAddr : broadcastAddresses) {
-        	LOGGER.info("Found this broadcast address: " + broadAddr);
         	send(broadAddr, port, msg);
         }
 	}
