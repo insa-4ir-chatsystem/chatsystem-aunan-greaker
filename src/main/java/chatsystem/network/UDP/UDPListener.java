@@ -7,7 +7,7 @@
  * 
  * */
 
-package chatsystem.network;
+package chatsystem.network.UDP;
 
 import java.io.IOException;
 import java.net.DatagramPacket;

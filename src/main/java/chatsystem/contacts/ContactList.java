@@ -30,7 +30,8 @@ public class ContactList {
     public synchronized void addContact(Contact contact) throws ContactAlreadyExists {
         if (hasContact(contact)) {
             throw new ContactAlreadyExists(contact);
-        } else {
+        } 
+        else {
             contacts.add(contact);
             for (Observer obs : observers) {
                 obs.newContactAdded(contact);
@@ -40,6 +41,16 @@ public class ContactList {
 
     public synchronized boolean hasContact(Contact contact) {
     	return contacts.contains(contact);
+    }
+    
+    public synchronized boolean hasContactIP(Contact contact) {
+    	List<Contact> allContacts = getAllContacts();
+    	for (int i = 0; allContacts.size() > i; i++) {
+    		if ((allContacts.get(i).ip()).equals(contact.ip())) {
+    			return true;
+    		}
+    	}
+    	return false;
     }
 
     public synchronized List<Contact> getAllContacts() {

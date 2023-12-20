@@ -3,8 +3,8 @@ package chatsystem;
 import chatsystem.contacts.*;
 import chatsystem.controller.Controller;
 import chatsystem.ui.*;
-import chatsystem.network.UDPListener;
-import chatsystem.network.UDPSender;
+import chatsystem.network.UDP.UDPListener;
+import chatsystem.network.UDP.UDPSender;
 import chatsystem.ui.View;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -71,7 +71,7 @@ public class Main {
 		
 		LOGGER.info("Now online with username:" + myUsername);
 		
-		new ChatSystemGUI(myUsername);
+		//new ChatSystemGUI(myUsername);
 		
     }
 }

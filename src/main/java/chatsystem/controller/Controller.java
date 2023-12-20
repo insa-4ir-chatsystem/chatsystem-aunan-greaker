@@ -4,8 +4,8 @@ import chatsystem.Main;
 import chatsystem.contacts.Contact;
 import chatsystem.contacts.ContactAlreadyExists;
 import chatsystem.contacts.ContactList;
-import chatsystem.network.UDPMessage;
-import chatsystem.network.UDPSender;
+import chatsystem.network.UDP.UDPMessage;
+import chatsystem.network.UDP.UDPSender;
 
 import java.io.IOException;
 import java.net.InetAddress;

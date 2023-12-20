@@ -3,7 +3,8 @@ package chatsystem.controller;
 import chatsystem.contacts.ContactList;
 import chatsystem.contacts.Contact;
 import chatsystem.controller.Controller;
-import chatsystem.network.UDPMessage;
+import chatsystem.network.UDP.UDPMessage;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
