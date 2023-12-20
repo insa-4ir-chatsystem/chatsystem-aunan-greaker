@@ -1,26 +1,44 @@
-# ~~Burn~~ Replace with your own after reading
+# Chat System Project
 
-This private repository is created for you so that your teachers have access to it.
+## Overview
 
-## Identify yourself
+The Chat System Project is designed to connect users through a chat system, focusing on various phases of development. The primary goals include:
 
-Before anything, **complete the `metadata.yml` with your own information.** 
+- Connecting and contact discovery phase
+- Peer-to-peer messaging
+- Implementation of a user-friendly chat system interface
+- History of messages handling
 
-This is the file that we will use to identify the teacher responsible for the repository and assign the grades to the participating students.
+For the initial release, the project concentrates on the connecting and contact discovery phase.
 
-## Take ownership
+## Features in the First Release
 
-As long as you make sure to keep the `metadata.yml` file at the root of this repository, you are free to do anything. Our suggestion would be to have it organized into something like the following:
+1. **Log-in and Username Selection:**
+   - Users can log in and choose their usernames.
 
-    .gitignore
-    metadata.yml
-    pom.xml
-    README.md
-    src/
-      main/
-      test/
-    doc/
-      uml/
-      report.pdf
+2. **Username Availability:**
+   - Verification ensures the chosen username is available on the network.
 
-In particular, you will soon have to replace this README with something that describes your own project.
+3. **Contact List Management:**
+   - Initial creation of the contact list, including the user and others online during log-in.
+
+## Prerequisites
+
+Before running the program, ensure you have [Maven](https://maven.apache.org/) installed on your machine.
+
+## How to Run
+
+### Windows
+
+1. Open the terminal window (cmd).
+2. Navigate to the project root directory.
+3. Run `mvn clean package`.
+4. Once tests pass and compilation is complete, run `java -jar target/ChatSystem-jar-with-dependencies.jar`.
+
+### Linux
+
+1. Open the terminal window (bash).
+2. Navigate to the project root directory.
+3. Run `mvn package` and `mvn exec:java -Dexec.mainClass="network.Main"`.
+
+This will start the program on your computer.
