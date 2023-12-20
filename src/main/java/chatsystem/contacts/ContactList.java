@@ -41,6 +41,16 @@ public class ContactList {
     public synchronized boolean hasContact(Contact contact) {
     	return contacts.contains(contact);
     }
+    
+    public synchronized boolean hasContactIP(Contact contact) {
+    	List<Contact> allContacts = getAllContacts();
+    	for (int i = 0; allContacts.size() > i; i++) {
+    		if ((allContacts.get(i).ip()).equals(contact.ip())) {
+    			return true;
+    		}
+    	}
+    	return false;
+    }
 
     public synchronized List<Contact> getAllContacts() {
         // return defensive copy of the contacts to avoid anybody modifying it or doing unsynchronized access
