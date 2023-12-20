@@ -27,13 +27,13 @@ public class ControllerTest {
         Contact contact2 = new Contact(msg2.text(), msg2.source());
         
         assert !contacts.hasContact(contact1);
-        Controller.handleContactDiscoveryMessage(msg1);
+        Controller.contactDiscoveryMessageHandler(msg1);
         assert contacts.hasContact(contact1);
 
         assert !contacts.hasContact(contact2);
-        Controller.handleContactDiscoveryMessage(msg2);
+        Controller.contactDiscoveryMessageHandler(msg2);
         assert contacts.hasContact(contact2);
 
-        Controller.handleContactDiscoveryMessage(msg2);
+        Controller.contactDiscoveryMessageHandler(msg2);
     }
 }

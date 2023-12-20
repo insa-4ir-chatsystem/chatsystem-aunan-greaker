@@ -4,14 +4,11 @@ import java.io.IOException;
 import java.net.*;
 import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import chatsystem.Main;
-import chatsystem.contacts.ContactList.Observer;
 
 /** Class containing all methods for sending UDP packets, and getting local broadcast addresses */
 public class UDPSender {	
@@ -33,7 +30,7 @@ public class UDPSender {
 		// TODO
 		ArrayList<InetAddress> broadcastAddresses = getAllBroadcastAddresses();
         for (InetAddress broadAddr : broadcastAddresses) {
-        	LOGGER.info("Found these broadcasts addresses: " + broadAddr);
+        	//LOGGER.info("Found these broadcasts addresses: " + broadAddr);
         	send(broadAddr, port, msg);
         }
 	}
