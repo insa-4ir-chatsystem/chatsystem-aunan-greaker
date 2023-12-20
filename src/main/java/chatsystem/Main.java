@@ -1,7 +1,7 @@
 package chatsystem;
 
 import chatsystem.controller.Controller;
-import chatsystem.network.UDPSender;
+import chatsystem.network.udp.UDPSender;
 import chatsystem.ui.View;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
