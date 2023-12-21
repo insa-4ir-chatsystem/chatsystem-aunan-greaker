@@ -18,7 +18,7 @@ public class ChatHistory {
 	}
 	
 	public List<ChatMessage> getChatHistory(){
-		//TODO
+		//TODO maybe done?
 		return chatMessages;
 	}
 }
