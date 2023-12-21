@@ -26,7 +26,6 @@ import java.util.List;
 
 public class UDPListener extends Thread {
     private static final Logger LOGGER = LogManager.getLogger(UDPListener.class);
-	private Stack<UDPMessage> receivedPacketStack;
 	private final DatagramSocket socket;
     private final List<Observer> observers = new ArrayList<>();
 	private boolean listening;
@@ -39,13 +38,11 @@ public class UDPListener extends Thread {
 	
 	public UDPListener(int port) throws SocketException {
 		listening = true;
-		receivedPacketStack = new Stack<UDPMessage>();
 		socket = new DatagramSocket(port);
 	}
 	
 	public UDPListener(int port, int timeoutMS) throws SocketException {
 		listening = true;
-		receivedPacketStack = new Stack<UDPMessage>();
 		socket = new DatagramSocket(port);
 		socket.setSoTimeout(timeoutMS);
 	}
@@ -57,21 +54,6 @@ public class UDPListener extends Thread {
             this.observers.add(obs);
         }
     }
-	
-	// Pops receivedPacketStack. If stack is empty throws EmptyStackException
-	public UDPMessage popPacketStack() throws EmptyStackException {
-		return receivedPacketStack.pop();
-	}
-	
-	// Peeks receivedPacketStack. If stack is empty throws EmptyStackException
-	public UDPMessage peekPacketStack() throws EmptyStackException {
-		return receivedPacketStack.peek();
-	}
-	
-	// true if and only if this stack contains no items; false otherwise.
-	public Boolean isPacketStackEmpty() {
-		return receivedPacketStack.empty();
-	}
 	
 	public Boolean isListening() {
 		return listening;
