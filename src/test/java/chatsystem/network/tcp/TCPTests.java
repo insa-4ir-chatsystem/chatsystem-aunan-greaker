@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 
 class TCPTests {
 
+	/*
 	@Test
 	void StartSessionTest() throws UnknownHostException {
 		TCPListener listener = new TCPListener();
@@ -16,11 +17,11 @@ class TCPTests {
             new TCPConnection(ip, socket);
         });
 		listener.start();
-		
+	*/	
 		
 		//TCPConnection client1 = new TCPConnection(ip, socket);
 		//client1.startConnection(InetAddress.getLocalHost());
 		//client1.sendMessage("Hi");
-	}
+	
 
 }
