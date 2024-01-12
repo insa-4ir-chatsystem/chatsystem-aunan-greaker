@@ -1,6 +1,6 @@
 package chatsystem;
 
-import chatsystem.controller.Controller;
+import chatsystem.controller.UDPController;
 import chatsystem.network.udp.UDPSender;
 import chatsystem.ui.View;
 import org.apache.logging.log4j.Level;
@@ -20,7 +20,7 @@ public class Main {
         LOGGER.info("Starting ChatSystem application");
 
         View.initialize();
-        Controller.loginHandler();
-		
+        UDPController.loginHandler();
+        //Controller TCPListener start goes here
     }
 }

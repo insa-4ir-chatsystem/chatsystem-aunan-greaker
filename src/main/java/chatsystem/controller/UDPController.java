@@ -16,9 +16,9 @@ import java.util.Scanner;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class Controller {
+public class UDPController {
 
-    private static final Logger LOGGER = LogManager.getLogger(Controller.class);
+    private static final Logger LOGGER = LogManager.getLogger(UDPController.class);
 	public static final int BROADCAST_PORT = 7471; // The port on which all javaChatProgram instances must listen for Broadcast.
 	public static final int BROADCAST_REPLY_PORT = 7472; // The port to reply to when receiving a broadcast.
 	public static final String ANNOUNCE_PROTOCOL = "All online users announce yourselves.";
@@ -48,9 +48,7 @@ public class Controller {
     public static void loginHandler() {
         try {
             UDPListener server = new UDPListener(BROADCAST_PORT);
-
-            server.addObserver(msg -> {Controller.contactDiscoveryMessageHandler(msg);});
-
+            server.addObserver(msg -> {UDPController.contactDiscoveryMessageHandler(msg);});
             server.start();
         } catch (SocketException e) {
             System.err.println("Could not start UDP listener: " + e.getMessage());
