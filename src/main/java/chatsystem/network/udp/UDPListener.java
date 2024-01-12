@@ -89,9 +89,6 @@ public class UDPListener extends Thread {
 		        	observers.forEach(obs -> obs.handle(message));
 		        }
 				
-				
-				/** Put in handler
-				receivedPacketStack.push(message);*/
 			} catch (SocketTimeoutException e) {
 				listening = false;
 			} catch (IOException e) {
