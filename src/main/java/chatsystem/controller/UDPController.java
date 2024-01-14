@@ -1,6 +1,5 @@
 package chatsystem.controller;
 
-import chatsystem.Main;
 import chatsystem.contacts.Contact;
 import chatsystem.contacts.ContactAlreadyExists;
 import chatsystem.contacts.ContactList;
@@ -81,6 +80,7 @@ public class UDPController {
 		    	System.out.println("The username you chose is already taken! Please choose another username");
 		    }
 		}
+		input.close();
 		
 	    try {
 			UDPSender.sendBroadcast(BROADCAST_PORT, myUsername); // Sends its username on the network so others can add it to contactlist
