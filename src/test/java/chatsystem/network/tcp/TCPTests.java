@@ -24,7 +24,7 @@ class TCPTests {
 			try {
 				client2 = new TCPConnection(socket);
 	            String inputLine;
-	            while((inputLine = client2.readMessages()) != null) {
+	            while((inputLine = client2.readMessage()) != null) {
 	            	actual.add(inputLine);
 	            	LOGGER.trace("Got message: " + inputLine);
 	            }
@@ -67,7 +67,7 @@ class TCPTests {
 			try {
 				client2 = new TCPConnection(socket);
 	            String inputLine;
-	            while((inputLine = client2.readMessages()) != null) {
+	            while((inputLine = client2.readMessage()) != null) {
 	            	if (inputLine.equals("Hi")) {
 	            		client2.sendMessage("Hello, nice to meet you!");
 	            	}
@@ -92,7 +92,7 @@ class TCPTests {
 		expected.add("Hi");
 		Thread.sleep(WAIT_DELAY);
 		assertEquals(expected, actual);
-		assertEquals("Hello, nice to meet you!", client1.readMessages());
+		assertEquals("Hello, nice to meet you!", client1.readMessage());
 		
 		client1.sendMessage("So..");
 		expected.add("So..");
@@ -117,7 +117,7 @@ class TCPTests {
 				try {
 					client2 = new TCPConnection(socket);
 		            String inputLine;
-		            while((inputLine = client2.readMessages()) != null) {
+		            while((inputLine = client2.readMessage()) != null) {
 		            	actual.add(inputLine);
 		            	LOGGER.trace("Got message: " + inputLine);
 		            }

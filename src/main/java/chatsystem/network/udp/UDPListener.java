@@ -12,11 +12,8 @@ package chatsystem.network.udp;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
-import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
-import java.util.EmptyStackException;
-import java.util.Stack;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -48,11 +45,8 @@ public class UDPListener extends Thread {
 	}
 	
     /** Adds a new observer to the class, for which the handle method will be called for each incoming message. */
-    public void addObserver(Observer obs) {
-    	// Synchronized to avoid concurrent access
-        synchronized (this.observers) {
-            this.observers.add(obs);
-        }
+    public synchronized void addObserver(Observer obs) {
+        this.observers.add(obs);
     }
 	
 	public Boolean isListening() {
