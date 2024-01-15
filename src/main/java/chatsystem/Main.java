@@ -21,8 +21,6 @@ public class Main {
         LOGGER.info("Starting ChatSystem application");
 
         ChooseUsernameGUI.initialize();
-        View.initialize();
-        UDPController.loginHandler();
         //Controller TCPListener start goes here
     }
 }

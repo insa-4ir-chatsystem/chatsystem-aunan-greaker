@@ -7,6 +7,8 @@ import chatsystem.contacts.ContactList;
 import chatsystem.network.udp.UDPListener;
 import chatsystem.network.udp.UDPMessage;
 import chatsystem.network.udp.UDPSender;
+import chatsystem.ui.ChatSystemGUI;
+import chatsystem.ui.ChooseUsernameGUI;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -30,6 +32,7 @@ public class UDPController {
 	    	Contact contact = new Contact(message.text(), message.source());
 	        try {
 	            ContactList.getInstance().addContact(contact);
+	            ChatSystemGUI.updateContactTable(); // Update Contact table in GUI
 	            LOGGER.info("New Contact added to the list: " + contact);
 	        } catch (ContactAlreadyExists e) {
 	            LOGGER.error("Received duplicated contact: " + contact);
@@ -45,7 +48,7 @@ public class UDPController {
     	}
     }
     
-    public static void loginHandler() {
+    public static Boolean loginHandler() {
         try {
             UDPListener server = new UDPListener(BROADCAST_PORT);
             server.addObserver(msg -> {UDPController.contactDiscoveryMessageHandler(msg);});
@@ -55,41 +58,36 @@ public class UDPController {
             System.exit(1);
         }
         
-        Boolean validUsername = false;
-		Scanner input = new Scanner(System.in);  // Create a Scanner object
-		
-		while (!validUsername) {
-		    System.out.print("Enter username: ");
-		    myUsername = input.nextLine();  // Read user input
-		
-		    try {
-				UDPSender.sendBroadcast(BROADCAST_PORT, ANNOUNCE_PROTOCOL); // Sends ANNOUNCE msg to request online users to announce themselves.
-				Thread.sleep(2000); // Waits 2 seconds for online users to announce themselves
-		    } catch (IOException e) {
-				System.err.println("Could not start send broadcast: " + e.getMessage());
-	            System.exit(1);
-			} catch (InterruptedException e) {
-				System.err.println("Could not sleep thread ContactList may not have been initialised correctly: " + e.getMessage());
-			}
-		    
-		    
-		    Contact newContact = new Contact(myUsername, InetAddress.getLoopbackAddress());
-		    if (!ContactList.getInstance().hasContact(newContact)) {
-		    	validUsername = true;
-		    }
-		    else {
-		    	System.out.println("The username you chose is already taken! Please choose another username");
-		    }
-		}
-		
-	    try {
-			UDPSender.sendBroadcast(BROADCAST_PORT, myUsername); // Sends its username on the network so others can add it to contactlist
+        myUsername = ChooseUsernameGUI.getUsername();  // Gets the chosen username
+			
+		try {
+			UDPSender.sendBroadcast(BROADCAST_PORT, ANNOUNCE_PROTOCOL); // Sends ANNOUNCE msg to request online users to announce themselves.
+			Thread.sleep(2000); // Waits 2 seconds for all online users to announce themselves
 		} catch (IOException e) {
 			System.err.println("Could not start send broadcast: " + e.getMessage());
-            System.exit(1);
+	        System.exit(1);
+		} catch (InterruptedException e) {
+			System.err.println("Could not sleep thread ContactList may not have been initialised correctly: " + e.getMessage());
+		}    
+		    
+		Contact newContact = new Contact(myUsername, InetAddress.getLoopbackAddress());
+		if (!ContactList.getInstance().hasContact(newContact)) {
+			// Username chosen is available
+			try {
+				UDPSender.sendBroadcast(BROADCAST_PORT, myUsername); // Sends its username on the network so others can add it to contactlist
+			} catch (IOException e) {
+				LOGGER.error("Could not start send broadcast: " + e.getMessage());
+	            System.exit(1);
+			}
+			
+			LOGGER.info("Now online with username:" + myUsername);
+			
+		    return true;
 		}
-		
-		LOGGER.info("Now online with username:" + myUsername);
+		else {
+			// Username chosen is not available / already taken
+		    return false;
+		}
     }
   
 }
