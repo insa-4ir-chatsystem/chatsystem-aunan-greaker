@@ -2,6 +2,7 @@ package chatsystem;
 
 import chatsystem.controller.UDPController;
 import chatsystem.network.udp.UDPSender;
+import chatsystem.ui.ChooseUsernameGUI;
 import chatsystem.ui.View;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -19,6 +20,7 @@ public class Main {
         Configurator.setRootLevel(Level.INFO);
         LOGGER.info("Starting ChatSystem application");
 
+        ChooseUsernameGUI.initialize();
         View.initialize();
         UDPController.loginHandler();
         //Controller TCPListener start goes here
