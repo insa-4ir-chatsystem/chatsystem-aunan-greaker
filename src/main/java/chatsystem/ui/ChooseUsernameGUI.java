@@ -17,13 +17,13 @@ public class ChooseUsernameGUI {
 	//public static String myUsername;
 	//private JTextField usernameField;
 	
-	private boolean UsernameIsAvailable(String username) throws UnknownHostException {
+	public static boolean UsernameIsAvailable(String username) throws UnknownHostException {
 		ContactList contactList = ContactList.getInstance();
 		Contact newContact = new Contact(username, InetAddress.getLocalHost());
         return !contactList.hasContact(newContact);
 	}
 	
-	public ChooseUsernameGUI() {
+	public static void initialize() {
 		final JFrame frame = new JFrame();
 	    JPanel panel = new JPanel();
 	    panel.setLayout(new GridLayout(0, 1));
