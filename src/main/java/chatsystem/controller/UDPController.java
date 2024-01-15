@@ -31,7 +31,6 @@ public class UDPController {
 	    	Contact contact = new Contact(message.text(), message.source());
 	        try {
 	            ContactList.getInstance().addContact(contact);
-	            ChatSystemGUI.updateContactTable(); // Update Contact table in GUI
 	            LOGGER.info("New Contact added to the list: " + contact);
 	        } catch (ContactAlreadyExists e) {
 	            LOGGER.error("Received duplicated contact: " + contact);
@@ -51,6 +50,7 @@ public class UDPController {
         try {
             UDPListener server = new UDPListener(BROADCAST_PORT);
             server.addObserver(msg -> {UDPController.contactDiscoveryMessageHandler(msg);});
+			server.addObserver((msg) -> {ChatSystemGUI.updateContactTable();}); // Update Contact table in GUI
             server.start();
         } catch (SocketException e) {
             System.err.println("Could not start UDP listener: " + e.getMessage());
