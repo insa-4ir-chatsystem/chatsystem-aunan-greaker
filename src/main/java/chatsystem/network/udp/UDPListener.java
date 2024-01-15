@@ -23,7 +23,7 @@ import java.util.List;
 
 public class UDPListener extends Thread {
     private static final Logger LOGGER = LogManager.getLogger(UDPListener.class);
-	private final DatagramSocket socket;
+	private final DatagramSocket SOCKET;
     private final List<Observer> observers = new ArrayList<>();
 	private boolean listening;
 	
@@ -35,13 +35,13 @@ public class UDPListener extends Thread {
 	
 	public UDPListener(int port) throws SocketException {
 		listening = true;
-		socket = new DatagramSocket(port);
+		SOCKET = new DatagramSocket(port);
 	}
 	
 	public UDPListener(int port, int timeoutMS) throws SocketException {
 		listening = true;
-		socket = new DatagramSocket(port);
-		socket.setSoTimeout(timeoutMS);
+		SOCKET = new DatagramSocket(port);
+		SOCKET.setSoTimeout(timeoutMS);
 	}
 	
     /** Adds a new observer to the class, for which the handle method will be called for each incoming message. */
@@ -61,7 +61,7 @@ public class UDPListener extends Thread {
 			DatagramPacket incomingPacket = new DatagramPacket(buf, buf.length);
 			try {
 				// Waits for the next message
-				socket.receive(incomingPacket);
+				SOCKET.receive(incomingPacket);
 				
 				// Extracts message 
 				String received = new String(incomingPacket.getData(), 0, incomingPacket.getLength());
@@ -70,12 +70,12 @@ public class UDPListener extends Thread {
 				LOGGER.trace(message.source().getHostAddress());
 				// Ignore messages on from LocalHost
 				if (UDPSender.getAllCurrentIp().contains(message.source())) {
-					LOGGER.trace("Ignored message from LocalHost " + socket.getLocalPort() + ": '" + message.text() + "' from " + message.source());
+					LOGGER.trace("Ignored message from LocalHost " + SOCKET.getLocalPort() + ": '" + message.text() + "' from " + message.source());
 					continue;
 				}
 				
 				// Adds message to logger
-                LOGGER.trace("Received message on port " + socket.getLocalPort() + ": '" + message.text() + "' from " + message.source());
+                LOGGER.trace("Received message on port " + SOCKET.getLocalPort() + ": '" + message.text() + "' from " + message.source());
                 
 				// Synchronized to avoid concurrent access
 		        synchronized (this.observers) {
@@ -89,6 +89,6 @@ public class UDPListener extends Thread {
 				e.printStackTrace();
 			}
 		}
-		socket.close();
+		SOCKET.close();
 	}
 }
