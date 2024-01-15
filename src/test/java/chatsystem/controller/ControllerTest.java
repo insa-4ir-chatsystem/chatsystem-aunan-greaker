@@ -2,7 +2,7 @@ package chatsystem.controller;
 
 import chatsystem.contacts.ContactList;
 import chatsystem.contacts.Contact;
-import chatsystem.controller.Controller;
+import chatsystem.controller.UDPController;
 import chatsystem.network.udp.UDPMessage;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -28,13 +28,13 @@ public class ControllerTest {
         Contact contact2 = new Contact(msg2.text(), msg2.source());
         
         assert !contacts.hasContact(contact1);
-        Controller.contactDiscoveryMessageHandler(msg1);
+        UDPController.contactDiscoveryMessageHandler(msg1);
         assert contacts.hasContact(contact1);
 
         assert !contacts.hasContact(contact2);
-        Controller.contactDiscoveryMessageHandler(msg2);
+        UDPController.contactDiscoveryMessageHandler(msg2);
         assert contacts.hasContact(contact2);
 
-        Controller.contactDiscoveryMessageHandler(msg2);
+        UDPController.contactDiscoveryMessageHandler(msg2);
     }
 }

@@ -1,6 +1,6 @@
 package chatsystem;
 
-import chatsystem.controller.Controller;
+import chatsystem.controller.UDPController;
 import chatsystem.network.udp.UDPSender;
 import chatsystem.ui.ChooseUsernameGUI;
 import chatsystem.ui.View;
@@ -22,7 +22,7 @@ public class Main {
 
         ChooseUsernameGUI.initialize();
         View.initialize();
-        Controller.loginHandler();
-		
+        UDPController.loginHandler();
+        //Controller TCPListener start goes here
     }
 }
