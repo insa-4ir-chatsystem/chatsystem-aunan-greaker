@@ -4,10 +4,14 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import chatsystem.network.tcp.TCPConnection;
 import chatsystem.network.tcp.TCPListener;
 
 public class TCPController {
+	private static final Logger LOGGER = LogManager.getLogger(TCPController.class);
 	public static final int TCP_LISTENING_PORT = 9922;
 	
 	/**	Starts the TCPListener. This is required to be able to accept incoming TCPConnections*/
@@ -28,18 +32,28 @@ public class TCPController {
 	public static void handleIncomingTCPConnection(Socket socket) {
 		// Handles Incoming TCPConnection in a separate thread so TCPListener can continue listen for new connections
 		Thread handlerThread = new Thread(() -> {
-			//TODO Implement what to do when new connection is established
+			try {
+				TCPConnection chatconnection = new TCPConnection(socket);
+				LOGGER.trace("New TCPConnection established with " + socket.getInetAddress() + " on port " + socket.getPort());
+
+				//TODO: Handle incoming messages on chatconnection
+			} catch (IOException e) {
+				System.err.println("Could not establish TCPConnection with " + socket.getInetAddress());
+				e.printStackTrace();
+			}
+
 		});
 		handlerThread.start();
 	}
 	
 	/** Starts a chat with remote user on given ip*/
-	public static void startChatWith(InetAddress ip){
+	public static TCPConnection startChatWith(InetAddress ip){
 		try {
-			TCPConnection chatConnection = new TCPConnection(ip, TCP_LISTENING_PORT);
+			return new TCPConnection(ip, TCP_LISTENING_PORT);
 		} catch (IOException e) {
 			System.err.println("Could not start TCPConnection with " + ip + "on port " + TCP_LISTENING_PORT);
 			e.printStackTrace();
+			return null;
 		}
 	}
 	

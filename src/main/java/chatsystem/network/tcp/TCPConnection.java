@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.util.ArrayList;
 
 /* Class representing an active TCP connection*/
 public class TCPConnection {
@@ -59,8 +60,8 @@ public class TCPConnection {
     	out.println(msg);
     }
     
-    /**	Reads a line*/
-    public String readMessages() throws IOException {
+    /**	Reads a line on the TCPConnection, returns null if no line read*/
+    public String readMessage() throws IOException {
     	return in.readLine();
     }
 }

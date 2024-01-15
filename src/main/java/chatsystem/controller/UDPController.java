@@ -1,6 +1,5 @@
 package chatsystem.controller;
 
-import chatsystem.Main;
 import chatsystem.contacts.Contact;
 import chatsystem.contacts.ContactAlreadyExists;
 import chatsystem.contacts.ContactList;
