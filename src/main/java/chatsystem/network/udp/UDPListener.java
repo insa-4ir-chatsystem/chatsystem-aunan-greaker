@@ -52,6 +52,10 @@ public class UDPListener extends Thread {
 	public Boolean isListening() {
 		return listening;
 	}
+
+	public void close() {
+		SOCKET.close();
+	}
 	
 		
 	@Override
