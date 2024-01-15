@@ -11,11 +11,11 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 import chatsystem.contacts.ContactList;
+import chatsystem.controller.UDPController;
 import chatsystem.contacts.Contact;
 
 public class ChooseUsernameGUI {
-	//public static String myUsername;
-	//private JTextField usernameField;
+	private static JTextField usernameField = new JTextField(20);;
 	
 	public static boolean UsernameIsAvailable(String username) throws UnknownHostException {
 		ContactList contactList = ContactList.getInstance();
@@ -30,26 +30,17 @@ public class ChooseUsernameGUI {
 	    panel.setBorder(new EmptyBorder(10, 10, 10, 10));
 
 	    JLabel usernameLabel = new JLabel("Username: ");
-	    JTextField usernameField = new JTextField(20);
 
 	    JButton loginButton = new JButton("Login");
 
 	    loginButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
             	String myUsername = usernameField.getText();
-	            try {
-					if (UsernameIsAvailable(myUsername) && myUsername != "") {
-						frame.dispose();
-						new ChatSystemGUI(myUsername);
-					} else {
-					    JOptionPane.showMessageDialog(frame, "This username is not available, please choose a different one");	            	            
-					}
-				} catch (HeadlessException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				} catch (UnknownHostException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+				if (UDPController.loginHandler() && !myUsername.equals("")) {
+					frame.dispose();
+					new ChatSystemGUI(myUsername);
+				} else {
+					JOptionPane.showMessageDialog(frame, "This username is not available, please choose a different one");	            	            
 				}
 	        }
 	    });
@@ -63,5 +54,9 @@ public class ChooseUsernameGUI {
         frame.pack();
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	}
+	
+	public static String getUsername() {
+		return usernameField.getText();
 	}
 }

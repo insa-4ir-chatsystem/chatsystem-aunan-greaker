@@ -24,62 +24,57 @@ import chatsystem.log.TableAlreadyExists;
 import chatsystem.network.udp.UDPSender;
 
 public class ChatSystemGUI {
-	private JTable contactTable;
-	private JTable chatsTable;
+	private static final JFrame frame = new JFrame();
+	private static JPanel contactsPanel = new JPanel();
+	private static JPanel chatHistoryPanel = new JPanel();
+	private static JPanel newChatPanel = new JPanel();
+	private static JTable contactTable = new JTable();
+	private static JTable chatsTable = new JTable();
 	
 	private static final Logger LOGGER = LogManager.getLogger(ChatSystemGUI.class);
 	
 	public ChatSystemGUI(String username) {
-		final JFrame frame = new JFrame();
-	    JPanel panel = new JPanel();
-	    panel.setLayout(new GridBagLayout());
+	    newChatPanel.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
-
+        
+        contactTable.setPreferredScrollableViewportSize(new Dimension(200, 500));
+        updateContactTable();
+        
+        chatsTable.setPreferredScrollableViewportSize(new Dimension(500, 500));
+        JScrollPane scrollPaneChats = new JScrollPane(chatsTable);
+        chatHistoryPanel.add(scrollPaneChats);
+        
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.gridx = 0;
-        gbc.gridy = 0;
-        contactTable = new JTable();
-        updateContactTable(contactTable);
-        contactTable.setPreferredScrollableViewportSize(new Dimension(200, 500));
-        JScrollPane scrollPaneContacts = new JScrollPane(contactTable);
-        panel.add(scrollPaneContacts);
-        
-        gbc.gridx = 1;
         gbc.gridy = 1;
-        chatsTable = new JTable();
-        chatsTable.setPreferredScrollableViewportSize(new Dimension(400, 460));
-        JScrollPane scrollPaneChats = new JScrollPane(chatsTable);
-        panel.add(scrollPaneChats);
+        newChatPanel.add(new JLabel("Write your message here: "));
         
-        gbc.gridx = 1;
-        gbc.gridy = 1;
-        panel.add(new JLabel("Write your message here: "));
-        
-        gbc.gridx = 1;
+        gbc.gridx = 0;
         gbc.gridy = 2;
         JTextField messageField = new JTextField();
         messageField.setPreferredSize(new Dimension(600, 25));
-        panel.add(messageField);
+        newChatPanel.add(messageField);
 
-        gbc.gridx = 1;
+        gbc.gridx = 0;
         gbc.gridy = 3;
 	    JButton sendButton = new JButton("Send");
-	    panel.add(sendButton);
+	    newChatPanel.add(sendButton);
 
 	    sendButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-	            //String message = messageField.getText(); Kommenterte ut fordi eclipse ga warning
+	            //String message = messageField.getText();
 	        }
 	    });
 
-        frame.add(panel, BorderLayout.CENTER);
+        frame.add(contactsPanel, BorderLayout.WEST);
+        frame.add(newChatPanel, BorderLayout.SOUTH);
         frame.setTitle("ChatSystem");
         frame.pack();
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 	
-	public void updateContactTable(JTable contactTable) {
+	public static void updateContactTable() {
     	// Create a table model with one column for contactNames and no data initially
         DefaultTableModel tableModel = new DefaultTableModel( new Object[]{"Contacts"}, 0);
 
@@ -98,6 +93,12 @@ public class ChatSystemGUI {
         
         // Make the entire table non-editable
         contactTable.setEnabled(false);
+        
+        // Add contactTable to the scrollPaneContacts, scrollPaneContacts to the contactsPanel, and contactPanel to the WEST of the frame (and remove any old version of the contactPanel if found)
+        JScrollPane scrollPaneContacts = new JScrollPane(contactTable);
+        contactsPanel.add(scrollPaneContacts);
+        frame.remove(contactsPanel);
+        frame.add(contactsPanel, BorderLayout.WEST);
     }
 	
 	public void updateChatsTable(JTable chatsTable, Contact otherUser) {
@@ -116,7 +117,6 @@ public class ChatSystemGUI {
 			LOGGER.error(e.getMessage());
 		}
         
-        // Database controller???
         try {
 	        ResultSet rs = db.getTable(otherUser.ip().toString());
 	        
@@ -139,6 +139,13 @@ public class ChatSystemGUI {
 	        
 	        // Make the entire table non-editable
 	        chatsTable.setEnabled(false);
+	        
+	     // Add contactTable to the scrollPaneChats, scrollPaneChats to the chatHistoryPanel, and chatHistoryPanel to the CENTER of the frame (and remove any old version of the chatHistoryPanel if found)
+	        JScrollPane scrollPaneChats = new JScrollPane(chatsTable);
+	        chatHistoryPanel.add(scrollPaneChats);
+	        frame.remove(chatHistoryPanel);
+	        frame.add(chatHistoryPanel, BorderLayout.CENTER);
+	        
         } catch (SQLException e) {
         	LOGGER.error(e.getMessage());
         }
