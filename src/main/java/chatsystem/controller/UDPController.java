@@ -67,14 +67,6 @@ public class UDPController {
     		Contact newContact = new Contact(myUsername, InetAddress.getLoopbackAddress());
     		if (!ContactList.getInstance().hasContact(newContact)) {
     			// Username chosen is available
-    			try {
-    				UDPSender.sendBroadcast(BROADCAST_PORT, myUsername); // Sends its username on the network so others can add it to contactlist
-    			} catch (IOException e) {
-    				LOGGER.error("Could not start send broadcast: " + e.getMessage());
-    	            System.exit(1);
-    			}
-    			
-    			LOGGER.info("Now online with username:" + myUsername);
     			server.close();
     		    return true;
     		}
@@ -100,6 +92,15 @@ public class UDPController {
             System.err.println("Could not start UDP listener: " + e.getMessage());
             System.exit(1);
         } 
+        
+        try {
+			UDPSender.sendBroadcast(BROADCAST_PORT, myUsername); // Sends its username on the network so others can add it to contactlist
+		} catch (IOException e) {
+			LOGGER.error("Could not start send broadcast: " + e.getMessage());
+            System.exit(1);
+		}
+		
+		LOGGER.info("Now online with username:" + myUsername);
     }
   
 }
