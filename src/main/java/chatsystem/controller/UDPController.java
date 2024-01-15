@@ -50,52 +50,51 @@ public class UDPController {
     	try {
             UDPListener server = new UDPListener(BROADCAST_PORT);
             server.addObserver(msg -> {UDPController.contactDiscoveryMessageHandler(msg);});
-			server.addObserver((msg) -> {ChatSystemGUI.updateContactTable();}); // Update Contact table in GUI
             server.start();
+            
+            myUsername = username;  // Gets the chosen username
+			
+    		try {
+    			UDPSender.sendBroadcast(BROADCAST_PORT, ANNOUNCE_PROTOCOL); // Sends ANNOUNCE msg to request online users to announce themselves.
+    			Thread.sleep(2000); // Waits 2 seconds for all online users to announce themselves
+    		} catch (IOException e) {
+    			System.err.println("Could not start send broadcast: " + e.getMessage());
+    	        System.exit(1);
+    		} catch (InterruptedException e) {
+    			System.err.println("Could not sleep thread ContactList may not have been initialised correctly: " + e.getMessage());
+    		}    
+    		    
+    		Contact newContact = new Contact(myUsername, InetAddress.getLoopbackAddress());
+    		if (!ContactList.getInstance().hasContact(newContact)) {
+    			// Username chosen is available
+    			try {
+    				UDPSender.sendBroadcast(BROADCAST_PORT, myUsername); // Sends its username on the network so others can add it to contactlist
+    			} catch (IOException e) {
+    				LOGGER.error("Could not start send broadcast: " + e.getMessage());
+    	            System.exit(1);
+    			}
+    			
+    			LOGGER.info("Now online with username:" + myUsername);
+    			server.close();
+    		    return true;
+    		}
+    		else {
+    			// Username chosen is not available / already taken
+    			server.close();
+    		    return false;
+    		}  		
         } catch (SocketException e) {
             System.err.println("Could not start UDP listener: " + e.getMessage());
             System.exit(1);
-        }
-        
-        myUsername = username;  // Gets the chosen username
-			
-		try {
-			UDPSender.sendBroadcast(BROADCAST_PORT, ANNOUNCE_PROTOCOL); // Sends ANNOUNCE msg to request online users to announce themselves.
-			Thread.sleep(2000); // Waits 2 seconds for all online users to announce themselves
-		} catch (IOException e) {
-			System.err.println("Could not start send broadcast: " + e.getMessage());
-	        System.exit(1);
-		} catch (InterruptedException e) {
-			System.err.println("Could not sleep thread ContactList may not have been initialised correctly: " + e.getMessage());
-		}    
-		    
-		Contact newContact = new Contact(myUsername, InetAddress.getLoopbackAddress());
-		if (!ContactList.getInstance().hasContact(newContact)) {
-			// Username chosen is available
-			try {
-				UDPSender.sendBroadcast(BROADCAST_PORT, myUsername); // Sends its username on the network so others can add it to contactlist
-			} catch (IOException e) {
-				LOGGER.error("Could not start send broadcast: " + e.getMessage());
-	            System.exit(1);
-			}
-			
-			LOGGER.info("Now online with username:" + myUsername);
-			
-		    return true;
-		}
-		else {
-			// Username chosen is not available / already taken
-		    return false;
-		}
-		
-		//server.close();
-		
+        }	
+    	return false;
     }
     
     public static void loginHandler() {
         try {
             UDPListener server = new UDPListener(BROADCAST_PORT);
             server.addObserver(msg -> {UDPController.contactDiscoveryMessageHandler(msg);});
+            server.addObserver((msg) -> {ChatSystemGUI.updateContactTable();}); // Update Contact table in GUI
             server.start();
         } catch (SocketException e) {
             System.err.println("Could not start UDP listener: " + e.getMessage());
