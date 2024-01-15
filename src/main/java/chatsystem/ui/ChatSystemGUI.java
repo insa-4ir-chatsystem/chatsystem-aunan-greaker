@@ -25,15 +25,20 @@ import chatsystem.network.udp.UDPSender;
 
 public class ChatSystemGUI {
 	private static final JFrame frame = new JFrame();
-	private static JPanel contactsPanel = new JPanel();
-	private static JPanel chatHistoryPanel = new JPanel();
-	private static JPanel newChatPanel = new JPanel();
-	private static JTable contactTable = new JTable();
-	private static JTable chatsTable = new JTable();
+	private static JPanel contactsPanel;
+	private static JPanel chatHistoryPanel;
+	private static JPanel newChatPanel;
+	private static JTable contactTable;
+	private static JTable chatsTable;
 	
 	private static final Logger LOGGER = LogManager.getLogger(ChatSystemGUI.class);
 	
 	public ChatSystemGUI(String username) {
+		contactsPanel = new JPanel();
+		chatHistoryPanel = new JPanel();
+		newChatPanel = new JPanel();
+		contactTable = new JTable();
+		chatsTable = new JTable();
 	    newChatPanel.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         

@@ -47,8 +47,8 @@ public class UDPController {
     	}
     }
     
-    public static Boolean loginHandler() {
-        try {
+    public static Boolean usernameAvailableHandler(String username) {
+    	try {
             UDPListener server = new UDPListener(BROADCAST_PORT);
             server.addObserver(msg -> {UDPController.contactDiscoveryMessageHandler(msg);});
             server.start();
@@ -57,7 +57,7 @@ public class UDPController {
             System.exit(1);
         }
         
-        myUsername = ChooseUsernameGUI.getUsername();  // Gets the chosen username
+        myUsername = username;  // Gets the chosen username
 			
 		try {
 			UDPSender.sendBroadcast(BROADCAST_PORT, ANNOUNCE_PROTOCOL); // Sends ANNOUNCE msg to request online users to announce themselves.
@@ -87,6 +87,20 @@ public class UDPController {
 			// Username chosen is not available / already taken
 		    return false;
 		}
+		
+		//server.close();
+		
+    }
+    
+    public static void loginHandler() {
+        try {
+            UDPListener server = new UDPListener(BROADCAST_PORT);
+            server.addObserver(msg -> {UDPController.contactDiscoveryMessageHandler(msg);});
+            server.start();
+        } catch (SocketException e) {
+            System.err.println("Could not start UDP listener: " + e.getMessage());
+            System.exit(1);
+        } 
     }
   
 }

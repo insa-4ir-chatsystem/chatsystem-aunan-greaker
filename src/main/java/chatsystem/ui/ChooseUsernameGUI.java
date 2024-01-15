@@ -36,9 +36,10 @@ public class ChooseUsernameGUI {
 	    loginButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
             	String myUsername = usernameField.getText();
-				if (UDPController.loginHandler() && !myUsername.equals("")) {
+				if (UDPController.usernameAvailableHandler(myUsername) && !myUsername.equals("")) {
 					frame.dispose();
 					new ChatSystemGUI(myUsername);
+					UDPController.loginHandler();
 				} else {
 					JOptionPane.showMessageDialog(frame, "This username is not available, please choose a different one");	            	            
 				}
