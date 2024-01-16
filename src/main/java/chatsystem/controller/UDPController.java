@@ -24,20 +24,22 @@ public class UDPController {
 	public static String myUsername;
 
     public static void contactDiscoveryMessageHandler(UDPMessage message) {
+		// Somebody announced themselves, so we add them to our contact list.
     	if (!message.text().equals(ANNOUNCE_PROTOCOL))
     	{
 	    	Contact contact = new Contact(message.text(), message.source());
 	        try {
 	            ContactList.getInstance().addContact(contact);
-	            LOGGER.info("New Contact added to the list: " + contact);
+	            LOGGER.trace("New Contact added to the list: " + contact);
 	        } catch (ContactAlreadyExists e) {
 	            LOGGER.error("Received duplicated contact: " + contact);
 	        }
     	}
+		// Somebody asked us to announce ourselves, so we do.
     	else {
     		try {
 				UDPSender.send(message.source(), BROADCAST_PORT, myUsername);
-				LOGGER.info("Announced ourself to: " + message.source());
+				LOGGER.trace("Announced ourself to: " + message.source());
 			} catch (IOException e) {
 				LOGGER.error("Could not announce ourselves: " + e.getMessage());
 			}
@@ -45,6 +47,7 @@ public class UDPController {
     }
     
     public static Boolean usernameAvailableHandler(String username) {
+		LOGGER.trace("Checking if" + username + " is available...");
     	try {
             UDPListener server = new UDPListener(BROADCAST_PORT);
             server.addObserver(msg -> {UDPController.contactDiscoveryMessageHandler(msg);});
@@ -56,10 +59,9 @@ public class UDPController {
     			UDPSender.sendBroadcast(BROADCAST_PORT, ANNOUNCE_PROTOCOL); // Sends ANNOUNCE msg to request online users to announce themselves.
     			Thread.sleep(2000); // Waits 2 seconds for all online users to announce themselves
     		} catch (IOException e) {
-    			System.err.println("Could not start send broadcast: " + e.getMessage());
-    	        System.exit(1);
+    			LOGGER.error("Could not start send broadcast: " + e.getMessage());
     		} catch (InterruptedException e) {
-    			System.err.println("Could not sleep thread ContactList may not have been initialised correctly: " + e.getMessage());
+    			LOGGER.error("Could not sleep thread ContactList may not have been initialised correctly: " + e.getMessage());
     		}    
     		    
 			/** Creates itself has a contact to check if the username is already taken */
@@ -92,6 +94,7 @@ public class UDPController {
 	}
 
 	public static void loginHandler() {
+		LOGGER.trace("Running loginHandler...");
 		// Initilize the UDPListener
 		initilizeUDPListener();
 		
@@ -101,6 +104,7 @@ public class UDPController {
 			public void newContactAdded(Contact contact) {  
 				// Update Contact table in GUI
 				ChatSystemGUI.updateContactTable();
+				LOGGER.trace("Updated contact table in GUI");
 			}
 
 			@Override
@@ -112,10 +116,11 @@ public class UDPController {
 		try {
 			// Sends its username on the network so others can add it to contactlist
 			UDPSender.sendBroadcast(BROADCAST_PORT, myUsername);
+			LOGGER.trace("Sent UDP broadcast with username: " + myUsername + " on port: " + BROADCAST_PORT);
 		} catch (IOException e) {
 			LOGGER.error("Failed to send UDP broadcast: " + e.getMessage());
-			System.exit(1);
 		}
-		LOGGER.info("Now online with username:" + myUsername);
+		TCPController.startTCPListener();
+		LOGGER.info("Now online with username: " + myUsername);
 	}
 }

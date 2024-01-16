@@ -48,19 +48,14 @@ public class UDPListener extends Thread {
     public synchronized void addObserver(Observer obs) {
         this.observers.add(obs);
     }
-	
-	public Boolean isListening() {
-		return listening;
-	}
 
 	public void close() {
 		SOCKET.close();
 	}
 	
-		
 	@Override
 	public void run() {
-		while(listening) {
+		while(!SOCKET.isClosed()) {
 			byte[] buf = new byte[200];
 			DatagramPacket incomingPacket = new DatagramPacket(buf, buf.length);
 			try {
@@ -87,11 +82,15 @@ public class UDPListener extends Thread {
 		        }
 				
 			} catch (SocketTimeoutException e) {
-				listening = false;
+				LOGGER.trace("UDPListener timed out");
+				SOCKET.close();
 			} catch (IOException e) {
-				e.printStackTrace();
+				if (SOCKET.isClosed()) {
+					LOGGER.trace("UDPListener was closed");
+				} else {
+					LOGGER.error("Could not receive packet: " + e.getMessage());
+				}
 			}
 		}
-		SOCKET.close();
 	}
 }

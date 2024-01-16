@@ -21,7 +21,7 @@ public class TCPController {
 			theTCPListener = new TCPListener(TCP_LISTENING_PORT);
 			theTCPListener.addObserver(socket -> TCPController.handleIncomingTCPConnection(socket));
 			theTCPListener.start();
-			
+			LOGGER.trace("TCPListener started on port " + TCP_LISTENING_PORT);
 		} catch (IOException e) {
 			LOGGER.error("Could not start TCPListener");
 			e.printStackTrace();

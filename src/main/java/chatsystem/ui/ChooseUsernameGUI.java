@@ -10,11 +10,15 @@ import java.net.UnknownHostException;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import chatsystem.contacts.ContactList;
 import chatsystem.controller.UDPController;
 import chatsystem.contacts.Contact;
 
 public class ChooseUsernameGUI {
+	private static final Logger LOGGER = LogManager.getLogger(ChooseUsernameGUI.class);
 	private static JTextField usernameField = new JTextField(20);;
 	
 	public static boolean UsernameIsAvailable(String username) throws UnknownHostException {
@@ -35,8 +39,10 @@ public class ChooseUsernameGUI {
 
 	    loginButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+				LOGGER.trace("Login button pressed");
             	String myUsername = usernameField.getText();
 				if (UDPController.usernameAvailableHandler(myUsername) && !myUsername.equals("")) {
+					LOGGER.debug("Username '"+ myUsername + "' was available, logging in...");
 					frame.dispose();
 					new ChatSystemGUI(myUsername);
 					UDPController.loginHandler();
@@ -55,6 +61,8 @@ public class ChooseUsernameGUI {
         frame.pack();
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+		LOGGER.trace("Initialized ChooseUsernameGUI");
 	}
 	
 	public static String getUsername() {
