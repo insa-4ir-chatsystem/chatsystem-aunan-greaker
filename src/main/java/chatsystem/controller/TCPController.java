@@ -34,9 +34,14 @@ public class TCPController {
 		Thread handlerThread = new Thread(() -> {
 			try {
 				TCPConnection chatconnection = new TCPConnection(socket);
-				LOGGER.trace("New TCPConnection established with " + socket.getInetAddress() + " on port " + socket.getPort());
+				LOGGER.trace("Incoming TCPConnection established with " + socket.getInetAddress() + " on port " + socket.getPort());
 
-				//TODO: Handle incoming messages on chatconnection
+				//Handles incoming messages
+				String receivedMsg;
+				while ((receivedMsg = chatconnection.readMessage()) != null) {
+					LOGGER.trace("Received message: " + receivedMsg);
+				}
+				LOGGER.trace("TCPConnection with " + socket.getInetAddress() + " on port " + socket.getPort() + " closed");
 			} catch (IOException e) {
 				System.err.println("Could not establish TCPConnection with " + socket.getInetAddress());
 				e.printStackTrace();
