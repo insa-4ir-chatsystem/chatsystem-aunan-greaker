@@ -64,6 +64,7 @@ public class UDPController {
     			System.err.println("Could not sleep thread ContactList may not have been initialised correctly: " + e.getMessage());
     		}    
     		    
+			/** Creates itself has a contact to check if the username is already taken */
     		Contact newContact = new Contact(myUsername, InetAddress.getLoopbackAddress());
     		if (!ContactList.getInstance().hasContact(newContact)) {
     			// Username chosen is available
