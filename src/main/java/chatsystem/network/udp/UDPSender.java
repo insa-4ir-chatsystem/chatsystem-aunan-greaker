@@ -27,10 +27,8 @@ public class UDPSender {
 	
 	// Sends the message buf on all local broadcast addresses found in the getAllLocalBroadcastAddresses function of this class
 	public static void sendBroadcast(int port, String msg) throws IOException {
-		// TODO
 		ArrayList<InetAddress> broadcastAddresses = getAllBroadcastAddresses();
         for (InetAddress broadAddr : broadcastAddresses) {
-        	//LOGGER.info("Found these broadcasts addresses: " + broadAddr);
         	send(broadAddr, port, msg);
         }
 	}
