@@ -86,19 +86,27 @@ public class UDPController {
         try {
             UDPListener server = new UDPListener(BROADCAST_PORT);
             server.addObserver(msg -> {UDPController.contactDiscoveryMessageHandler(msg);});
-            server.addObserver((msg) -> {ChatSystemGUI.updateContactTable();}); // Update Contact table in GUI
             server.start();
         } catch (SocketException e) {
             System.err.println("Could not start UDP listener: " + e.getMessage());
             System.exit(1);
         } 
         
+        /*
         try {
+        	ContactList.getInstance().addObserver(contact -> {ChatSystemGUI.updateContactTable();}); // Update Contact table in GUI
+        	ContactList.getInstance().addObserver(new ContqctList.Observer {
+        		void newContactAdded(Contact contact) {  
+        			
+        		}
+                void nicknameChanged(Contact newContact, String previousNickname) { }
+        	}
 			UDPSender.sendBroadcast(BROADCAST_PORT, myUsername); // Sends its username on the network so others can add it to contactlist
 		} catch (IOException e) {
 			LOGGER.error("Could not start send broadcast: " + e.getMessage());
             System.exit(1);
 		}
+		*/
 		
 		LOGGER.info("Now online with username:" + myUsername);
     }
