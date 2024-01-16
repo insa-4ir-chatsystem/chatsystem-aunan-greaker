@@ -10,10 +10,10 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class UDPTests {
-
     private static final int TEST_PORT = 1871;
+    private static final int SLEEP_DELAY = 100; // If test fails, increase this value
 
-   /* @Test
+   @Test
     void sendReceiveTest() throws Exception {
         List<String> testMessages = Arrays.asList("alice", "bob", "chloe", "multi\nline string", "éàç");
 
@@ -25,11 +25,10 @@ public class UDPTests {
         listener.start();
 
         for (String msg : testMessages) {
-            UDPSender.send(InetAddress.getLocalHost(), TEST_PORT, msg);
+            UDPSender.send(InetAddress.getLoopbackAddress(), TEST_PORT, msg);
         }
 
-        Thread.sleep(100);
-        assertEquals(testMessages.size(), receivedMessages.size());
+        Thread.sleep(SLEEP_DELAY);
         assertEquals(testMessages, receivedMessages);
-    }*/
+    }
 }
