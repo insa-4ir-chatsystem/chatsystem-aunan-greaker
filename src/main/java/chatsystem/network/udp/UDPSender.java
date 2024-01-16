@@ -34,10 +34,16 @@ public class UDPSender {
 	}
 	
 	// Gets the local broadcast addresses from all interfaceAddresses in all the networkInterfaces, and adds them to an arraylist that is returned at the end of the function
-	public static ArrayList<InetAddress> getAllBroadcastAddresses() throws SocketException {
+	public static ArrayList<InetAddress> getAllBroadcastAddresses() {
 		
     	ArrayList<InetAddress> AllBroadcastIp = new ArrayList<>();
-        Enumeration<NetworkInterface> networkInterfaces = NetworkInterface.getNetworkInterfaces();
+        Enumeration<NetworkInterface> networkInterfaces;
+        try {
+            networkInterfaces = NetworkInterface.getNetworkInterfaces();
+        } catch (SocketException e) {
+            LOGGER.error("Unable to get network interfaces " + e.getMessage(), e);
+            return null;
+        }
         while (networkInterfaces.hasMoreElements()) {
             NetworkInterface ni = (NetworkInterface) networkInterfaces.nextElement();
             List<InterfaceAddress> nias = ni.getInterfaceAddresses();
