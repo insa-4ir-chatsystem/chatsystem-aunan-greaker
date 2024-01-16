@@ -7,12 +7,10 @@ import chatsystem.network.udp.UDPListener;
 import chatsystem.network.udp.UDPMessage;
 import chatsystem.network.udp.UDPSender;
 import chatsystem.ui.ChatSystemGUI;
-import chatsystem.ui.ChooseUsernameGUI;
 
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.SocketException;
-import java.util.Scanner;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -82,34 +80,42 @@ public class UDPController {
         }	
     	return false;
     }
-    
-    public static void loginHandler() {
-        try {
-            UDPListener server = new UDPListener(BROADCAST_PORT);
-            server.addObserver(msg -> {UDPController.contactDiscoveryMessageHandler(msg);});
-            server.start();
-        } catch (SocketException e) {
-            System.err.println("Could not start UDP listener: " + e.getMessage());
-            System.exit(1);
-        } 
-        
-        /*
-        try {
-        	ContactList.getInstance().addObserver(contact -> {ChatSystemGUI.updateContactTable();}); // Update Contact table in GUI
-        	ContactList.getInstance().addObserver(new ContqctList.Observer {
-        		void newContactAdded(Contact contact) {  
-        			
-        		}
-                void nicknameChanged(Contact newContact, String previousNickname) { }
-        	}
-			UDPSender.sendBroadcast(BROADCAST_PORT, myUsername); // Sends its username on the network so others can add it to contactlist
-		} catch (IOException e) {
-			LOGGER.error("Could not start send broadcast: " + e.getMessage());
-            System.exit(1);
-		}
-		*/
+    public static void initilizeUDPListener() {
+		try {
+			UDPListener server = new UDPListener(BROADCAST_PORT);
+			server.addObserver(msg -> {UDPController.contactDiscoveryMessageHandler(msg);});
+			server.start();
+		} catch (SocketException e) {
+			System.err.println("Could not start UDP listener: " + e.getMessage());
+			System.exit(1);
+		}	
+	}
+
+	public static void loginHandler() {
+		// Initilize the UDPListener
+		initilizeUDPListener();
 		
+		// Initilize the ContactList Observer
+		ContactList.getInstance().addObserver(new ContactList.Observer() {
+			@Override
+			public void newContactAdded(Contact contact) {  
+				// Update Contact table in GUI
+				ChatSystemGUI.updateContactTable();
+			}
+
+			@Override
+			public void nicknameChanged(Contact newContact, String previousNickname) {
+				// Handle nickname change
+			}
+		});
+
+		try {
+			// Sends its username on the network so others can add it to contactlist
+			UDPSender.sendBroadcast(BROADCAST_PORT, myUsername);
+		} catch (IOException e) {
+			LOGGER.error("Failed to send UDP broadcast: " + e.getMessage());
+			System.exit(1);
+		}
 		LOGGER.info("Now online with username:" + myUsername);
-    }
-  
+	}
 }
