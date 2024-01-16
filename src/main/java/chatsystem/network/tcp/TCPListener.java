@@ -7,10 +7,15 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import chatsystem.controller.TCPController;
 import chatsystem.network.udp.UDPListener.Observer;
 
 /** Class representing a TCP socket that listens for new TCPConnections */
 public class TCPListener extends Thread {
+	private static final Logger LOGGER = LogManager.getLogger(TCPListener.class);
 	private int port; // The port on which serverSocket will be run on
 	private ServerSocket serverSocket;
 	private final List<Observer> observers = new ArrayList<>();
@@ -41,12 +46,12 @@ public class TCPListener extends Thread {
     	try {
 			serverSocket = new ServerSocket(port);
 		} catch (IOException e) {
-			System.err.println("Failed to start TCPListener on port: " + port);
+			LOGGER.error("Failed to start TCPListener on port: " + port);
 			e.printStackTrace();
 			System.exit(1);
 		}
     	// To be running as long as we are online
-    	while(true) {
+    	while(!serverSocket.isClosed()) {
     		Socket clientSocket;
 			try {
 				clientSocket = serverSocket.accept();
@@ -57,8 +62,12 @@ public class TCPListener extends Thread {
 		        	observers.forEach(obs -> obs.handleNewConnection(clientSocket));
 		        }
 			} catch (IOException e) {
-				System.err.println("Failed to establish connection with connecting client");
-				e.printStackTrace();
+				if (serverSocket.isClosed()) {
+					LOGGER.info("TCPListener stopped");
+				} else {
+					LOGGER.error("Failed to accept incoming connection");
+					e.printStackTrace();
+				}
 			}
 
     	}

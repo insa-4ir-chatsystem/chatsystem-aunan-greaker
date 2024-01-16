@@ -12,19 +12,31 @@ import chatsystem.network.tcp.TCPListener;
 
 public class TCPController {
 	private static final Logger LOGGER = LogManager.getLogger(TCPController.class);
+	private static TCPListener theTCPListener;
 	public static final int TCP_LISTENING_PORT = 9922;
 	
 	/**	Starts the TCPListener. This is required to be able to accept incoming TCPConnections*/
 	public static void startTCPListener() {
 		try {
-			TCPListener theTCPListener = new TCPListener(TCP_LISTENING_PORT);
+			theTCPListener = new TCPListener(TCP_LISTENING_PORT);
 			theTCPListener.addObserver(socket -> TCPController.handleIncomingTCPConnection(socket));
 			theTCPListener.start();
 			
 		} catch (IOException e) {
-			System.err.println("Could not start TCPListener");
+			LOGGER.error("Could not start TCPListener");
 			e.printStackTrace();
 			System.exit(1);
+		}
+	}
+
+	public static void stopTCPListener() {
+		try {
+			theTCPListener.stopServerSocket();
+		} catch (IOException e) {
+			LOGGER.error("Could not stop TCPListener");
+			e.printStackTrace();
+		} catch (NullPointerException e) {
+			LOGGER.info("Tried to close TCPListener but it was not running");
 		}
 	}
 	
@@ -56,7 +68,7 @@ public class TCPController {
 		try {
 			return new TCPConnection(ip, TCP_LISTENING_PORT);
 		} catch (IOException e) {
-			System.err.println("Could not start TCPConnection with " + ip + "on port " + TCP_LISTENING_PORT);
+			LOGGER.error("Could not start TCPConnection with " + ip + "on port " + TCP_LISTENING_PORT);
 			e.printStackTrace();
 			return null;
 		}
