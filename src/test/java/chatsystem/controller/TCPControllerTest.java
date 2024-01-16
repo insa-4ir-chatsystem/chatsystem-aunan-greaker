@@ -1,13 +1,11 @@
 package chatsystem.controller;
 
-import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.IOException;
 import java.net.InetAddress;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import chatsystem.network.tcp.TCPConnection;
@@ -16,7 +14,7 @@ class TCPControllerTest {
 	private static final int SLEEP_DELAY = 50;
 	
 	@BeforeAll
-	/** Starts the TCPListener */
+	/** Starts the TCPListener and gives it time to start*/
 	static void startListener() throws InterruptedException {
 		TCPController.startTCPListener();
 		Thread.sleep(SLEEP_DELAY);

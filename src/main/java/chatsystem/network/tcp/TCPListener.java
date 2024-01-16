@@ -1,7 +1,6 @@
 package chatsystem.network.tcp;
 
 import java.io.IOException;
-import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -9,9 +8,6 @@ import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import chatsystem.controller.TCPController;
-import chatsystem.network.udp.UDPListener.Observer;
 
 /** Class representing a TCP socket that listens for new TCPConnections */
 public class TCPListener extends Thread {

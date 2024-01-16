@@ -1,10 +1,8 @@
 package chatsystem;
 
 import chatsystem.controller.TCPController;
-import chatsystem.controller.UDPController;
 import chatsystem.network.udp.UDPSender;
 import chatsystem.ui.ChooseUsernameGUI;
-import chatsystem.ui.View;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
