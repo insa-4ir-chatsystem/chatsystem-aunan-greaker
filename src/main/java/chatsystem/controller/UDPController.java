@@ -19,7 +19,6 @@ public class UDPController {
 
     private static final Logger LOGGER = LogManager.getLogger(UDPController.class);
 	public static final int BROADCAST_PORT = 7471; // The port on which all javaChatProgram instances must listen for Broadcast.
-	public static final int BROADCAST_REPLY_PORT = 7472; // The port to reply to when receiving a broadcast.
 	public static final String ANNOUNCE_PROTOCOL = "All online users announce yourselves.";
 	public static String myUsername;
 
@@ -39,7 +38,7 @@ public class UDPController {
     	else {
     		try {
 				UDPSender.send(message.source(), BROADCAST_PORT, myUsername);
-				LOGGER.trace("Announced ourself to: " + message.source());
+				LOGGER.trace("Announced ourself to: " + message.source() + ":" + BROADCAST_PORT);
 			} catch (IOException e) {
 				LOGGER.error("Could not announce ourselves: " + e.getMessage());
 			}
@@ -47,7 +46,7 @@ public class UDPController {
     }
     
     public static Boolean usernameAvailableHandler(String username) {
-		LOGGER.trace("Checking if" + username + " is available...");
+		LOGGER.trace("Checking if username '" + username + "' is available...");
     	try {
             UDPListener server = new UDPListener(BROADCAST_PORT);
             server.addObserver(msg -> {UDPController.contactDiscoveryMessageHandler(msg);});

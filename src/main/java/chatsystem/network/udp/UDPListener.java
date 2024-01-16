@@ -25,7 +25,6 @@ public class UDPListener extends Thread {
     private static final Logger LOGGER = LogManager.getLogger(UDPListener.class);
 	private final DatagramSocket SOCKET;
     private final List<Observer> observers = new ArrayList<>();
-	private boolean listening;
 	
     /** Interface that observers of the UDP server must implement. */
     public interface Observer {
@@ -34,12 +33,10 @@ public class UDPListener extends Thread {
     }
 	
 	public UDPListener(int port) throws SocketException {
-		listening = true;
 		SOCKET = new DatagramSocket(port);
 	}
 	
 	public UDPListener(int port, int timeoutMS) throws SocketException {
-		listening = true;
 		SOCKET = new DatagramSocket(port);
 		SOCKET.setSoTimeout(timeoutMS);
 	}
