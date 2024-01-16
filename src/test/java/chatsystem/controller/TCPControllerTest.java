@@ -19,6 +19,7 @@ class TCPControllerTest {
 	/** Starts the TCPListener */
 	static void startListener() throws InterruptedException {
 		TCPController.startTCPListener();
+		Thread.sleep(SLEEP_DELAY);
 	}
 	@AfterAll
 	/** Stops the TCPListener */
