@@ -151,7 +151,7 @@ public class ChatSystemGUI {
         contactTable.setModel(tableModel);
         
         // Make the entire table non-editable
-        contactTable.setEnabled(false);
+        //contactTable.setEnabled(false);
         
         // Add contactTable to the scrollPaneContacts, scrollPaneContacts to the contactsPanel, and contactPanel to the WEST of the frame (and remove any old version of the contactPanel if found)
         contactsPanel.removeAll();
