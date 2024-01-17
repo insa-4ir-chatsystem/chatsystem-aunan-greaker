@@ -18,8 +18,9 @@ public class ControllerTest {
     }
 
     @BeforeEach
-    void closeListener() {
+    void closeListener() throws InterruptedException {
         UDPController.closeUDPListener();
+        Thread.sleep(SLEEP_DELAY);
     }
 
     @Test
