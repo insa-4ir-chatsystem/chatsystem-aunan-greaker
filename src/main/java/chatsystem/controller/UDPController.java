@@ -104,6 +104,14 @@ public class UDPController {
 		}	
 	}
 
+	public static void closeUDPListener() {
+		try {
+			udpListener.close();
+		} catch (NullPointerException e) {
+			LOGGER.warn("Tried to close UDPListener but it was not running");
+		}
+	}
+
 	public static void loginHandler() {
 		LOGGER.trace("Running loginHandler()...");
 		// Initilize the UDPListener
@@ -152,6 +160,6 @@ public class UDPController {
 			LOGGER.error("Failed to send UDP broadcast: " + e.getMessage());
 		}
 		TCPController.stopTCPListener();
-		UDPController.udpListener.close();
+		UDPController.closeUDPListener();
 	}
 }

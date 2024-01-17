@@ -11,10 +11,15 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 public class ControllerTest {
-
+    private static final int SLEEP_DELAY = 100;
     @BeforeEach
     void clearContactList() {
         ContactList.getInstance().clear();
+    }
+
+    @BeforeEach
+    void closeListener() {
+        UDPController.closeUDPListener();
     }
 
     @Test
@@ -72,7 +77,7 @@ public class ControllerTest {
     }
 
     @Test
-    void loginLogoutHandlersTest() throws UnknownHostException {
+    void loginLogoutHandlersTest() throws UnknownHostException, InterruptedException {
         UDPController.myUsername = "Eve";
         UDPController.loginHandler();
         UDPController.logoutHandler();
