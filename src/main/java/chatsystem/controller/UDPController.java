@@ -99,8 +99,7 @@ public class UDPController {
 			udpListener.addObserver(msg -> {UDPController.contactDiscoveryMessageHandler(msg);});
 			udpListener.start();
 		} catch (SocketException e) {
-			System.err.println("Could not start UDP listener: " + e.getMessage());
-			System.exit(1);
+			LOGGER.fatal("Could not start UDP listener: " + e.getMessage());
 		}	
 	}
 
