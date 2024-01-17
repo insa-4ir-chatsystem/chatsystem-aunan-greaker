@@ -61,7 +61,11 @@ public class ChatSystemGUI {
                     if (selectedRow != -1) {
                         // Get the contact username from the selected row, and sends it to the DatabaseController
                         String contactUsername = contactTable.getValueAt(selectedRow, 0).toString();
-                        DatabaseController.selectedRowHandler(contactUsername);
+                        
+                        // Update the 'Chat' table to the selected username
+                        ContactList contList = ContactList.getInstance(); 
+                        Contact selectedContact = contList.getContact(contactUsername);
+                		ChatSystemGUI.updateChatsTable(selectedContact);
                     }
                 }
             }
@@ -69,21 +73,23 @@ public class ChatSystemGUI {
         
         // Set the preferred size of the 'Chat' table in the GUI
         chatsTable.setPreferredScrollableViewportSize(new Dimension(500, 500));
+ 
+        // Create the 'Change Nickname' button
+        JButton changeNnButton = new JButton("Change Nickname");
+	    changeNnButton.setBorder(BorderFactory.createEmptyBorder(10,50,10,50));
+	    newChatPanel.add(changeNnButton);	    
         
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.gridx = 0;
-        gbc.gridy = 1;
-        newChatPanel.add(new JLabel("Write your message here: "));
-        
-        gbc.gridx = 0;
-        gbc.gridy = 2;
+        // Create the message field
         JTextField messageField = new JTextField();
         messageField.setPreferredSize(new Dimension(600, 25));
+        JLabel lbl = new JLabel("Write your message here: ");
+        lbl.setBorder(BorderFactory.createEmptyBorder(0,20,0,0));
+        newChatPanel.add(lbl);
         newChatPanel.add(messageField);
 
-        gbc.gridx = 0;
-        gbc.gridy = 3;
+        // Create the 'Send' button to send 
 	    JButton sendButton = new JButton("Send");
+	    sendButton.setBorder(BorderFactory.createEmptyBorder(10,20,10,20));
 	    sendButton.setEnabled(false);
 	    newChatPanel.add(sendButton);
 
@@ -143,7 +149,7 @@ public class ChatSystemGUI {
         SwingUtilities.updateComponentTreeUI(frame);
     }
 	
-	public void updateChatsTable(JTable chatsTable, Contact otherUser) {
+	public static void updateChatsTable(Contact otherUser) {
 		// Enable send button
 		sendButton.setEnabled(true);
 		
