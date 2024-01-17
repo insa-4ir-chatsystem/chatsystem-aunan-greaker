@@ -18,12 +18,12 @@ public class DatabaseController {
 	
 	private static final Logger LOGGER = LogManager.getLogger(DatabaseController.class);
 
-	public static void sendMsgHandler(String msg) {
-		
+	public static void sendMsgHandler(Contact chattingWith, String msg) {
+		Database db = Database.getInstance();
+		try {
+			db.addToTable(chattingWith.ip().toString(), "me", msg);
+		} catch (SQLException e) {
+			LOGGER.error("AddToTable function of Database failed with error: " + e);
+		}
 	}
-	
-	public static void selectedContactHandler(String contactUsername ) {
-	
-	}
-	
 }

@@ -24,9 +24,11 @@ import org.apache.logging.log4j.Logger;
 import chatsystem.contacts.Contact;
 import chatsystem.contacts.ContactList;
 import chatsystem.controller.DatabaseController;
+import chatsystem.controller.TCPController;
 import chatsystem.controller.UDPController;
 import chatsystem.log.Database;
 import chatsystem.log.TableAlreadyExists;
+import chatsystem.network.tcp.TCPConnection;
 import chatsystem.network.udp.UDPSender;
 
 public class ChatSystemGUI {
@@ -38,6 +40,10 @@ public class ChatSystemGUI {
 	private static JTable chatsTable;
 	private static JButton sendButton;
 	
+	// Private variables to keep track of who the user is chatting with, and the corresponding TCPConnection
+	private static Contact chattingWith;
+	private static TCPConnection connection;
+	
 	private static final Logger LOGGER = LogManager.getLogger(ChatSystemGUI.class);
 	
 	public ChatSystemGUI(String username) {
@@ -47,7 +53,6 @@ public class ChatSystemGUI {
 		contactTable = new JTable();
 		chatsTable = new JTable();
 	    newChatPanel.setLayout(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
         
         // Set the preferred size of the 'Contacts' table in the GUI and initialize its content
         contactTable.setPreferredScrollableViewportSize(new Dimension(200, 500));
@@ -93,11 +98,14 @@ public class ChatSystemGUI {
 	    sendButton.setEnabled(false);
 	    newChatPanel.add(sendButton);
 
+	    // Adding an ActionListener to 'Send' button, to start the sendMsgHandler() of the DatabaseController
 	    sendButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
 	            String msg = messageField.getText();
-	            // TODO - msg receiver;
-	            DatabaseController.sendMsgHandler(msg);
+	            if (!msg.equals("")) {
+		            connection.sendMessage(msg);
+		            DatabaseController.sendMsgHandler(chattingWith, msg);
+	            }
 	        }
 	    });
 
@@ -153,11 +161,15 @@ public class ChatSystemGUI {
 		// Enable send button
 		sendButton.setEnabled(true);
 		
+		// Update which contact the user is chatting with
+		chattingWith = otherUser;
+		connection = TCPController.startChatWith(otherUser.ip());
+		
     	// Create a table model with one column for contactNames and no data initially
         DefaultTableModel tableModel = new DefaultTableModel( new Object[]{otherUser.username(), "Me"}, 0);
         Database db = Database.getInstance();
         
-        // If there is no saved chatHistory linked to this ip, create a new chat table in the database
+        // If there is no saved chatHistory linked to this IP, create a new chat table in the database
         try {
 			if (!db.hasTable(otherUser.ip().toString())) {
 				db.newTable(otherUser.ip().toString());
