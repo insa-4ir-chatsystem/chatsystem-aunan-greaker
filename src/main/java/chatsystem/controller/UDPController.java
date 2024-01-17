@@ -20,6 +20,7 @@ public class UDPController {
     private static final Logger LOGGER = LogManager.getLogger(UDPController.class);
 	public static final int BROADCAST_PORT = 7471; // The port on which all javaChatProgram instances must listen for Broadcast.
 	public static final String ANNOUNCE_PROTOCOL = "All online users announce yourselves.";
+	public static final String LOGOUT_PROTOCOL = "I am logging out.";
 	public static String myUsername;
 
     public static void contactDiscoveryMessageHandler(UDPMessage message) {
@@ -30,10 +31,17 @@ public class UDPController {
 	        try {
 	            ContactList.getInstance().addContact(contact);
 	            LOGGER.trace("New Contact added to the list: " + contact);
+				LOGGER.trace("ContactList: " + ContactList.getInstance());
 	        } catch (ContactAlreadyExists e) {
 	            LOGGER.error("Received duplicated contact: " + contact);
 	        }
     	}
+		// Somebody logged out, so we remove them from our contact list.
+		else if (message.text().equals(LOGOUT_PROTOCOL)) {
+			Contact contact = new Contact(message.text(), message.source());
+			ContactList.getInstance().removeContact(contact);
+			LOGGER.info(contact + " logged out.");
+		}
 		// Somebody asked us to announce ourselves, so we do.
     	else {
     		try {
@@ -107,6 +115,13 @@ public class UDPController {
 			}
 
 			@Override
+			public void contactRemoved(Contact contact) {
+				// Update Contact table in GUI
+				ChatSystemGUI.updateContactTable();
+				LOGGER.trace("Updated contact table in GUI");
+			}
+
+			@Override
 			public void nicknameChanged(Contact newContact, String previousNickname) {
 				// Handle nickname change
 			}
@@ -121,5 +136,17 @@ public class UDPController {
 		}
 		TCPController.startTCPListener();
 		LOGGER.info("Now online with username: " + myUsername);
+	}
+
+	/** To be run when closing main chatsystem window */
+	public static void onExit() {
+		LOGGER.trace("Running onExit...");
+		try {
+			UDPSender.sendBroadcast(BROADCAST_PORT, LOGOUT_PROTOCOL);
+			LOGGER.trace("Sent UDP broadcast with logout protocol: " + LOGOUT_PROTOCOL + " on port: " + BROADCAST_PORT);
+		} catch (IOException e) {
+			LOGGER.error("Failed to send UDP broadcast: " + e.getMessage());
+		}
+		TCPController.stopTCPListener();
 	}
 }

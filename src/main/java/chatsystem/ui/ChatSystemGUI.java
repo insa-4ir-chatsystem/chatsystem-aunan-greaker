@@ -7,6 +7,8 @@ import java.awt.GridBagConstraints;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
@@ -19,6 +21,7 @@ import org.apache.logging.log4j.Logger;
 
 import chatsystem.contacts.Contact;
 import chatsystem.contacts.ContactList;
+import chatsystem.controller.UDPController;
 import chatsystem.log.Database;
 import chatsystem.log.TableAlreadyExists;
 import chatsystem.network.udp.UDPSender;
@@ -71,6 +74,15 @@ public class ChatSystemGUI {
 	        }
 	    });
 
+        // Adding a WindowListener to handle window events
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                // Code to be executed when the window is closing
+                LOGGER.trace("Window is closing. Performing cleanup or final tasks...");
+				UDPController.onExit();
+            }
+        });
         frame.add(contactsPanel, BorderLayout.WEST);
         frame.add(newChatPanel, BorderLayout.SOUTH);
         frame.setTitle("ChatSystem");

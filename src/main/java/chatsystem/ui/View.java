@@ -27,6 +27,12 @@ public class View implements ContactList.Observer {
     }
 
     @Override
+    public void contactRemoved(Contact contact) {
+        System.out.println("[VIEW] Contact removed: " + contact.username());
+        displayContactList();
+    }
+
+    @Override
     public void nicknameChanged(Contact newContact, String previousNickname) {
         System.out.println("[VIEW] Contact changed: " + newContact.username()+ " (was previously: " + previousNickname + ")");
         displayContactList();
