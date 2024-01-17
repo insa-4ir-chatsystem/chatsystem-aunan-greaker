@@ -2,3 +2,4 @@ target/
 .settings/
 .project
 .classpath
+chat_system.db
