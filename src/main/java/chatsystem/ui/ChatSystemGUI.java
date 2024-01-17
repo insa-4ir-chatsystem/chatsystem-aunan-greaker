@@ -14,6 +14,8 @@ import java.sql.SQLException;
 import java.util.List;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
 import org.apache.logging.log4j.LogManager;
@@ -21,6 +23,7 @@ import org.apache.logging.log4j.Logger;
 
 import chatsystem.contacts.Contact;
 import chatsystem.contacts.ContactList;
+import chatsystem.controller.DatabaseController;
 import chatsystem.controller.UDPController;
 import chatsystem.log.Database;
 import chatsystem.log.TableAlreadyExists;
@@ -33,6 +36,7 @@ public class ChatSystemGUI {
 	private static JPanel newChatPanel;
 	private static JTable contactTable;
 	private static JTable chatsTable;
+	private static JButton sendButton;
 	
 	private static final Logger LOGGER = LogManager.getLogger(ChatSystemGUI.class);
 	
@@ -47,6 +51,26 @@ public class ChatSystemGUI {
         
         contactTable.setPreferredScrollableViewportSize(new Dimension(200, 500));
         updateContactTable();
+        
+        // Set functionality for selecting contact from the GUI 'Contacts' table
+        /*contactTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                if (!e.getValueIsAdjusting()) {
+                    int selectedRow = requestedHelpTable.getSelectedRow();
+                    if (selectedRow != -1) {
+                        // Get the data from the selected row
+                        String selectedId = requestedHelpTable.getValueAt(selectedRow, 0).toString();
+                        String selectedUsername = requestedHelpTable.getValueAt(selectedRow, 1).toString();
+                        String selectedText = requestedHelpTable.getValueAt(selectedRow, 2).toString();
+
+                        // Open a new interface with the selected data
+                        openDetailsInterface(selectedId, selectedUsername, selectedText, username);
+                    }
+                }
+            }
+        });
+        */
         
         chatsTable.setPreferredScrollableViewportSize(new Dimension(500, 500));
         JScrollPane scrollPaneChats = new JScrollPane(chatsTable);
@@ -66,11 +90,14 @@ public class ChatSystemGUI {
         gbc.gridx = 0;
         gbc.gridy = 3;
 	    JButton sendButton = new JButton("Send");
+	    sendButton.setEnabled(false);
 	    newChatPanel.add(sendButton);
 
 	    sendButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-	            //String message = messageField.getText();
+	            String msg = messageField.getText();
+	            // TODO - msg receiver;
+	            DatabaseController.sendMsgHandler(msg);
 	        }
 	    });
 
@@ -112,13 +139,20 @@ public class ChatSystemGUI {
         contactTable.setEnabled(false);
         
         // Add contactTable to the scrollPaneContacts, scrollPaneContacts to the contactsPanel, and contactPanel to the WEST of the frame (and remove any old version of the contactPanel if found)
+        contactsPanel.removeAll();
         JScrollPane scrollPaneContacts = new JScrollPane(contactTable);
         contactsPanel.add(scrollPaneContacts);
         frame.remove(contactsPanel);
         frame.add(contactsPanel, BorderLayout.WEST);
+        
+        // Update the frame
+        SwingUtilities.updateComponentTreeUI(frame);
     }
 	
 	public void updateChatsTable(JTable chatsTable, Contact otherUser) {
+		// Enable send button
+		sendButton.setEnabled(true);
+		
     	// Create a table model with one column for contactNames and no data initially
         DefaultTableModel tableModel = new DefaultTableModel( new Object[]{otherUser.username(), "Me"}, 0);
         Database db = Database.getInstance();
@@ -150,21 +184,25 @@ public class ChatSystemGUI {
 	            	tableModel.addRow(new Object[]{"", msg});
 	            }
 	        }
-	
-	        // Set the table model for the JTable
-	        chatsTable.setModel(tableModel);
-	        
-	        // Make the entire table non-editable
-	        chatsTable.setEnabled(false);
-	        
-	     // Add contactTable to the scrollPaneChats, scrollPaneChats to the chatHistoryPanel, and chatHistoryPanel to the CENTER of the frame (and remove any old version of the chatHistoryPanel if found)
-	        JScrollPane scrollPaneChats = new JScrollPane(chatsTable);
-	        chatHistoryPanel.add(scrollPaneChats);
-	        frame.remove(chatHistoryPanel);
-	        frame.add(chatHistoryPanel, BorderLayout.CENTER);
 	        
         } catch (SQLException e) {
         	LOGGER.error(e.getMessage());
         }
+	
+	    // Set the table model for the JTable
+	    chatsTable.setModel(tableModel);
+	        
+	    // Make the entire table non-editable
+	    chatsTable.setEnabled(false);
+	        
+	    // Add chatsTable to the scrollPaneChats, scrollPaneChats to the chatHistoryPanel, and chatHistoryPanel to the CENTER of the frame (and remove any old version of the chatHistoryPanel if found)
+	    chatHistoryPanel.removeAll();
+	    JScrollPane scrollPaneChats = new JScrollPane(chatsTable);
+	    chatHistoryPanel.add(scrollPaneChats);
+	    frame.remove(chatHistoryPanel);
+	    frame.add(chatHistoryPanel, BorderLayout.CENTER);
+	        
+	    // Update the frame
+	    SwingUtilities.updateComponentTreeUI(frame);
     }
 }
