@@ -19,38 +19,42 @@ public class UDPController {
 
     private static final Logger LOGGER = LogManager.getLogger(UDPController.class);
 	public static final int BROADCAST_PORT = 7471; // The port on which all javaChatProgram instances must listen for Broadcast.
-	public static final String ANNOUNCE_PROTOCOL = "All online users announce yourselves.";
-	public static final String LOGOUT_PROTOCOL = "I am logging out.";
+	public static final String ANNOUNCE_REQUEST_MSG = "All online users announce yourselves.";
+	public static final String LOGOUT_MSG = "I am logging out.";
 	public static String myUsername;
+	private static UDPListener udpListener;
 
     public static void contactDiscoveryMessageHandler(UDPMessage message) {
-		// Somebody announced themselves, so we add them to our contact list.
-    	if (!message.text().equals(ANNOUNCE_PROTOCOL))
-    	{
-	    	Contact contact = new Contact(message.text(), message.source());
-	        try {
-	            ContactList.getInstance().addContact(contact);
-	            LOGGER.trace("New Contact added to the list: " + contact);
-				LOGGER.trace("ContactList: " + ContactList.getInstance());
-	        } catch (ContactAlreadyExists e) {
-	            LOGGER.error("Received duplicated contact: " + contact);
-	        }
-    	}
-		// Somebody logged out, so we remove them from our contact list.
-		else if (message.text().equals(LOGOUT_PROTOCOL)) {
-			Contact contact = new Contact(message.text(), message.source());
-			ContactList.getInstance().removeContact(contact);
-			LOGGER.info(contact + " logged out.");
+		switch (message.text()) {
+			case ANNOUNCE_REQUEST_MSG:
+				try {
+					/** Broadcast our username on the network */
+					UDPSender.send(message.source(), BROADCAST_PORT, myUsername);
+					LOGGER.trace("Announced ourself to: " + message.source() + ":" + BROADCAST_PORT);
+				} catch (IOException e) {
+					LOGGER.error("Could not announce ourselves: " + e.getMessage());
+				} catch (NullPointerException e) {
+					LOGGER.error("Could not announce ourselves because myUsername is null: " + e.getMessage());
+				}
+				break;
+			case LOGOUT_MSG:
+				/**	Removes contact from contact list */
+				Contact contactToRemove = ContactList.getInstance().getContact(message.source());
+				ContactList.getInstance().removeContact(contactToRemove);
+				LOGGER.info(contactToRemove + " logged out.");
+				break;
+			/**	Somebody connecting to the chat */
+			default:
+				Contact newContact = new Contact(message.text(), message.source());
+				try {
+					ContactList.getInstance().addContact(newContact);
+					LOGGER.trace("New Contact added to the list: " + newContact);
+					LOGGER.trace("ContactList: " + ContactList.getInstance().toString());
+				} catch (ContactAlreadyExists e) {
+					LOGGER.error("Received duplicated contact: " + newContact);
+				}
+				break;
 		}
-		// Somebody asked us to announce ourselves, so we do.
-    	else {
-    		try {
-				UDPSender.send(message.source(), BROADCAST_PORT, myUsername);
-				LOGGER.trace("Announced ourself to: " + message.source() + ":" + BROADCAST_PORT);
-			} catch (IOException e) {
-				LOGGER.error("Could not announce ourselves: " + e.getMessage());
-			}
-    	}
     }
     
     public static Boolean usernameAvailableHandler(String username) {
@@ -63,7 +67,7 @@ public class UDPController {
             myUsername = username;  // Gets the chosen username
 			
     		try {
-    			UDPSender.sendBroadcast(BROADCAST_PORT, ANNOUNCE_PROTOCOL); // Sends ANNOUNCE msg to request online users to announce themselves.
+    			UDPSender.sendBroadcast(BROADCAST_PORT, ANNOUNCE_REQUEST_MSG); // Sends ANNOUNCE msg to request online users to announce themselves.
     			Thread.sleep(2000); // Waits 2 seconds for all online users to announce themselves
     		} catch (IOException e) {
     			LOGGER.error("Could not start send broadcast: " + e.getMessage());
@@ -91,9 +95,9 @@ public class UDPController {
     }
     public static void initilizeUDPListener() {
 		try {
-			UDPListener server = new UDPListener(BROADCAST_PORT);
-			server.addObserver(msg -> {UDPController.contactDiscoveryMessageHandler(msg);});
-			server.start();
+			udpListener = new UDPListener(BROADCAST_PORT);
+			udpListener.addObserver(msg -> {UDPController.contactDiscoveryMessageHandler(msg);});
+			udpListener.start();
 		} catch (SocketException e) {
 			System.err.println("Could not start UDP listener: " + e.getMessage());
 			System.exit(1);
@@ -101,7 +105,7 @@ public class UDPController {
 	}
 
 	public static void loginHandler() {
-		LOGGER.trace("Running loginHandler...");
+		LOGGER.trace("Running loginHandler()...");
 		// Initilize the UDPListener
 		initilizeUDPListener();
 		
@@ -139,14 +143,15 @@ public class UDPController {
 	}
 
 	/** To be run when closing main chatsystem window */
-	public static void onExit() {
-		LOGGER.trace("Running onExit...");
+	public static void logoutHandler() {
+		LOGGER.trace("Running logoutHandler()...");
 		try {
-			UDPSender.sendBroadcast(BROADCAST_PORT, LOGOUT_PROTOCOL);
-			LOGGER.trace("Sent UDP broadcast with logout protocol: " + LOGOUT_PROTOCOL + " on port: " + BROADCAST_PORT);
+			UDPSender.sendBroadcast(BROADCAST_PORT, LOGOUT_MSG);
+			LOGGER.trace("Sent UDP broadcast with logout protocol: '" + LOGOUT_MSG + "' on port: " + BROADCAST_PORT);
 		} catch (IOException e) {
 			LOGGER.error("Failed to send UDP broadcast: " + e.getMessage());
 		}
 		TCPController.stopTCPListener();
+		UDPController.udpListener.close();
 	}
 }

@@ -16,7 +16,7 @@ public class UDPSender {
 	 private static final Logger LOGGER = LogManager.getLogger(UDPSender.class);
 	
     /** Sends a UDP message on the given address and port. */
-    public static void send(InetAddress addr, int port, String message) throws IOException {
+    public static void send(InetAddress addr, int port, String message) throws IOException, NullPointerException {
         DatagramSocket socket = new DatagramSocket(); // Will create a socket on an available port
         socket.setBroadcast(true);
         byte[] buff = message.getBytes();

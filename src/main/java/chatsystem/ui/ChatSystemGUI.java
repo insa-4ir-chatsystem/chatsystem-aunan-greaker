@@ -106,8 +106,8 @@ public class ChatSystemGUI {
             @Override
             public void windowClosing(WindowEvent e) {
                 // Code to be executed when the window is closing
-                LOGGER.trace("Window is closing. Performing cleanup or final tasks...");
-				UDPController.onExit();
+                LOGGER.trace("Window is closing. Performing final tasks...");
+				UDPController.logoutHandler();
             }
         });
         frame.add(contactsPanel, BorderLayout.WEST);

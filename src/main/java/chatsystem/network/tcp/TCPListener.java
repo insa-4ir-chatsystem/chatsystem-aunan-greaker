@@ -26,7 +26,7 @@ public class TCPListener extends Thread {
 	}
 
 	// Closes ServerSocket
-	public void stopServerSocket() throws IOException {
+	public void close() throws IOException {
     	serverSocket.close();
     }
     
@@ -59,7 +59,7 @@ public class TCPListener extends Thread {
 		        }
 			} catch (IOException e) {
 				if (serverSocket.isClosed()) {
-					LOGGER.info("TCPListener stopped");
+					LOGGER.info("TCPListener closed");
 				} else {
 					LOGGER.error("Failed to accept incoming connection");
 					e.printStackTrace();

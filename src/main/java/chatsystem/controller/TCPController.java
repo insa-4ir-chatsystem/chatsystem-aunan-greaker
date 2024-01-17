@@ -31,7 +31,7 @@ public class TCPController {
 
 	public static void stopTCPListener() {
 		try {
-			theTCPListener.stopServerSocket();
+			theTCPListener.close();
 		} catch (IOException e) {
 			LOGGER.error("Could not stop TCPListener");
 			e.printStackTrace();

@@ -1,5 +1,6 @@
 package chatsystem.contacts;
 
+import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,16 +21,34 @@ public class ContactList {
     List<Contact> contacts = new ArrayList<>();
     List<Observer> observers = new ArrayList<>();
     
+    private ContactList() {
+    }
+
     /* Defines singleton constructor class */
     public static ContactList getInstance() {
     	return INSTANCE;
     }
-    
-    private ContactList() {
-    }
-    
+
     public synchronized void addObserver(Observer obs) {
         this.observers.add(obs);
+    }
+
+    public synchronized Contact getContact(String username) {
+        for (Contact contact : contacts) {
+            if (contact.username().equals(username)) {
+                return contact;
+            }
+        }
+        return null;
+    }
+
+    public synchronized Contact getContact(InetAddress ip) {
+        for (Contact contact : contacts) {
+            if (contact.ip().equals(ip)) {
+                return contact;
+            }
+        }
+        return null;
     }
 
     public synchronized void addContact(Contact contact) throws ContactAlreadyExists {
@@ -73,6 +92,10 @@ public class ContactList {
     public synchronized List<Contact> getAllContacts() {
         // return defensive copy of the contacts to avoid anybody modifying it or doing unsynchronized access
         return new ArrayList<>(this.contacts);
+    }
+
+    public synchronized String toString() {
+        return this.contacts.toString();
     }
     
     public synchronized void clear() {

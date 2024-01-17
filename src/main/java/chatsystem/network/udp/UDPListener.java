@@ -80,14 +80,13 @@ public class UDPListener extends Thread {
 				
 			} catch (SocketTimeoutException e) {
 				LOGGER.trace("UDPListener timed out");
-				SOCKET.close();
+				close();
 			} catch (IOException e) {
-				if (SOCKET.isClosed()) {
-					LOGGER.trace("UDPListener was closed");
-				} else {
+				if (!SOCKET.isClosed()) {
 					LOGGER.error("Could not receive packet: " + e.getMessage());
 				}
 			}
 		}
+		LOGGER.trace("UDPListener closed");
 	}
 }
