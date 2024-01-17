@@ -13,7 +13,7 @@ public class ContactList {
     public interface Observer {
         void newContactAdded(Contact contact);
         void contactRemoved(Contact contact);
-        void nicknameChanged(Contact newContact, String previousNickname);
+        void usernameChanged(String newUsername);
     }
     
     private static final Logger LOGGER = LogManager.getLogger(ContactList.class);

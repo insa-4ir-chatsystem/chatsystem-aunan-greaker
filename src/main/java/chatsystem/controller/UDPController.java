@@ -141,8 +141,21 @@ public class UDPController {
 			}
 
 			@Override
-			public void nicknameChanged(Contact newContact, String previousNickname) {
-				// Handle nickname change
+			public void usernameChanged(String newUsername) {
+				// Handle username change
+				try {
+					// Sends logout protocol on the network so others can remove it from contactlist
+					UDPSender.sendBroadcast(BROADCAST_PORT, LOGOUT_MSG);
+					LOGGER.trace("Sent UDP broadcast with logout protocol: '" + LOGOUT_MSG + "' on port: " + BROADCAST_PORT);
+
+					myUsername = newUsername; // Updates the username
+
+					// Sends its username on the network so others can add it to contactlist
+					UDPSender.sendBroadcast(BROADCAST_PORT, myUsername);
+					LOGGER.trace("Sent UDP broadcast with new username: " + myUsername + " on port: " + BROADCAST_PORT);
+				} catch (IOException e) {
+					LOGGER.fatal("Failed to announce username change: " + e.getMessage());
+				}
 			}
 		});
 

@@ -33,8 +33,8 @@ public class View implements ContactList.Observer {
     }
 
     @Override
-    public void nicknameChanged(Contact newContact, String previousNickname) {
-        System.out.println("[VIEW] Contact changed: " + newContact.username()+ " (was previously: " + previousNickname + ")");
+    public void usernameChanged(String newUsername) {
+        System.out.println("[VIEW] Contact changed name to: " + newUsername);
         displayContactList();
     }
 }
