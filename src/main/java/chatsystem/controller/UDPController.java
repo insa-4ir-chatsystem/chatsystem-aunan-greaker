@@ -7,6 +7,7 @@ import chatsystem.network.udp.UDPListener;
 import chatsystem.network.udp.UDPMessage;
 import chatsystem.network.udp.UDPSender;
 import chatsystem.ui.ChatSystemGUI;
+import chatsystem.ui.ChooseUsernameGUI;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -93,6 +94,7 @@ public class UDPController {
         }	
     	return false;
     }
+
     public static void initilizeUDPListener() {
 		try {
 			udpListener = new UDPListener(BROADCAST_PORT);
@@ -139,24 +141,6 @@ public class UDPController {
 					LOGGER.warn("Could not update view because GUI has not been initilized!");
 				}
 			}
-
-			@Override
-			public void usernameChanged(String newUsername) {
-				// Handle username change
-				try {
-					// Sends logout protocol on the network so others can remove it from contactlist
-					UDPSender.sendBroadcast(BROADCAST_PORT, LOGOUT_MSG);
-					LOGGER.trace("Sent UDP broadcast with logout protocol: '" + LOGOUT_MSG + "' on port: " + BROADCAST_PORT);
-
-					myUsername = newUsername; // Updates the username
-
-					// Sends its username on the network so others can add it to contactlist
-					UDPSender.sendBroadcast(BROADCAST_PORT, myUsername);
-					LOGGER.trace("Sent UDP broadcast with new username: " + myUsername + " on port: " + BROADCAST_PORT);
-				} catch (IOException e) {
-					LOGGER.fatal("Failed to announce username change: " + e.getMessage());
-				}
-			}
 		});
 
 		try {
@@ -170,7 +154,7 @@ public class UDPController {
 		LOGGER.info("Now online with username: " + myUsername);
 	}
 
-	/** To be run when closing main chatsystem window */
+	/** Logs the user out of the chatsystem*/
 	public static void logoutHandler() {
 		LOGGER.trace("Running logoutHandler()...");
 		try {
@@ -181,5 +165,6 @@ public class UDPController {
 		}
 		TCPController.stopTCPListener();
 		UDPController.closeUDPListener();
+		ContactList.getInstance().clear();
 	}
 }

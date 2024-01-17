@@ -31,10 +31,4 @@ public class View implements ContactList.Observer {
         System.out.println("[VIEW] Contact removed: " + contact.username());
         displayContactList();
     }
-
-    @Override
-    public void usernameChanged(String newUsername) {
-        System.out.println("[VIEW] Contact changed name to: " + newUsername);
-        displayContactList();
-    }
 }

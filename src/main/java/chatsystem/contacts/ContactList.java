@@ -13,7 +13,6 @@ public class ContactList {
     public interface Observer {
         void newContactAdded(Contact contact);
         void contactRemoved(Contact contact);
-        void usernameChanged(String newUsername);
     }
     
     private static final Logger LOGGER = LogManager.getLogger(ContactList.class);
@@ -31,6 +30,10 @@ public class ContactList {
 
     public synchronized void addObserver(Observer obs) {
         this.observers.add(obs);
+    }
+
+    public synchronized void removeObserver(Observer obs) {
+        this.observers.remove(obs);
     }
 
     public synchronized Contact getContact(String username) {

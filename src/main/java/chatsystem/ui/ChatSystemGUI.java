@@ -80,9 +80,16 @@ public class ChatSystemGUI {
         chatsTable.setPreferredScrollableViewportSize(new Dimension(500, 500));
  
         // Create the 'Change Nickname' button
-        JButton changeNnButton = new JButton("Change Nickname");
-	    changeNnButton.setBorder(BorderFactory.createEmptyBorder(10,50,10,50));
-	    newChatPanel.add(changeNnButton);	    
+        JButton changeUserNameButton = new JButton("Change Username");
+	    changeUserNameButton.setBorder(BorderFactory.createEmptyBorder(10,50,10,50));
+	    newChatPanel.add(changeUserNameButton);	 
+        changeUserNameButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                // Creates a window to change username
+                UDPController.logoutHandler();
+				ChooseUsernameGUI.initialize();
+	        }   
+        });
         
         // Create the message field
         JTextField messageField = new JTextField();
