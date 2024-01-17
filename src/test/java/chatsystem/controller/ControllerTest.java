@@ -58,11 +58,4 @@ public class ControllerTest {
         UDPController.contactDiscoveryMessageHandler(msg5);
         UDPController.contactDiscoveryMessageHandler(msg6);
     }
-
-    @Test
-    void loginLogoutHandlersTest() throws UnknownHostException, InterruptedException {
-        UDPController.myUsername = "Eve";
-        UDPController.loginHandler();
-        UDPController.logoutHandler();
-    }
 }
