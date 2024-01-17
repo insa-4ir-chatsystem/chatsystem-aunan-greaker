@@ -49,32 +49,26 @@ public class ChatSystemGUI {
 	    newChatPanel.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         
+        // Set the preferred size of the 'Contacts' table in the GUI and initialize its content
         contactTable.setPreferredScrollableViewportSize(new Dimension(200, 500));
         updateContactTable();
         
-        // Set functionality for selecting contact from the GUI 'Contacts' table
-        /*contactTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-            @Override
+        // When selecting contact from the GUI 'Contacts' table, open the corresponding 'Chat' table
+        contactTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             public void valueChanged(ListSelectionEvent e) {
                 if (!e.getValueIsAdjusting()) {
-                    int selectedRow = requestedHelpTable.getSelectedRow();
+                    int selectedRow = contactTable.getSelectedRow();
                     if (selectedRow != -1) {
-                        // Get the data from the selected row
-                        String selectedId = requestedHelpTable.getValueAt(selectedRow, 0).toString();
-                        String selectedUsername = requestedHelpTable.getValueAt(selectedRow, 1).toString();
-                        String selectedText = requestedHelpTable.getValueAt(selectedRow, 2).toString();
-
-                        // Open a new interface with the selected data
-                        openDetailsInterface(selectedId, selectedUsername, selectedText, username);
+                        // Get the contact username from the selected row, and sends it to the DatabaseController
+                        String contactUsername = contactTable.getValueAt(selectedRow, 0).toString();
+                        DatabaseController.selectedRowHandler(contactUsername);
                     }
                 }
             }
-        });
-        */
+        });    
         
+        // Set the preferred size of the 'Chat' table in the GUI
         chatsTable.setPreferredScrollableViewportSize(new Dimension(500, 500));
-        JScrollPane scrollPaneChats = new JScrollPane(chatsTable);
-        chatHistoryPanel.add(scrollPaneChats);
         
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.gridx = 0;
