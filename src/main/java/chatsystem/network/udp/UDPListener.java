@@ -52,6 +52,7 @@ public class UDPListener extends Thread {
 	
 	@Override
 	public void run() {
+		LOGGER.trace("UDPListener started on port " + SOCKET.getLocalPort());
 		while(!SOCKET.isClosed()) {
 			byte[] buf = new byte[200];
 			DatagramPacket incomingPacket = new DatagramPacket(buf, buf.length);

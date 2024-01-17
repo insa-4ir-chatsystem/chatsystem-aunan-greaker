@@ -44,7 +44,7 @@ public class ChooseUsernameGUI {
 				if (UDPController.usernameAvailableHandler(myUsername) && !myUsername.equals("")) {
 					LOGGER.debug("Username '"+ myUsername + "' was available, logging in...");
 					frame.dispose();
-					new ChatSystemGUI(myUsername);
+					ChatSystemGUI.initialize(myUsername);
 					UDPController.loginHandler();
 				} else {
 					JOptionPane.showMessageDialog(frame, "This username is not available, please choose a different one");	            	            
