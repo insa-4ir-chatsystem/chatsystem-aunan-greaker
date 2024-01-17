@@ -165,5 +165,6 @@ public class UDPController {
 		}
 		TCPController.stopTCPListener();
 		UDPController.closeUDPListener();
+		ContactList.getInstance().clear();
 	}
 }
