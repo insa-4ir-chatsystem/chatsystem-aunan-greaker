@@ -12,7 +12,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class UDPTests {
-    private static final int SLEEP_DELAY = 100; // If test fails, increase this value
+    private static final int SLEEP_DELAY = 200; // If test fails, increase this value
 
    @Test
     void sendReceiveTest() throws Exception {
