@@ -47,7 +47,7 @@ public class ChatSystemGUI {
 	
 	private static final Logger LOGGER = LogManager.getLogger(ChatSystemGUI.class);
 	
-	public static void initialize(String username) {
+	public static void initialize() {
 		LOGGER.trace("Initializing ChatSystemGUI...");
 		contactsPanel = new JPanel();
 		chatHistoryPanel = new JPanel();
@@ -88,7 +88,6 @@ public class ChatSystemGUI {
         changeUserNameButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 // Creates a window to change username
-                UDPController.logoutHandler();
 				ChooseUsernameGUI.initialize();
 	        }   
         });
@@ -133,6 +132,11 @@ public class ChatSystemGUI {
         frame.pack();
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	}
+
+	// Method to close the GUI
+	public static void close() {
+		frame.dispose();
 	}
 	
 	public static void updateContactTable() {

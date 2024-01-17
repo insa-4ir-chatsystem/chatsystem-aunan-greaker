@@ -22,6 +22,7 @@ public class UDPController {
 	public static final int BROADCAST_PORT = 7471; // The port on which all javaChatProgram instances must listen for Broadcast.
 	public static final String ANNOUNCE_REQUEST_MSG = "All online users announce yourselves.";
 	public static final String LOGOUT_MSG = "I am logging out.";
+	public static Boolean isOnline = false;
 	public static String myUsername;
 	private static UDPListener udpListener;
 
@@ -60,6 +61,10 @@ public class UDPController {
     
     public static Boolean usernameAvailableHandler(String username) {
 		LOGGER.trace("Checking if username '" + username + "' is available...");
+		if (isOnline) {
+			LOGGER.error("Could not check if username was available because we are already online as " + myUsername);
+			return false;
+		}
     	try {
             UDPListener server = new UDPListener(BROADCAST_PORT);
             server.addObserver(msg -> {UDPController.contactDiscoveryMessageHandler(msg);});
@@ -113,8 +118,13 @@ public class UDPController {
 		}
 	}
 
-	public static void loginHandler() {
+	public static void loginHandler(String availableUsername) {
 		LOGGER.trace("Running loginHandler()...");
+		if (isOnline) {
+			LOGGER.error("Can't login because we are already online as " + myUsername);
+			return;
+		}
+		myUsername = availableUsername;
 		// Initilize the UDPListener
 		initilizeUDPListener();
 		
@@ -150,7 +160,11 @@ public class UDPController {
 		} catch (IOException e) {
 			LOGGER.error("Failed to send UDP broadcast: " + e.getMessage());
 		}
+
 		TCPController.startTCPListener();
+		ChatSystemGUI.initialize();
+
+		isOnline = true;
 		LOGGER.info("Now online with username: " + myUsername);
 	}
 
@@ -163,8 +177,11 @@ public class UDPController {
 		} catch (IOException e) {
 			LOGGER.error("Failed to send UDP broadcast: " + e.getMessage());
 		}
+		
+		ChatSystemGUI.close();
 		TCPController.stopTCPListener();
 		UDPController.closeUDPListener();
 		ContactList.getInstance().clear();
+		isOnline = false;
 	}
 }
