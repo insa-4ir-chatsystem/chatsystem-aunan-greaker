@@ -135,7 +135,7 @@ public class UDPController {
 				try {
 					ChatSystemGUI.updateContactTable();
 					LOGGER.trace("Updated contact table in GUI");
-				} catch (NullPointerException e) {
+				} catch (NullPointerException | NoClassDefFoundError e) {
 					LOGGER.warn("Could not update view because GUI has not been initilized!");
 				}
 			}
