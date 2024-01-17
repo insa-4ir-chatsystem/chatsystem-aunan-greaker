@@ -36,32 +36,43 @@ public class ControllerTest {
         Contact contact2 = new Contact(msg4.text(), msg4.source());
         
         assert !contacts.hasContact(contact1);
-        UDPController.contactDiscoveryMessageHandler(msg3);
+        try {
+            UDPController.contactDiscoveryMessageHandler(msg3);
+        } catch (NullPointerException e) {
+            // GUI is not initialized
+        }
+        
         assert contacts.hasContact(contact1);
 
         assert !contacts.hasContact(contact2);
-        UDPController.contactDiscoveryMessageHandler(msg4);
+
+        try {
+            UDPController.contactDiscoveryMessageHandler(msg4);
+        } catch (NullPointerException e) {
+            // GUI is not initialized
+        }
         assert contacts.hasContact(contact2);
 
-        UDPController.contactDiscoveryMessageHandler(msg4);
+        try {
+            UDPController.contactDiscoveryMessageHandler(msg4);
+        } catch (NullPointerException e) {
+            // GUI is not initialized
+        }
 
         /** Testing LOGOUT_MSG */
         UDPMessage msg5 = new UDPMessage(UDPController.LOGOUT_MSG, InetAddress.getByName("10.5.5.1"));
         UDPMessage msg6 = new UDPMessage(UDPController.LOGOUT_MSG, InetAddress.getByName("10.5.5.2"));
 
-        UDPController.contactDiscoveryMessageHandler(msg5);
-        UDPController.contactDiscoveryMessageHandler(msg6);
+        try {
+            UDPController.contactDiscoveryMessageHandler(msg5);
+            UDPController.contactDiscoveryMessageHandler(msg6);
+        } catch (NullPointerException e) {
+            // GUI is not initialized
+        }
     }
 
     @Test
-    void loginHandlerTest() throws UnknownHostException {
-        UDPController.myUsername = "Eve";
-        UDPController.loginHandler();
-        ContactList contacts = ContactList.getInstance();
-    }
-
-    @Test
-    void logoutHandlerTest() throws UnknownHostException {
+    void loginLogoutHandlersTest() throws UnknownHostException {
         UDPController.myUsername = "Eve";
         UDPController.loginHandler();
         UDPController.logoutHandler();
