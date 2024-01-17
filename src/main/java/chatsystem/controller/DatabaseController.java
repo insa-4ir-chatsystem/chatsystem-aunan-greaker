@@ -8,5 +8,8 @@ public class DatabaseController {
 	
 	private static final Logger LOGGER = LogManager.getLogger(DatabaseController.class);
 
+	public static void sendMsgHandler(String msg) {
+		
+	}
 	
 }
