@@ -121,15 +121,23 @@ public class UDPController {
 			@Override
 			public void newContactAdded(Contact contact) {  
 				// Update Contact table in GUI
-				ChatSystemGUI.updateContactTable();
-				LOGGER.trace("Updated contact table in GUI");
+				try {
+					ChatSystemGUI.updateContactTable();
+					LOGGER.trace("Updated contact table in GUI");
+				} catch (NullPointerException e) {
+					LOGGER.warn("Could not update view because GUI has not been initilized!");
+				}
 			}
 
 			@Override
 			public void contactRemoved(Contact contact) {
 				// Update Contact table in GUI
-				ChatSystemGUI.updateContactTable();
-				LOGGER.trace("Updated contact table in GUI");
+				try {
+					ChatSystemGUI.updateContactTable();
+					LOGGER.trace("Updated contact table in GUI");
+				} catch (NullPointerException e) {
+					LOGGER.warn("Could not update view because GUI has not been initilized!");
+				}
 			}
 
 			@Override

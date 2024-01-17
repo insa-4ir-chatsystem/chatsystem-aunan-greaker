@@ -42,39 +42,21 @@ public class ControllerTest {
         Contact contact2 = new Contact(msg4.text(), msg4.source());
         
         assert !contacts.hasContact(contact1);
-        try {
-            UDPController.contactDiscoveryMessageHandler(msg3);
-        } catch (NullPointerException e) {
-            // GUI is not initialized
-        }
-        
+        UDPController.contactDiscoveryMessageHandler(msg3);
         assert contacts.hasContact(contact1);
-
         assert !contacts.hasContact(contact2);
 
-        try {
-            UDPController.contactDiscoveryMessageHandler(msg4);
-        } catch (NullPointerException e) {
-            // GUI is not initialized
-        }
+        UDPController.contactDiscoveryMessageHandler(msg4);
         assert contacts.hasContact(contact2);
 
-        try {
-            UDPController.contactDiscoveryMessageHandler(msg4);
-        } catch (NullPointerException e) {
-            // GUI is not initialized
-        }
+        UDPController.contactDiscoveryMessageHandler(msg4);
 
         /** Testing LOGOUT_MSG */
         UDPMessage msg5 = new UDPMessage(UDPController.LOGOUT_MSG, InetAddress.getByName("10.5.5.1"));
         UDPMessage msg6 = new UDPMessage(UDPController.LOGOUT_MSG, InetAddress.getByName("10.5.5.2"));
 
-        try {
-            UDPController.contactDiscoveryMessageHandler(msg5);
-            UDPController.contactDiscoveryMessageHandler(msg6);
-        } catch (NullPointerException e) {
-            // GUI is not initialized
-        }
+        UDPController.contactDiscoveryMessageHandler(msg5);
+        UDPController.contactDiscoveryMessageHandler(msg6);
     }
 
     @Test
