@@ -176,7 +176,7 @@ public class ChatSystemGUI {
         // Update the frame
 		LOGGER.debug("Updating frame...");
         if (frame != null) {
-			SwingUtilities.updateComponentTreeUI(frame);
+			//SwingUtilities.updateComponentTreeUI(frame);
 		} else {
 			LOGGER.error("frame is null. Make sure it is properly initialized.");
 		}
