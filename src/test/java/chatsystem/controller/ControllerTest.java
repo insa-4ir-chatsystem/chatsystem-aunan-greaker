@@ -26,7 +26,7 @@ public class ControllerTest {
     @Test
     void messageHandlingTest() throws UnknownHostException {
         /** Testing ANNOUNCE_REQUEST_MSG */
-        UDPController.myUsername = "Eve";
+        Controller.setMyUsername("Eve");
         UDPMessage msg1 = new UDPMessage(UDPController.ANNOUNCE_REQUEST_MSG, InetAddress.getByName("10.5.5.1"));
         UDPMessage msg2 = new UDPMessage(UDPController.ANNOUNCE_REQUEST_MSG, InetAddress.getByName("10.5.5.2"));
 

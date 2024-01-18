@@ -23,6 +23,7 @@ import org.apache.logging.log4j.Logger;
 
 import chatsystem.contacts.Contact;
 import chatsystem.contacts.ContactList;
+import chatsystem.controller.Controller;
 import chatsystem.controller.DatabaseController;
 import chatsystem.controller.TCPController;
 import chatsystem.controller.UDPController;
@@ -127,7 +128,7 @@ public class ChatSystemGUI {
             public void windowClosing(WindowEvent e) {
                 // Code to be executed when the window is closing
                 LOGGER.trace("Window is closing. Performing final tasks...");
-				UDPController.logoutHandler();
+				Controller.logoutHandler();
             }
         });
         frame.add(contactsPanel, BorderLayout.WEST);
@@ -175,12 +176,7 @@ public class ChatSystemGUI {
         frame.add(contactsPanel, BorderLayout.WEST);
         
         // Update the frame
-		LOGGER.debug("Updating frame...");
-        if (frame != null) {
-			SwingUtilities.updateComponentTreeUI(frame);
-		} else {
-			LOGGER.error("frame is null. Make sure it is properly initialized.");
-		}
+		SwingUtilities.updateComponentTreeUI(frame);
 		
     }
 	
