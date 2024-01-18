@@ -50,7 +50,6 @@ public class ChatSystemGUI {
 	public ChatSystemGUI() {
 		SwingUtilities.invokeLater(() -> {
 			initialize();
-			updateContactTable();
 		});
 	}
 
@@ -65,6 +64,7 @@ public class ChatSystemGUI {
         
         // Set the preferred size of the 'Contacts' table in the GUI and initialize its content
         contactTable.setPreferredScrollableViewportSize(new Dimension(200, 500));
+		updateContactTable();
         
         // When selecting contact from the GUI 'Contacts' table, open the corresponding 'Chat' table
         contactTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
@@ -151,9 +151,6 @@ public class ChatSystemGUI {
 
 		// Get the existing table model
 		DefaultTableModel tableModel = new DefaultTableModel(new Object[]{"Contacts"}, 0);
-		
-		// Clear the existing data in the table model
-		tableModel.setRowCount(0);
 	
 		List<Contact> contactList = ContactList.getInstance().getAllContacts();
 	
