@@ -111,6 +111,9 @@ public class ChatSystemGUI {
 	            if (!msg.equals("")) {
 		            connection.sendMessage(msg);
 		            DatabaseController.sendMsgHandler(chattingWith, msg);
+		            
+		            // Remove the message from the messageField after it is sent
+		            messageField.setText("");
 	            }
 	        }
 	    });
