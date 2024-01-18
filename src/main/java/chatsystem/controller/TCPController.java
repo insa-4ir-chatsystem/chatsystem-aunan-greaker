@@ -9,6 +9,7 @@ import org.apache.logging.log4j.Logger;
 
 import chatsystem.contacts.Contact;
 import chatsystem.contacts.ContactList;
+import chatsystem.log.ChatHistory;
 import chatsystem.network.tcp.TCPConnection;
 import chatsystem.network.tcp.TCPListener;
 
@@ -56,9 +57,14 @@ public class TCPController {
 					LOGGER.trace("Received message: " + receivedMsg);
 					
 					// Update the chat history table in GUI
+					InetAddress otherUser = chatConnection.getIp();
 					ContactList contactList = ContactList.getInstance();
-					Contact otherUser = contactList.getContact(chatConnection.getIp());
-					Controller.getGui().updateChatsTable(otherUser);
+					Contact otherContact = contactList.getContact(otherUser);
+					
+					// Store the incoming message in the local chat history
+					ChatHistory chatHistory = new ChatHistory(otherUser);
+					chatHistory.addMessage(otherUser, receivedMsg);
+					Controller.getGui().updateChatsTable(otherContact);
 					
 				}
 				LOGGER.trace("TCPConnection with " + socket.getInetAddress() + " on port " + socket.getPort() + " closed");
