@@ -46,8 +46,12 @@ public class ChatSystemGUI {
 	private static TCPConnection connection;
 	
 	private static final Logger LOGGER = LogManager.getLogger(ChatSystemGUI.class);
-	
-	public static void initialize() {
+
+	public ChatSystemGUI() {
+			initialize();
+	}
+
+	public void initialize() {
 		LOGGER.trace("Initializing ChatSystemGUI...");
 		contactsPanel = new JPanel();
 		chatHistoryPanel = new JPanel();
