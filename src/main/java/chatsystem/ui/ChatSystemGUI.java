@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.net.InetAddress;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
@@ -27,7 +28,8 @@ import chatsystem.controller.Controller;
 import chatsystem.controller.DatabaseController;
 import chatsystem.controller.TCPController;
 import chatsystem.controller.UDPController;
-import chatsystem.log.Database;
+import chatsystem.log.ChatHistory;
+import chatsystem.log.ChatMessage;
 import chatsystem.log.TableAlreadyExists;
 import chatsystem.network.tcp.TCPConnection;
 import chatsystem.network.udp.UDPSender;
@@ -40,7 +42,7 @@ public class ChatSystemGUI {
 	private JPanel newChatPanel;
 	private JTable contactTable;
 	private JTable chatsTable;
-	private JButton sendButton;
+	private JButton sendButton = new JButton("Send");
 	
 	// Private variables to keep track of who the user is chatting with, and the corresponding TCPConnection
     // Disse vurde kanskje være i controlleren? De må vel også være lister siden man kan chatte med flere samtidig
@@ -105,8 +107,7 @@ public class ChatSystemGUI {
         newChatPanel.add(lbl);
         newChatPanel.add(messageField);
 
-        // Create the 'Send' button to send 
-	    JButton sendButton = new JButton("Send");
+        // Set the border and disable the 'Send' button 
 	    sendButton.setBorder(BorderFactory.createEmptyBorder(10,20,10,20));
 	    sendButton.setEnabled(false);
 	    newChatPanel.add(sendButton);
@@ -165,8 +166,7 @@ public class ChatSystemGUI {
 		contactTable.setModel(tableModel);
         
         // Make the entire table non-editable
-        //contactTable.setFocusable(false);
-        //contactTable.setEnabled(false);
+        contactTable.setFocusable(false);
         
         // Add contactTable to the scrollPaneContacts, scrollPaneContacts to the contactsPanel, and contactPanel to the WEST of the frame (and remove any old version of the contactPanel if found)
 		contactsPanel.removeAll();
@@ -190,39 +190,24 @@ public class ChatSystemGUI {
 		
     	// Create a table model with one column for contactNames and no data initially
         DefaultTableModel tableModel = new DefaultTableModel( new Object[]{otherUser.username(), "Me"}, 0);
-        Database db = Database.getInstance();
+
+        // Get the ChatHistory instance with the otherUser
+        ChatHistory chatHistory = new ChatHistory(otherUser.ip());
+        List<ChatMessage> list = chatHistory.getChatHistory();
         
-        // If there is no saved chatHistory linked to this IP, create a new chat table in the database
-        try {
-			if (!db.hasTable(otherUser.ip().toString())) {
-				db.newTable(otherUser.ip().toString());
-			}
-		} catch (SQLException e) {
-			LOGGER.error(e.getMessage());
-		} catch (TableAlreadyExists e) {
-			LOGGER.error(e.getMessage());
-		}
-        
-        try {
-	        ResultSet rs = db.getTable(otherUser.ip().toString());
-	        
-	        // Populate the table model with data from the chatHistory
-	        while (rs.next()) {
-	            String from = rs.getString("from_contact");
-	            String msg = rs.getString("msg");
+	    // Populate the table model with data from the chatHistory list
+	    for (ChatMessage chatMessage : list) {
+	        InetAddress from = chatMessage.from();
+	        String msg = chatMessage.msg();
 	
-	            // Add a new row to the table model
-	            if (from.equals(otherUser.ip().toString())) {
-	            	tableModel.addRow(new Object[]{msg, ""});
-	            }
-	            else {
-	            	tableModel.addRow(new Object[]{"", msg});
-	            }
+	        // Add a new row to the table model
+	        if (from.equals(otherUser.ip())) {
+	            tableModel.addRow(new Object[]{msg, ""});
 	        }
-	        
-        } catch (SQLException e) {
-        	LOGGER.error(e.getMessage());
-        }
+	        else {
+	            tableModel.addRow(new Object[]{"", msg});
+	        }
+	    }      
 	
 	    // Set the table model for the JTable
 	    chatsTable.setModel(tableModel);
