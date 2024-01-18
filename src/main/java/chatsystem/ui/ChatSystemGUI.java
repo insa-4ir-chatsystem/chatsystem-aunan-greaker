@@ -32,19 +32,19 @@ import chatsystem.network.tcp.TCPConnection;
 import chatsystem.network.udp.UDPSender;
 
 public class ChatSystemGUI {
-	private static final JFrame frame = new JFrame();
-	private static JPanel contactsPanel;
-	private static JPanel chatHistoryPanel;
-	private static JPanel newChatPanel;
-	private static JTable contactTable;
-	private static JTable chatsTable;
-	private static JButton sendButton;
+
+	private JFrame frame = new JFrame();
+	private JPanel contactsPanel;
+	private JPanel chatHistoryPanel;
+	private JPanel newChatPanel;
+	private JTable contactTable;
+	private JTable chatsTable;
+	private JButton sendButton;
 	
 	// Private variables to keep track of who the user is chatting with, and the corresponding TCPConnection
     // Disse vurde kanskje være i controlleren? De må vel også være lister siden man kan chatte med flere samtidig
 	private static Contact chattingWith;
 	private static TCPConnection connection;
-	
 	private static final Logger LOGGER = LogManager.getLogger(ChatSystemGUI.class);
 
 	public ChatSystemGUI() {
@@ -62,7 +62,7 @@ public class ChatSystemGUI {
         
         // Set the preferred size of the 'Contacts' table in the GUI and initialize its content
         contactTable.setPreferredScrollableViewportSize(new Dimension(200, 500));
-        updateContactTable();
+		updateContactTable();
         
         // When selecting contact from the GUI 'Contacts' table, open the corresponding 'Chat' table
         contactTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
@@ -76,7 +76,7 @@ public class ChatSystemGUI {
                         // Update the 'Chat' table to the selected username
                         ContactList contList = ContactList.getInstance(); 
                         Contact selectedContact = contList.getContact(contactUsername);
-                		ChatSystemGUI.updateChatsTable(selectedContact);
+                		updateChatsTable(selectedContact);
                     }
                 }
             }
@@ -139,48 +139,52 @@ public class ChatSystemGUI {
 	}
 
 	// Method to close the GUI
-	public static void close() {
+	public void close() {
 		frame.dispose();
+		LOGGER.trace("Closed ChatSystemGUI");
 	}
 	
-	public static void updateContactTable() {
+	public void updateContactTable() {
 		LOGGER.trace("Updating contactTable...");
-    	// Create a table model with one column for contactNames and no data initially
-        DefaultTableModel tableModel = new DefaultTableModel( new Object[]{"Contacts"}, 0);
 
-        List<Contact> contactList = ContactList.getInstance().getAllContacts();
-        
-        // Populate the table model with data from the contactList
-        for (int i = 0; i < contactList.size(); i++) {
-            String contactName = contactList.get(i).username();
-
-            // Add a new row to the table model
-            tableModel.addRow(new Object[]{contactName});
-        }
-
-        // Set the table model for the JTable
-        try {
-        	contactTable.setModel(tableModel);
-        } catch (NullPointerException e) {
-        	LOGGER.error("Could not set table model for contactTable" + e.getMessage());
-        }
+		// Get the existing table model
+		DefaultTableModel tableModel = new DefaultTableModel(new Object[]{"Contacts"}, 0);
+	
+		List<Contact> contactList = ContactList.getInstance().getAllContacts();
+	
+		// Populate the table model with data from the contactList
+		for (int i = 0; i < contactList.size(); i++) {
+			String contactName = contactList.get(i).username();
+	
+			// Add a new row to the table model
+			tableModel.addRow(new Object[]{contactName});
+		}
+	
+		// Set the table model for the JTable
+		contactTable.setModel(tableModel);
         
         // Make the entire table non-editable
         //contactTable.setFocusable(false);
         //contactTable.setEnabled(false);
         
         // Add contactTable to the scrollPaneContacts, scrollPaneContacts to the contactsPanel, and contactPanel to the WEST of the frame (and remove any old version of the contactPanel if found)
-        contactsPanel.removeAll();
+		contactsPanel.removeAll();
         JScrollPane scrollPaneContacts = new JScrollPane(contactTable);
         contactsPanel.add(scrollPaneContacts);
         frame.remove(contactsPanel);
         frame.add(contactsPanel, BorderLayout.WEST);
         
         // Update the frame
-        SwingUtilities.updateComponentTreeUI(frame);
+		LOGGER.debug("Updating frame...");
+        if (frame != null) {
+			SwingUtilities.updateComponentTreeUI(frame);
+		} else {
+			LOGGER.error("frame is null. Make sure it is properly initialized.");
+		}
+		
     }
 	
-	public static void updateChatsTable(Contact otherUser) {
+	public void updateChatsTable(Contact otherUser) {
 		// Enable send button
 		sendButton.setEnabled(true);
 		
