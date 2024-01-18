@@ -15,9 +15,14 @@ import chatsystem.network.tcp.TCPListener;
 
 public class TCPController {
 	private static final Logger LOGGER = LogManager.getLogger(TCPController.class);
-	private static TCPListener theTCPListener;
 	public static final int TCP_LISTENING_PORT = 9922;
+	private static TCPListener theTCPListener;
+	private static TCPConnection currChatConnection;
 	
+	public static TCPConnection getCurrentChatConnection() {
+		return currChatConnection;
+	}
+
 	/**	Starts the TCPListener. This is required to be able to accept incoming TCPConnections*/
 	public static void startTCPListener() {
 		try {
@@ -54,18 +59,7 @@ public class TCPController {
 				//Handles incoming messages
 				String receivedMsg;
 				while ((receivedMsg = chatConnection.readMessage()) != null) {
-					LOGGER.trace("Received message: " + receivedMsg);
-					
-					// Update the chat history table in GUI
-					InetAddress otherUser = chatConnection.getIp();
-					ContactList contactList = ContactList.getInstance();
-					Contact otherContact = contactList.getContact(otherUser);
-					
-					// Store the incoming message in the local chat history
-					ChatHistory chatHistory = new ChatHistory(otherUser);
-					chatHistory.addMessage(otherUser, receivedMsg);
-					Controller.getGui().updateChatsTable(otherContact);
-					
+					messageReceivedHandler(receivedMsg, chatConnection.getIp());
 				}
 				LOGGER.trace("TCPConnection with " + socket.getInetAddress() + " on port " + socket.getPort() + " closed");
 			} catch (IOException e) {
@@ -76,15 +70,37 @@ public class TCPController {
 		});
 		handlerThread.start();
 	}
+
+	public static void messageReceivedHandler(String msg, InetAddress from) {
+		LOGGER.trace("Received message: " + msg);
+		// Store the incoming message in the local chat history
+		InetAddress otherUser = from;
+		ChatHistory chatHistory = new ChatHistory(otherUser);
+		chatHistory.addMessage(otherUser, msg);
+
+		// Notify user that a new message has been received
+		//TODO: Notify user
+	}
 	
 	/** Starts a chat with remote user on given ip*/
-	public static TCPConnection startChatWith(InetAddress ip){
+	public static void startChatWith(InetAddress ip){
+		if (currChatConnection != null) {
+			LOGGER.warn("Startuing chat with " + ip + " but we are already chatting with " + currChatConnection.getIp());
+		}
 		try {
-			return new TCPConnection(ip, TCP_LISTENING_PORT);
+			currChatConnection = new TCPConnection(ip, TCP_LISTENING_PORT);
 		} catch (IOException e) {
 			LOGGER.error("Could not start TCPConnection with " + ip + "on port " + TCP_LISTENING_PORT);
 			e.printStackTrace();
-			return null;
 		}
+	}
+
+	/** Sends a message on the currChatConnection*/
+	public static void sendMessage(String msg) {
+		if (currChatConnection == null) {
+			LOGGER.error("Tried to send message but no chat is active");
+			return;
+		}
+		currChatConnection.sendMessage(msg);
 	}
 }

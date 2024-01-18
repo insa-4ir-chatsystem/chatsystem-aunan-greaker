@@ -20,13 +20,13 @@ public class DatabaseController {
 	
 	private static final Logger LOGGER = LogManager.getLogger(DatabaseController.class);
 
-	public static void sendMsgHandler(Contact chattingWith, String msg) {
+	public static void addMsgHandler(Contact chattingWith, String msg) {
 		try {
 			ChatHistory chatHistory = new ChatHistory(chattingWith.ip());
 			chatHistory.addMessage(InetAddress.getLocalHost(), msg);
 			
 			// Add the changes to the chat history table in the GUI
-			Controller.getGui().updateChatsTable(chattingWith);
+			Controller.getGui().showChatsWith(chattingWith);
 		} catch (UnknownHostException e) {
 			LOGGER.error("Could not get local host in DatabaseController: " + e);
 		}
