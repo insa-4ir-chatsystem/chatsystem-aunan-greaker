@@ -8,11 +8,13 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.net.InetAddress;
 import java.util.List;
+import java.util.ArrayList;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.DefaultTableCellRenderer;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -76,8 +78,10 @@ public class ChatSystemGUI {
             }
         });    
         
-        // Set the preferred size of the 'Chat' table in the GUI
-        chatsTable.setPreferredScrollableViewportSize(new Dimension(1000, 500));
+        // Set the preferred size of the 'Chat' table in the GUI, and remove grid lines of table
+        chatsTable.setPreferredScrollableViewportSize(new Dimension(900, 500));
+        chatsTable.setShowGrid(false);
+        chatsTable.setIntercellSpacing(new Dimension(0, 0));
  
         // Create the 'Change Username' button
         JButton changeUserNameButton = new JButton("Change Username");
@@ -134,6 +138,7 @@ public class ChatSystemGUI {
         frame.add(newChatPanel, BorderLayout.SOUTH);
         frame.setTitle("ChatSystem");
         frame.pack();
+        frame.setPreferredSize(new Dimension(1200, 600));
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
@@ -197,21 +202,44 @@ public class ChatSystemGUI {
 	    for (ChatMessage chatMessage : list) {
 	        InetAddress from = chatMessage.from();
 	        String msg = chatMessage.msg();
-	
-	        // Add a new row to the table model
-	        if (from.equals(otherUser.ip())) {
-	            tableModel.addRow(new Object[]{msg, ""});
+	        
+	        // Message size controll, to stop table text overflow in a single table line
+	        List<String> msgs = new ArrayList<String>();
+	        
+	        while (msg.length() > 80) {
+	        	for (int i = 80; i >= 0; i--) {
+	        		if (Character.toString(msg.charAt(i)).equals(" ")) {
+	        			msgs.add(msg.substring(0, i));
+	        			msg = msg.substring(i + 1);
+	        			msgs.add(msg);
+	        			i = -1;
+	        		}
+	        	}
 	        }
-	        else {
-	            tableModel.addRow(new Object[]{"", msg});
+	        msgs.add(msg);
+	
+	        for (String messagePiece : msgs) {
+	        	// Add a new row to the table model
+		        if (from.equals(otherUser.ip())) {
+		            tableModel.addRow(new Object[]{messagePiece, ""});
+		        }
+		        else {
+		            tableModel.addRow(new Object[]{"", messagePiece});
+		        }
 	        }
 	    }      
 	
 	    // Set the table model for the JTable
 	    chatsTable.setModel(tableModel);
+	    
+	    // Push the messages from this user to the right of the table column
+	    DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
+        rightRenderer.setHorizontalAlignment(JLabel.RIGHT);
+        chatsTable.getColumnModel().getColumn(1).setCellRenderer(rightRenderer);
 	        
 	    // Make the entire table non-editable
 	    chatsTable.setEnabled(false);
+	    chatsTable.setFocusable(false);
 	        
 	    // Add chatsTable to the scrollPaneChats, scrollPaneChats to the chatHistoryPanel, and chatHistoryPanel to the CENTER of the frame (and remove any old version of the chatHistoryPanel if found)
 	    chatHistoryPanel.removeAll();
