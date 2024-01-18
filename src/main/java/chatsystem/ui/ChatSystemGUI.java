@@ -32,22 +32,29 @@ import chatsystem.network.tcp.TCPConnection;
 import chatsystem.network.udp.UDPSender;
 
 public class ChatSystemGUI {
-	private static final JFrame frame = new JFrame();
-	private static JPanel contactsPanel;
-	private static JPanel chatHistoryPanel;
-	private static JPanel newChatPanel;
-	private static JTable contactTable;
-	private static JTable chatsTable;
-	private static JButton sendButton;
+
+	private JFrame frame = new JFrame();
+	private JPanel contactsPanel;
+	private JPanel chatHistoryPanel;
+	private JPanel newChatPanel;
+	private JTable contactTable;
+	private JTable chatsTable;
+	private JButton sendButton;
 	
 	// Private variables to keep track of who the user is chatting with, and the corresponding TCPConnection
     // Disse vurde kanskje være i controlleren? De må vel også være lister siden man kan chatte med flere samtidig
 	private static Contact chattingWith;
 	private static TCPConnection connection;
-	
 	private static final Logger LOGGER = LogManager.getLogger(ChatSystemGUI.class);
-	
-	public static void initialize() {
+
+	public ChatSystemGUI() {
+		SwingUtilities.invokeLater(() -> {
+			initialize();
+			updateContactTable();
+		});
+	}
+
+	public void initialize() {
 		LOGGER.trace("Initializing ChatSystemGUI...");
 		contactsPanel = new JPanel();
 		chatHistoryPanel = new JPanel();
@@ -58,9 +65,6 @@ public class ChatSystemGUI {
         
         // Set the preferred size of the 'Contacts' table in the GUI and initialize its content
         contactTable.setPreferredScrollableViewportSize(new Dimension(200, 500));
-		SwingUtilities.invokeLater(() -> {
-			updateContactTable();
-		});
         
         // When selecting contact from the GUI 'Contacts' table, open the corresponding 'Chat' table
         contactTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
@@ -74,7 +78,7 @@ public class ChatSystemGUI {
                         // Update the 'Chat' table to the selected username
                         ContactList contList = ContactList.getInstance(); 
                         Contact selectedContact = contList.getContact(contactUsername);
-                		ChatSystemGUI.updateChatsTable(selectedContact);
+                		updateChatsTable(selectedContact);
                     }
                 }
             }
@@ -137,11 +141,12 @@ public class ChatSystemGUI {
 	}
 
 	// Method to close the GUI
-	public static void close() {
+	public void close() {
 		frame.dispose();
+		LOGGER.trace("Closed ChatSystemGUI");
 	}
 	
-	public static void updateContactTable() {
+	public void updateContactTable() {
 		LOGGER.trace("Updating contactTable...");
 
 		// Get the existing table model
@@ -176,14 +181,14 @@ public class ChatSystemGUI {
         // Update the frame
 		LOGGER.debug("Updating frame...");
         if (frame != null) {
-			//SwingUtilities.updateComponentTreeUI(frame);
+			SwingUtilities.updateComponentTreeUI(frame);
 		} else {
 			LOGGER.error("frame is null. Make sure it is properly initialized.");
 		}
 		
     }
 	
-	public static void updateChatsTable(Contact otherUser) {
+	public void updateChatsTable(Contact otherUser) {
 		// Enable send button
 		sendButton.setEnabled(true);
 		
