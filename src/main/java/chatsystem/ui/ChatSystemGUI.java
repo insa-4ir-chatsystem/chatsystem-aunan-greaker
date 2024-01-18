@@ -1,17 +1,12 @@
 package chatsystem.ui;
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.net.InetAddress;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
 
 import javax.swing.*;
@@ -27,12 +22,9 @@ import chatsystem.contacts.ContactList;
 import chatsystem.controller.Controller;
 import chatsystem.controller.DatabaseController;
 import chatsystem.controller.TCPController;
-import chatsystem.controller.UDPController;
 import chatsystem.log.ChatHistory;
 import chatsystem.log.ChatMessage;
-import chatsystem.log.TableAlreadyExists;
 import chatsystem.network.tcp.TCPConnection;
-import chatsystem.network.udp.UDPSender;
 
 public class ChatSystemGUI {
 
