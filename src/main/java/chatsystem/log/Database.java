@@ -49,7 +49,7 @@ public class Database {
 		Connection conn = DriverManager.getConnection(url);
 		Statement stmt = conn.createStatement();
 		String sqlite = "SELECT * FROM " + tableName + ";";
-		return (stmt.executeQuery(sqlite));
+		return stmt.executeQuery(sqlite);
 	}
 	
 	public synchronized void removeTable(String tableName) {
