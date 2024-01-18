@@ -13,7 +13,7 @@ import java.time.format.DateTimeFormatter;
 public class Database {
 
 	private static final Database INSTANCE = new Database();
-	public String url = "jdbc:sqlite:chat_system.db";
+	public String url = "jdbc:sqlite:chatsystem_database.db";
 	
 	public static Database getInstance() {
     	return INSTANCE;
@@ -27,7 +27,7 @@ public class Database {
 			try (Connection conn = DriverManager.getConnection(url)) {
 				Statement stmt = conn.createStatement();
 			    
-			    String sqlite = "CREATE TABLE " + tableName + " (msg_id text PRIMARY KEY, from_contact text NOT NULL, msg text NOT NULL, created_at text NOT NULL);";
+			    String sqlite = "CREATE TABLE " + tableName + " (msgId text PRIMARY KEY, fromContact text NOT NULL, msg text NOT NULL, createdAt text NOT NULL);";
 			    stmt.execute(sqlite);
 			    conn.close();
 			}
@@ -48,7 +48,7 @@ public class Database {
 	public synchronized ResultSet getTable(String tableName) throws SQLException {  
 		Connection conn = DriverManager.getConnection(url);
 		Statement stmt = conn.createStatement();
-		String sqlite = "SELECT * FROM " + tableName + ";";
+		String sqlite = "SELECT msgId, fromContact, msg, createdAt FROM " + tableName + ";";
 		return stmt.executeQuery(sqlite);
 	}
 	

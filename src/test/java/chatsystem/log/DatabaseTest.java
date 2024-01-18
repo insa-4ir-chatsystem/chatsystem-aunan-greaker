@@ -25,7 +25,7 @@ class DatabaseTest {
 		}
 		
 		while (rs.next()) {
-			String from = rs.getString("from_contact");
+			String from = rs.getString("fromContact");
 			String msg = rs.getString("msg");
 			
 			if (from.equals("Emilie")) {
@@ -35,7 +35,7 @@ class DatabaseTest {
 				assert msg.equals("Hello :)");
 			}
 			else {
-				fail("Invalid 'from' value found in table");
+				fail("Invalid 'fromContact' value found in table");
 			}
 		}
 		rs.close();

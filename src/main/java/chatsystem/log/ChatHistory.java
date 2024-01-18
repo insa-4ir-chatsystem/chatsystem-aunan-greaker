@@ -17,6 +17,7 @@ import chatsystem.controller.DatabaseController;
 public class ChatHistory {
 	private InetAddress self;
 	private InetAddress other;
+	private String tblName;
 	private List<ChatMessage> chatHistory = new ArrayList<ChatMessage>();
 	
 	private static final Logger LOGGER = LogManager.getLogger(ChatHistory.class);
@@ -24,25 +25,28 @@ public class ChatHistory {
 	public ChatHistory(InetAddress other) {
 		try {
 			self = InetAddress.getLocalHost();
-			this.other = other;
 		} catch (UnknownHostException e) {
 			LOGGER.error("Could not get the local host address: " + e);
 			e.printStackTrace();
 		}
 		
+		this.other = other;
+		tblName = "Chat" + other.getHostAddress();
+		tblName = tblName.replaceAll("\\.", "");
+		
 		try {
 			Database db = Database.getInstance();
-			if (!db.hasTable(other.toString())) {
-				db.newTable(other.toString());
+			if (!db.hasTable(tblName)) {
+				db.newTable(tblName);
 			}
-	        ResultSet rs = db.getTable(other.toString());
+	        ResultSet rs = db.getTable(tblName);
 	        
 	        // Populate the chatHistory with data from the Database
 	        while (rs.next()) {
-	        	String msg_id = rs.getString("msg_id");
-	            InetAddress from = InetAddress.getByName(rs.getString("from_contact"));
+	        	String msg_id = rs.getString("msgId");
+	            InetAddress from = InetAddress.getByName(rs.getString("fromContact"));
 	            String msg = rs.getString("msg");
-	            String timeStamp = rs.getString("created_at");
+	            String timeStamp = rs.getString("createdAt");
 	
 	            // Add a new chatMessage to the chatHistory
 	            chatHistory.add(new ChatMessage(msg_id, from, msg, timeStamp));
@@ -50,19 +54,18 @@ public class ChatHistory {
 	        
         } catch (SQLException e) {
         	LOGGER.error("Could not get the table from the Database: " + e.getMessage());
-        } catch (UnknownHostException e) {
-			LOGGER.error("Could not change 'from_contact' value of database to an InetAddress: " + e);
-			e.printStackTrace();
-		} catch (TableAlreadyExists e) {
+        } catch (TableAlreadyExists e) {
 			LOGGER.error("Table already exist error in ChatHistory construction: " + e.getMessage());
+		} catch (UnknownHostException e) {
+			LOGGER.error("Could not convert 'fromContact' value to InetAddress: " + e.getMessage());
 		}
 	}
 	
-	public void addMessage(String msg) {
+	public void addMessage(InetAddress from, String msg) {
 		// Add message to the table in the Database
         try {
         	Database db = Database.getInstance();
-			db.addToTable(other.toString(), self.toString(), msg);
+			db.addToTable(tblName, from.getHostAddress(), msg);
 		} catch (SQLException e) {
 			LOGGER.error("Could not add msg to database: " + e.getMessage());
 		}
