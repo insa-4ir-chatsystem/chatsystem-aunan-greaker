@@ -78,8 +78,15 @@ public class TCPController {
 		ChatHistory chatHistory = new ChatHistory(otherUser);
 		chatHistory.addMessage(otherUser, msg);
 
+		// Update the GUI if we are currently chatting with the user who sent the message
+		Contact contact = ContactList.getInstance().getContact(otherUser); // The contact we are chatting with
+		if (Controller.getGui().getshowingChatWith().equals(contact)) {
+			Controller.getGui().showChatsWith(contact);
+		}
+		else {
 		// Notify user that a new message has been received
 		//TODO: Notify user
+		}
 	}
 	
 	/** Starts a chat with remote user on given ip*/
