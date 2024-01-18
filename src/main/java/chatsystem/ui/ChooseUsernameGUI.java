@@ -14,6 +14,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import chatsystem.contacts.ContactList;
+import chatsystem.controller.Controller;
 import chatsystem.controller.UDPController;
 import chatsystem.contacts.Contact;
 
@@ -42,15 +43,15 @@ public class ChooseUsernameGUI {
 				LOGGER.trace("Login button pressed");
             	String myUsername = usernameField.getText();
 				// If we are already online, we must logout before checking if a username is available or logging in again
-				if (UDPController.isOnline) {
-						UDPController.logoutHandler();
+				if (Controller.isOnline()) {
+					Controller.logoutHandler();
 				}
 
 				// Check if the username is available
 				if (UDPController.usernameAvailableHandler(myUsername) && !myUsername.equals("")) {
 					LOGGER.debug("Username '"+ myUsername + "' was available, logging in...");
 					frame.dispose();
-					UDPController.loginHandler(myUsername);
+					Controller.loginHandler(myUsername);
 				} else {
 					JOptionPane.showMessageDialog(frame, "This username is not available, please choose a different one");	            	            
 				}

@@ -52,6 +52,8 @@ public class TCPController {
 				String receivedMsg;
 				while ((receivedMsg = chatconnection.readMessage()) != null) {
 					LOGGER.trace("Received message: " + receivedMsg);
+					// Update gui chat history
+					
 				}
 				LOGGER.trace("TCPConnection with " + socket.getInetAddress() + " on port " + socket.getPort() + " closed");
 			} catch (IOException e) {
