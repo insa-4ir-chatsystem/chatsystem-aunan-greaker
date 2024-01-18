@@ -86,7 +86,7 @@ public class ChatSystemGUI {
         });    
         
         // Set the preferred size of the 'Chat' table in the GUI
-        chatsTable.setPreferredScrollableViewportSize(new Dimension(500, 500));
+        chatsTable.setPreferredScrollableViewportSize(new Dimension(1000, 500));
  
         // Create the 'Change Username' button
         JButton changeUserNameButton = new JButton("Change Username");
