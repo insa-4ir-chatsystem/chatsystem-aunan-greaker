@@ -59,13 +59,13 @@ public class TCPListener extends Thread {
 		        }
 			} catch (IOException e) {
 				if (serverSocket.isClosed()) {
-					LOGGER.info("TCPListener closed");
+					// ServerSocket closed, no need to print stack trace
 				} else {
 					LOGGER.error("Failed to accept incoming connection");
 					e.printStackTrace();
 				}
 			}
-
     	}
+		LOGGER.trace("TCPListener closed");
     }
 }

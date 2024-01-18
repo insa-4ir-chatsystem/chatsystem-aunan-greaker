@@ -141,6 +141,8 @@ public class ChatSystemGUI {
 	
 	public static void updateContactTable() {
 		LOGGER.trace("Updating contactTable...");
+		contactTable = new JTable();
+
     	// Create a table model with one column for contactNames and no data initially
         DefaultTableModel tableModel = new DefaultTableModel( new Object[]{"Contacts"}, 0);
 
@@ -165,13 +167,15 @@ public class ChatSystemGUI {
         //contactTable.setEnabled(false);
         
         // Add contactTable to the scrollPaneContacts, scrollPaneContacts to the contactsPanel, and contactPanel to the WEST of the frame (and remove any old version of the contactPanel if found)
-        contactsPanel.removeAll();
+        LOGGER.debug("Updating contactTable...");
+		contactsPanel.removeAll();
         JScrollPane scrollPaneContacts = new JScrollPane(contactTable);
         contactsPanel.add(scrollPaneContacts);
         frame.remove(contactsPanel);
         frame.add(contactsPanel, BorderLayout.WEST);
         
         // Update the frame
+		LOGGER.debug("Updating frame...");
         SwingUtilities.updateComponentTreeUI(frame);
     }
 	
