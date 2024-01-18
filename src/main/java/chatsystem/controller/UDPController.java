@@ -13,6 +13,8 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.SocketException;
 
+import javax.swing.SwingUtilities;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -22,6 +24,7 @@ public class UDPController {
 	public static final int BROADCAST_PORT = 7471; // The port on which all javaChatProgram instances must listen for Broadcast.
 	public static final String ANNOUNCE_REQUEST_MSG = "All online users announce yourselves.";
 	public static final String LOGOUT_MSG = "I am logging out.";
+	public static ChatSystemGUI gui;
 	public static Boolean isOnline = false;
 	public static String myUsername;
 	private static UDPListener udpListener;
@@ -134,7 +137,9 @@ public class UDPController {
 			public void newContactAdded(Contact contact) {  
 				// Update Contact table in GUI
 				try {
-					ChatSystemGUI.updateContactTable();
+					SwingUtilities.invokeLater(() -> {
+    					gui.updateContactTable();
+					});
 					LOGGER.trace("Updated contact table in GUI");
 				} catch (NullPointerException | NoClassDefFoundError e) {
 					LOGGER.warn("Could not update view because GUI has not been initilized!");
@@ -145,7 +150,9 @@ public class UDPController {
 			public void contactRemoved(Contact contact) {
 				// Update Contact table in GUI
 				try {
-					ChatSystemGUI.updateContactTable();
+					SwingUtilities.invokeLater(() -> {
+    					gui.updateContactTable();
+					});
 					LOGGER.trace("Updated contact table in GUI");
 				} catch (NullPointerException | NoClassDefFoundError e) {
 					LOGGER.warn("Could not update view because GUI has not been initilized!");
@@ -162,7 +169,7 @@ public class UDPController {
 		}
 
 		TCPController.startTCPListener();
-		ChatSystemGUI.initialize();
+		gui = new ChatSystemGUI(); // Initilize the GUI
 
 		isOnline = true;
 		LOGGER.info("Now online with username: " + myUsername);
@@ -178,7 +185,7 @@ public class UDPController {
 			LOGGER.error("Failed to send UDP broadcast: " + e.getMessage());
 		}
 		
-		ChatSystemGUI.close();
+		gui.close();
 		TCPController.stopTCPListener();
 		UDPController.closeUDPListener();
 		ContactList.getInstance().clear();
