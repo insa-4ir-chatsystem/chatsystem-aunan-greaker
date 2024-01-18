@@ -15,9 +15,13 @@ import chatsystem.ui.ChatSystemGUI;
 public class Controller {
     private static final Logger LOGGER = LogManager.getLogger(Controller.class);
 
-    public static ChatSystemGUI gui;
+    private static ChatSystemGUI gui;
 	private static Boolean isOnline = false;
 	private static String myUsername;
+
+    public static ChatSystemGUI getGui() {
+        return gui;
+    }
 
     public static Boolean isOnline() {
         return isOnline;

@@ -5,12 +5,12 @@ import java.net.UnknownHostException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import javax.swing.event.ListSelectionEvent;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import chatsystem.contacts.Contact;
+import chatsystem.log.Database;
 import chatsystem.contacts.ContactList;
 import chatsystem.log.ChatHistory;
 import chatsystem.ui.ChatSystemGUI;
