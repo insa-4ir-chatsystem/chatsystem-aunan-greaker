@@ -82,9 +82,6 @@ public class ChatSystemGUI {
         chatsTable.setPreferredScrollableViewportSize(new Dimension(900, 500));
         chatsTable.setShowGrid(false);
         chatsTable.setIntercellSpacing(new Dimension(0, 0));
-        DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
-        rightRenderer.setHorizontalAlignment(JLabel.RIGHT);
-        chatsTable.getColumnModel().getColumn(1).setCellRenderer(rightRenderer);
  
         // Create the 'Change Username' button
         JButton changeUserNameButton = new JButton("Change Username");
@@ -230,6 +227,11 @@ public class ChatSystemGUI {
 	
 	    // Set the table model for the JTable
 	    chatsTable.setModel(tableModel);
+	    
+	    // Push the messages from this user to the right of the table column
+	    DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
+        rightRenderer.setHorizontalAlignment(JLabel.RIGHT);
+        chatsTable.getColumnModel().getColumn(1).setCellRenderer(rightRenderer);
 	        
 	    // Make the entire table non-editable
 	    chatsTable.setEnabled(false);
