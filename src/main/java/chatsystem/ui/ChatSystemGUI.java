@@ -141,27 +141,25 @@ public class ChatSystemGUI {
 	
 	public static void updateContactTable() {
 		LOGGER.trace("Updating contactTable...");
-		contactTable = new JTable();
 
-    	// Create a table model with one column for contactNames and no data initially
-        DefaultTableModel tableModel = new DefaultTableModel( new Object[]{"Contacts"}, 0);
-
-        List<Contact> contactList = ContactList.getInstance().getAllContacts();
-        
-        // Populate the table model with data from the contactList
-        for (int i = 0; i < contactList.size(); i++) {
-            String contactName = contactList.get(i).username();
-
-            // Add a new row to the table model
-            tableModel.addRow(new Object[]{contactName});
-        }
-
-        // Set the table model for the JTable
-        try {
-        	contactTable.setModel(tableModel);
-        } catch (NullPointerException e) {
-        	LOGGER.error("Could not set table model for contactTable" + e.getMessage());
-        }
+		// Get the existing table model
+		DefaultTableModel tableModel = (DefaultTableModel) contactTable.getModel();
+		
+		// Clear the existing data in the table model
+		tableModel.setRowCount(0);
+	
+		List<Contact> contactList = ContactList.getInstance().getAllContacts();
+	
+		// Populate the table model with data from the contactList
+		for (int i = 0; i < contactList.size(); i++) {
+			String contactName = contactList.get(i).username();
+	
+			// Add a new row to the table model
+			tableModel.addRow(new Object[]{contactName});
+		}
+	
+		// Set the table model for the JTable
+		contactTable.setModel(tableModel);
         
         // Make the entire table non-editable
         //contactTable.setEnabled(false);
