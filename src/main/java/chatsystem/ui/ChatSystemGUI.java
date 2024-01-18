@@ -39,8 +39,8 @@ public class ChatSystemGUI {
 	private JButton sendButton = new JButton("Send");
 	
 	// Private variables to keep track of who the user is chatting with, and the corresponding TCPConnection
-	private static Contact chattingWith;
-	private static TCPConnection connection;
+    // Disse vurde kanskje være i controlleren? De må vel også være lister siden man kan chatte med flere samtidig
+	private static Contact showingChatWith;
 	private static final Logger LOGGER = LogManager.getLogger(ChatSystemGUI.class);
 
 	public ChatSystemGUI() {
@@ -72,7 +72,7 @@ public class ChatSystemGUI {
                         // Update the 'Chat' table to the selected username
                         ContactList contList = ContactList.getInstance(); 
                         Contact selectedContact = contList.getContact(contactUsername);
-                		updateChatsTable(selectedContact);
+                		showChatsWith(selectedContact);
                     }
                 }
             }
@@ -112,8 +112,12 @@ public class ChatSystemGUI {
             public void actionPerformed(ActionEvent e) {
 	            String msg = messageField.getText();
 	            if (!msg.equals("")) {
-		            connection.sendMessage(msg);
-		            DatabaseController.sendMsgHandler(chattingWith, msg);
+					//Starts a connection with the user and sends the message
+					TCPController.startChatWith(showingChatWith.ip());
+		            TCPController.sendMessage(msg);
+
+					// Store the message in the local chat history
+		            DatabaseController.addMsgHandler(showingChatWith, msg);
 		            
 		            // Remove the message from the messageField after it is sent
 		            messageField.setText("");
@@ -179,13 +183,13 @@ public class ChatSystemGUI {
 		
     }
 	
-	public void updateChatsTable(Contact otherUser) {
+	public void showChatsWith(Contact otherUser) {
+		LOGGER.trace("Updating chatsTable for " + otherUser.username());
 		// Enable send button
 		sendButton.setEnabled(true);
 		
 		// Update which contact the user is chatting with
-		chattingWith = otherUser;
-		connection = TCPController.startChatWith(otherUser.ip());
+		showingChatWith = otherUser;
 		
     	// Create a table model with one column for contactNames and no data initially
         DefaultTableModel tableModel = new DefaultTableModel( new Object[]{otherUser.username(), "Me"}, 0);
