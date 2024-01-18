@@ -47,6 +47,10 @@ public class ChatSystemGUI {
 			initialize();
 	}
 
+	public void disableSendButton() {
+		sendButton.setEnabled(false);
+	}
+	
 	public void initialize() {
 		LOGGER.trace("Initializing ChatSystemGUI...");
 		contactsPanel = new JPanel();
@@ -183,6 +187,10 @@ public class ChatSystemGUI {
 		
     }
 	
+	public Contact getshowingChatWith() {
+		return showingChatWith;
+	}
+
 	public void showChatsWith(Contact otherUser) {
 		LOGGER.trace("Updating chatsTable for " + otherUser.username());
 		// Enable send button

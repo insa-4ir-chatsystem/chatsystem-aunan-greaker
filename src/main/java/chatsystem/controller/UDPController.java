@@ -39,6 +39,12 @@ public class UDPController {
 				/**	Removes contact from contact list */
 				Contact contactToRemove = ContactList.getInstance().getContact(message.source());
 				ContactList.getInstance().removeContact(contactToRemove);
+
+				/**	Disables sendbutton if contact logges off */
+				if (Controller.getGui().getshowingChatWith().equals(contactToRemove)) {
+					Controller.getGui().disableSendButton();
+				}
+				
 				LOGGER.info(contactToRemove + " logged out.");
 				break;
 			/**	Somebody connecting to the chat */
