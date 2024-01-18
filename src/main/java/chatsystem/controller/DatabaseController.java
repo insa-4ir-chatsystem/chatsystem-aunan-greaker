@@ -24,6 +24,9 @@ public class DatabaseController {
 		try {
 			ChatHistory chatHistory = new ChatHistory(chattingWith.ip());
 			chatHistory.addMessage(InetAddress.getLocalHost(), msg);
+			
+			// Add the changes to the chat history table in the GUI
+			Controller.getGui().updateChatsTable(chattingWith);
 		} catch (UnknownHostException e) {
 			LOGGER.error("Could not get local host in DatabaseController: " + e);
 		}

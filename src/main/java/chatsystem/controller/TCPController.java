@@ -7,6 +7,8 @@ import java.net.Socket;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import chatsystem.contacts.Contact;
+import chatsystem.contacts.ContactList;
 import chatsystem.network.tcp.TCPConnection;
 import chatsystem.network.tcp.TCPListener;
 
@@ -45,14 +47,18 @@ public class TCPController {
 		// Handles Incoming TCPConnection in a separate thread so TCPListener can continue listen for new connections
 		Thread handlerThread = new Thread(() -> {
 			try {
-				TCPConnection chatconnection = new TCPConnection(socket);
+				TCPConnection chatConnection = new TCPConnection(socket);
 				LOGGER.trace("Incoming TCPConnection established with " + socket.getInetAddress() + " on port " + socket.getPort());
 
 				//Handles incoming messages
 				String receivedMsg;
-				while ((receivedMsg = chatconnection.readMessage()) != null) {
+				while ((receivedMsg = chatConnection.readMessage()) != null) {
 					LOGGER.trace("Received message: " + receivedMsg);
-					// Update gui chat history
+					
+					// Update the chat history table in GUI
+					ContactList contactList = ContactList.getInstance();
+					Contact otherUser = contactList.getContact(chatConnection.getIp());
+					Controller.getGui().updateChatsTable(otherUser);
 					
 				}
 				LOGGER.trace("TCPConnection with " + socket.getInetAddress() + " on port " + socket.getPort() + " closed");
