@@ -19,7 +19,7 @@ import chatsystem.contacts.Contact;
 
 public class ChooseUsernameGUI {
 	private static final Logger LOGGER = LogManager.getLogger(ChooseUsernameGUI.class);
-	private static JTextField usernameField = new JTextField(20);;
+	private static JTextField usernameField = new JTextField(20);
 	
 	public static boolean UsernameIsAvailable(String username) throws UnknownHostException {
 		ContactList contactList = ContactList.getInstance();
@@ -41,11 +41,16 @@ public class ChooseUsernameGUI {
             public void actionPerformed(ActionEvent e) {
 				LOGGER.trace("Login button pressed");
             	String myUsername = usernameField.getText();
+				// If we are already online, we must logout before checking if a username is available or logging in again
+				if (UDPController.isOnline) {
+						UDPController.logoutHandler();
+				}
+
+				// Check if the username is available
 				if (UDPController.usernameAvailableHandler(myUsername) && !myUsername.equals("")) {
 					LOGGER.debug("Username '"+ myUsername + "' was available, logging in...");
 					frame.dispose();
-					new ChatSystemGUI(myUsername);
-					UDPController.loginHandler();
+					UDPController.loginHandler(myUsername);
 				} else {
 					JOptionPane.showMessageDialog(frame, "This username is not available, please choose a different one");	            	            
 				}
@@ -57,7 +62,7 @@ public class ChooseUsernameGUI {
         panel.add(loginButton);
 
         frame.add(panel, BorderLayout.CENTER);
-        frame.setTitle("ChatSystem Login");
+        frame.setTitle("Choose Username for ChatSystem");
         frame.pack();
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

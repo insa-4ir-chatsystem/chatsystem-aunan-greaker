@@ -41,12 +41,14 @@ public class ChatSystemGUI {
 	private static JButton sendButton;
 	
 	// Private variables to keep track of who the user is chatting with, and the corresponding TCPConnection
+    // Disse vurde kanskje være i controlleren? De må vel også være lister siden man kan chatte med flere samtidig
 	private static Contact chattingWith;
 	private static TCPConnection connection;
 	
 	private static final Logger LOGGER = LogManager.getLogger(ChatSystemGUI.class);
 	
-	public ChatSystemGUI(String username) {
+	public static void initialize() {
+		LOGGER.trace("Initializing ChatSystemGUI...");
 		contactsPanel = new JPanel();
 		chatHistoryPanel = new JPanel();
 		newChatPanel = new JPanel();
@@ -79,14 +81,13 @@ public class ChatSystemGUI {
         // Set the preferred size of the 'Chat' table in the GUI
         chatsTable.setPreferredScrollableViewportSize(new Dimension(500, 500));
  
-        // Create the 'Change Nickname' button
+        // Create the 'Change Username' button
         JButton changeUserNameButton = new JButton("Change Username");
 	    changeUserNameButton.setBorder(BorderFactory.createEmptyBorder(10,50,10,50));
 	    newChatPanel.add(changeUserNameButton);	 
         changeUserNameButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 // Creates a window to change username
-                UDPController.logoutHandler();
 				ChooseUsernameGUI.initialize();
 	        }   
         });
@@ -132,8 +133,14 @@ public class ChatSystemGUI {
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
+
+	// Method to close the GUI
+	public static void close() {
+		frame.dispose();
+	}
 	
 	public static void updateContactTable() {
+		LOGGER.trace("Updating contactTable...");
     	// Create a table model with one column for contactNames and no data initially
         DefaultTableModel tableModel = new DefaultTableModel( new Object[]{"Contacts"}, 0);
 
@@ -148,7 +155,11 @@ public class ChatSystemGUI {
         }
 
         // Set the table model for the JTable
-        contactTable.setModel(tableModel);
+        try {
+        	contactTable.setModel(tableModel);
+        } catch (NullPointerException e) {
+        	LOGGER.error("Could not set table model for contactTable" + e.getMessage());
+        }
         
         // Make the entire table non-editable
         //contactTable.setFocusable(false);
