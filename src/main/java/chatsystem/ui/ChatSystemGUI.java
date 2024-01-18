@@ -79,7 +79,7 @@ public class ChatSystemGUI {
         });    
         
         // Set the preferred size of the 'Chat' table in the GUI, and remove grid lines of table
-        chatsTable.setPreferredScrollableViewportSize(new Dimension(900, 500));
+        chatsTable.setPreferredScrollableViewportSize(new Dimension(880, 500));
         chatsTable.setShowGrid(false);
         chatsTable.setIntercellSpacing(new Dimension(0, 0));
  
@@ -202,8 +202,8 @@ public class ChatSystemGUI {
 	        // Message size controll, to stop table text overflow in a single table line
 	        List<String> msgs = new ArrayList<String>();
 	        
-	        while (msg.length() > 80) {
-	        	for (int i = 80; i >= 0; i--) {
+	        while (msg.length() > 70) {
+	        	for (int i = 70; i >= 0; i--) {
 	        		if (Character.toString(msg.charAt(i)).equals(" ")) {
 	        			msgs.add(msg.substring(0, i));
 	        			msg = msg.substring(i + 1);
