@@ -14,6 +14,7 @@ import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.DefaultTableCellRenderer;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -78,9 +79,12 @@ public class ChatSystemGUI {
         });    
         
         // Set the preferred size of the 'Chat' table in the GUI, and remove grid lines of table
-        chatsTable.setPreferredScrollableViewportSize(new Dimension(1000, 500));
+        chatsTable.setPreferredScrollableViewportSize(new Dimension(900, 500));
         chatsTable.setShowGrid(false);
         chatsTable.setIntercellSpacing(new Dimension(0, 0));
+        DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
+        rightRenderer.setHorizontalAlignment(JLabel.RIGHT);
+        chatsTable.getColumnModel().getColumn(1).setCellRenderer(rightRenderer);
  
         // Create the 'Change Username' button
         JButton changeUserNameButton = new JButton("Change Username");
@@ -201,8 +205,8 @@ public class ChatSystemGUI {
 	        // Message size controll, to stop table text overflow in a single table line
 	        List<String> msgs = new ArrayList<String>();
 	        
-	        while (msg.length() > 50) {
-	        	for (int i = 50; i >= 0; i--) {
+	        while (msg.length() > 80) {
+	        	for (int i = 80; i >= 0; i--) {
 	        		if (Character.toString(msg.charAt(i)).equals(" ")) {
 	        			msgs.add(msg.substring(0, i));
 	        			msg = msg.substring(i + 1);
@@ -213,12 +217,14 @@ public class ChatSystemGUI {
 	        }
 	        msgs.add(msg);
 	
-	        // Add a new row to the table model
-	        if (from.equals(otherUser.ip())) {
-	            tableModel.addRow(new Object[]{msg, ""});
-	        }
-	        else {
-	            tableModel.addRow(new Object[]{"", msg});
+	        for (String messagePiece : msgs) {
+	        	// Add a new row to the table model
+		        if (from.equals(otherUser.ip())) {
+		            tableModel.addRow(new Object[]{messagePiece, ""});
+		        }
+		        else {
+		            tableModel.addRow(new Object[]{"", messagePiece});
+		        }
 	        }
 	    }      
 	
