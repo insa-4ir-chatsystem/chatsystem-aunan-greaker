@@ -13,6 +13,8 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.SocketException;
 
+import javax.swing.SwingUtilities;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -134,7 +136,9 @@ public class UDPController {
 			public void newContactAdded(Contact contact) {  
 				// Update Contact table in GUI
 				try {
-					ChatSystemGUI.updateContactTable();
+					SwingUtilities.invokeLater(() -> {
+    					ChatSystemGUI.updateContactTable();
+					});
 					LOGGER.trace("Updated contact table in GUI");
 				} catch (NullPointerException | NoClassDefFoundError e) {
 					LOGGER.warn("Could not update view because GUI has not been initilized!");
@@ -145,7 +149,9 @@ public class UDPController {
 			public void contactRemoved(Contact contact) {
 				// Update Contact table in GUI
 				try {
-					ChatSystemGUI.updateContactTable();
+					SwingUtilities.invokeLater(() -> {
+    					ChatSystemGUI.updateContactTable();
+					});
 					LOGGER.trace("Updated contact table in GUI");
 				} catch (NullPointerException | NoClassDefFoundError e) {
 					LOGGER.warn("Could not update view because GUI has not been initilized!");
