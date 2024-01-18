@@ -167,7 +167,6 @@ public class ChatSystemGUI {
         //contactTable.setEnabled(false);
         
         // Add contactTable to the scrollPaneContacts, scrollPaneContacts to the contactsPanel, and contactPanel to the WEST of the frame (and remove any old version of the contactPanel if found)
-        LOGGER.debug("Updating contactTable...");
 		contactsPanel.removeAll();
         JScrollPane scrollPaneContacts = new JScrollPane(contactTable);
         contactsPanel.add(scrollPaneContacts);
@@ -176,7 +175,12 @@ public class ChatSystemGUI {
         
         // Update the frame
 		LOGGER.debug("Updating frame...");
-        SwingUtilities.updateComponentTreeUI(frame);
+        if (frame != null) {
+			SwingUtilities.updateComponentTreeUI(frame);
+		} else {
+			LOGGER.error("frame is null. Make sure it is properly initialized.");
+		}
+		
     }
 	
 	public static void updateChatsTable(Contact otherUser) {
