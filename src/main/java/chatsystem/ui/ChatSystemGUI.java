@@ -50,9 +50,7 @@ public class ChatSystemGUI {
 	private static final Logger LOGGER = LogManager.getLogger(ChatSystemGUI.class);
 
 	public ChatSystemGUI() {
-		SwingUtilities.invokeLater(() -> {
 			initialize();
-		});
 	}
 
 	public void initialize() {
