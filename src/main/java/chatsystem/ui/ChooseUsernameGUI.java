@@ -1,7 +1,6 @@
 package chatsystem.ui;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
-import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.InetAddress;
@@ -29,6 +28,7 @@ public class ChooseUsernameGUI {
 	}
 	
 	public static void initialize() {
+		LOGGER.trace("Initializing ChooseUsernameGUI...");
 		final JFrame frame = new JFrame();
 	    JPanel panel = new JPanel();
 	    panel.setLayout(new GridLayout(0, 1));
@@ -67,8 +67,6 @@ public class ChooseUsernameGUI {
         frame.pack();
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-		LOGGER.trace("Initialized ChooseUsernameGUI");
 	}
 	
 	public static String getUsername() {

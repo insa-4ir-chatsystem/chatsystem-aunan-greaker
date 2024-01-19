@@ -17,11 +17,6 @@ public class TCPController {
 	private static final Logger LOGGER = LogManager.getLogger(TCPController.class);
 	public static final int TCP_LISTENING_PORT = 9922;
 	private static TCPListener theTCPListener;
-	private static TCPConnection currChatConnection;
-	
-	public static TCPConnection getCurrentChatConnection() {
-		return currChatConnection;
-	}
 
 	/**	Starts the TCPListener. This is required to be able to accept incoming TCPConnections*/
 	public static void startTCPListener() {
@@ -63,8 +58,7 @@ public class TCPController {
 				}
 				LOGGER.trace("TCPConnection with " + socket.getInetAddress() + " on port " + socket.getPort() + " closed");
 			} catch (IOException e) {
-				System.err.println("Could not establish TCPConnection with " + socket.getInetAddress());
-				e.printStackTrace();
+				LOGGER.error("Could not establish incoming TCPConnection with " + socket.getInetAddress() + " because " + e.getMessage());
 			}
 
 		});
@@ -90,26 +84,23 @@ public class TCPController {
 		}
 	}
 	
-	/** Starts a chat with remote user on given ip*/
-	public static void startChatWith(InetAddress ip){
-		if (currChatConnection != null) {
-			LOGGER.warn("Starting chat with " + ip + " but we are already chatting with " + currChatConnection.getIp());
-		}
-		try {
-			currChatConnection = new TCPConnection(ip, TCP_LISTENING_PORT);
-			LOGGER.trace("TCPConnection established with " + ip + " on port " + currChatConnection.getPort());
-		} catch (IOException e) {
-			LOGGER.error("Could not start TCPConnection with " + ip + "on port " + TCP_LISTENING_PORT);
-			e.printStackTrace();
-		}
+	/** Starts a chat with remote user on given ip
+	 * @throws IOException */
+	private static TCPConnection startChatWith(InetAddress ip) throws IOException{
+		TCPConnection chatConnection = new TCPConnection(ip, TCP_LISTENING_PORT);
+		LOGGER.trace("TCPConnection established with " + ip + " on port " + chatConnection.getPort());
+		return chatConnection;
 	}
 
-	/** Sends a message on the currChatConnection*/
-	public static void sendMessage(String msg) {
-		if (currChatConnection == null) {
-			LOGGER.error("Tried to send message but no chat is active");
-			return;
+	public static void sendMessageHandler(InetAddress ip, String msg) throws IOException {
+		TCPConnection chatConnection;
+		chatConnection = startChatWith(ip);
+		chatConnection.sendMessage(msg);
+		LOGGER.info("Sent message: '" + msg + "' to " + ContactList.getInstance().getContact(ip));
+		try {
+			chatConnection.closeConnection();
+		} catch (IOException e) {
+			LOGGER.warn("Could not close TCPConnection with " + ip);
 		}
-		currChatConnection.sendMessage(msg);
 	}
 }

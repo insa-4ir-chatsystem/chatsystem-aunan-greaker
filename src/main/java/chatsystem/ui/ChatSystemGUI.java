@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.IOException;
 import java.net.InetAddress;
 import java.util.List;
 import java.util.ArrayList;
@@ -27,7 +28,6 @@ import chatsystem.controller.DatabaseController;
 import chatsystem.controller.TCPController;
 import chatsystem.log.ChatHistory;
 import chatsystem.log.ChatMessage;
-import chatsystem.network.tcp.TCPConnection;
 
 public class ChatSystemGUI {
 
@@ -117,13 +117,17 @@ public class ChatSystemGUI {
             public void actionPerformed(ActionEvent e) {
 	            String msg = messageField.getText();
 	            if (!msg.equals("")) {
-					//Starts a connection with the user and sends the message
-					TCPController.startChatWith(showingChatWith.ip());
-		            TCPController.sendMessage(msg);
+					// Sends the message to the other user and stores it in the local chat history
+		            try {
+						TCPController.sendMessageHandler(showingChatWith.ip(), msg);
+					} catch (IOException e2) {
+						LOGGER.error("Could not start TCPConnection with " + showingChatWith.ip() + " because: " + e2.getMessage());
+						return;
+					}
 
 					// Store the message in the local chat history
-		            DatabaseController.addMsgHandler(showingChatWith, msg);
-		            
+					DatabaseController.addMsgHandler(showingChatWith, msg);
+
 		            // Remove the message from the messageField after it is sent
 		            messageField.setText("");
 	            }
@@ -155,7 +159,7 @@ public class ChatSystemGUI {
 	}
 	
 	public void updateContactTable() {
-		LOGGER.trace("Updating contactTable...");
+		LOGGER.debug("Updating contactTable...");
 
 		// Get the existing table model
 		DefaultTableModel tableModel = new DefaultTableModel(new Object[]{"Contacts"}, 0);

@@ -28,7 +28,7 @@ public class UDPController {
 				try {
 					/** Broadcast our username on the network */
 					UDPSender.send(message.source(), BROADCAST_PORT, Controller.getMyUsername());
-					LOGGER.trace("Announced ourself to: " + message.source() + ":" + BROADCAST_PORT);
+					LOGGER.debug("Announced ourself to: " + message.source() + ":" + BROADCAST_PORT);
 				} catch (IOException e) {
 					LOGGER.error("Could not announce ourselves: " + e.getMessage());
 				} catch (NullPointerException e) {
@@ -45,15 +45,15 @@ public class UDPController {
 					Controller.getGui().disableSendButton();
 				}
 
-				LOGGER.info(contactToRemove + " logged out.");
+				LOGGER.info(contactToRemove + " is now offline.");
 				break;
 			/**	Somebody connecting to the chat */
 			default:
 				Contact newContact = new Contact(message.text(), message.source());
 				try {
 					ContactList.getInstance().addContact(newContact);
-					LOGGER.trace("New Contact added to the list: " + newContact);
-					LOGGER.trace("ContactList: " + ContactList.getInstance().toString());
+					LOGGER.info(newContact + " is online.");
+					LOGGER.debug("ContactList: " + ContactList.getInstance().toString());
 				} catch (ContactAlreadyExists e) {
 					LOGGER.error("Received duplicated contact: " + newContact);
 				}
@@ -62,7 +62,7 @@ public class UDPController {
     }
     
     public static Boolean usernameAvailableHandler(String username) {
-		LOGGER.trace("Checking if username '" + username + "' is available...");
+		LOGGER.debug("Checking if username '" + username + "' is available...");
 		if (Controller.isOnline()) {
 			LOGGER.error("Could not check if username was available because we are already online as " + Controller.getMyUsername());
 			return false;

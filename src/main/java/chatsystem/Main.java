@@ -14,7 +14,7 @@ public class Main {
     private static final Logger LOGGER = LogManager.getLogger(Main.class);
 	
     public static void main(String[] args) throws InterruptedException, UnknownHostException {    	
-        Configurator.setRootLevel(Level.TRACE);
+        Configurator.setRootLevel(Level.DEBUG);
     	LOGGER.debug("Found these NIC addresses: " + UDPSender.getAllCurrentIp());
         LOGGER.debug("Found these broadcast addresses: " + UDPSender.getAllBroadcastAddresses());
         LOGGER.info("Starting ChatSystem application");
