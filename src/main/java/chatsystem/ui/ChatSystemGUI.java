@@ -261,7 +261,7 @@ public class ChatSystemGUI {
 	    // Update the frame
 		LOGGER.trace("Running updateComponentTreeUI()...");
 		try {
-			SwingUtilities.updateComponentTreeUI(frame);
+			SwingUtilities.updateComponentTreeUI(chatsTable);
 		} catch (NullPointerException e) {
 			LOGGER.warn(e.getMessage());
 		}
