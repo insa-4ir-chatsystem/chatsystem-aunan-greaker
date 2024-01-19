@@ -240,9 +240,9 @@ public class ChatSystemGUI {
 	    // Set the table model for the JTable
 	    chatsTable.setModel(tableModel);
 	    
-	    // Push the messages from this user to the right of the table column
 	    if (!list.isEmpty()) {
-			LOGGER.trace("Pushing messages from this user to the right of the table column...");
+	    	LOGGER.error("ChatHistory list is empty: " + list.isEmpty());
+	    	// Push the messages from this user to the right of the table column
 		    DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
 	        rightRenderer.setHorizontalAlignment(JLabel.RIGHT);
 	        chatsTable.getColumnModel().getColumn(1).setCellRenderer(rightRenderer);
