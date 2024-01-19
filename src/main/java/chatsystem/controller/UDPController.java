@@ -76,6 +76,16 @@ public class UDPController {
 		}
     }
     
+    public static void announceUsernameChange(String username) {
+    	try {
+			// Sends its new username on the network so others can replace the old username with the new one
+			UDPSender.sendBroadcast(UDPController.BROADCAST_PORT, ANNOUNCE_CHANGED_USERNAME_PREFIX + username);
+			LOGGER.trace("Sent UDP broadcast with new username: " + username + " on port: " + UDPController.BROADCAST_PORT);
+		} catch (IOException e) {
+			LOGGER.error("Failed to send UDP broadcast: " + e.getMessage());
+		}
+    }
+    
     public static Boolean usernameAvailableHandler(String username) {
 		LOGGER.debug("Checking if username '" + username + "' is available...");
 		if (Controller.isOnline()) {

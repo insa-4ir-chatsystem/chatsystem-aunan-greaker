@@ -54,6 +54,7 @@ public class ChooseUsernameGUI {
 					Controller.loginHandler(myUsername);
 				} else {
 					JOptionPane.showMessageDialog(frame, "This username is not available, please choose a different one");	            	            
+					Controller.changeUsernameHandler(myUsername);
 				}
 	        }
 	    });

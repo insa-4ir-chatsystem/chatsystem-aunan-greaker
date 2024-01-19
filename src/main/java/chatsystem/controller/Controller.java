@@ -96,10 +96,16 @@ public class Controller {
 		}
 
 		TCPController.startTCPListener();
-		gui = new ChatSystemGUI(); // Initilize the GUI
+		gui = new ChatSystemGUI(); // Initialize the GUI
 
 		isOnline = true;
 		LOGGER.info("Now online with username: " + myUsername);
+	}
+	
+	/** Handler for changing username*/
+	public static void changeUsernameHandler(String username) {
+		setMyUsername(username);
+		UDPController.announceUsernameChange(username);
 	}
 
     /** Logs the user out of the chatsystem*/
