@@ -67,8 +67,6 @@ public class ChooseUsernameGUI {
         frame.pack();
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-		LOGGER.trace("Initialized ChooseUsernameGUI");
 	}
 	
 	public static String getUsername() {
