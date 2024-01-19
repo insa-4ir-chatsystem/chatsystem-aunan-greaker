@@ -41,7 +41,9 @@ public class UDPController {
 				ContactList.getInstance().removeContact(contactToRemove);
 
 				/**	Disables sendbutton if contact logges off */
-				if (Controller.getGui() != null && Controller.getGui().getshowingChatWith().equals(contactToRemove)) {
+				if (Controller.getGui() != null
+					&& Controller.getGui().getshowingChatWith() != null
+					&& Controller.getGui().getshowingChatWith().equals(contactToRemove)) {
 					Controller.getGui().disableSendButton();
 				}
 
