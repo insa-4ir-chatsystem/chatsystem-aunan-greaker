@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.IOException;
 import java.net.InetAddress;
 import java.util.List;
 import java.util.ArrayList;
@@ -116,13 +117,17 @@ public class ChatSystemGUI {
             public void actionPerformed(ActionEvent e) {
 	            String msg = messageField.getText();
 	            if (!msg.equals("")) {
-					//Starts a connection with the user and sends the message
-					TCPController.startChatWith(showingChatWith.ip());
-		            TCPController.sendMessage(msg);
+					// Sends the message to the other user and stores it in the local chat history
+		            try {
+						TCPController.sendMessageHandler(showingChatWith.ip(), msg);
+					} catch (IOException e2) {
+						LOGGER.error("Could not start TCPConnection with " + showingChatWith.ip() + " because: " + e2.getMessage());
+						return;
+					}
 
 					// Store the message in the local chat history
-		            DatabaseController.addMsgHandler(showingChatWith, msg);
-		            
+					DatabaseController.addMsgHandler(showingChatWith, msg);
+
 		            // Remove the message from the messageField after it is sent
 		            messageField.setText("");
 	            }

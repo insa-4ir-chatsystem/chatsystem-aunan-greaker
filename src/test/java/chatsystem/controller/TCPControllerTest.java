@@ -8,8 +8,6 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import chatsystem.network.tcp.TCPConnection;
-
 class TCPControllerTest {
 	private static final int SLEEP_DELAY = 50;
 	
@@ -24,19 +22,12 @@ class TCPControllerTest {
 	static void stopListener() throws InterruptedException {
 		TCPController.stopTCPListener();
 	}
-	@Test
-	void establishChatTest() throws InterruptedException, IOException {
-		TCPController.startChatWith(InetAddress.getLoopbackAddress());
-		TCPController.getCurrentChatConnection().closeConnection();
-	}
 
 	@Test
-	void handleIncomingTCPConnectionTest() throws InterruptedException, IOException {
-		TCPController.startChatWith(InetAddress.getLoopbackAddress());
-		TCPController.sendMessage("Hello");
-		TCPController.sendMessage("How are you?");
-		TCPController.sendMessage("Goodbye");
-		TCPController.getCurrentChatConnection().closeConnection();
+	void sendMessageTest() throws InterruptedException, IOException {
+		TCPController.sendMessageHandler(InetAddress.getLoopbackAddress() ,"Hello");
+		TCPController.sendMessageHandler(InetAddress.getLoopbackAddress(), "How are you?");
+		TCPController.sendMessageHandler(InetAddress.getLoopbackAddress(), "Goodbye");
 	}
 
 	@Test /** Test with 3 clients connecting and sending messages at different times */
