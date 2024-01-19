@@ -80,7 +80,7 @@ public class TCPController {
 
 		// Update the GUI if we are currently chatting with the user who sent the message
 		Contact contact = ContactList.getInstance().getContact(otherUser); // The contact we are chatting with
-		if (Controller.getGui().getshowingChatWith().equals(contact)) {
+		if (Controller.getGui().getshowingChatWith() != null && Controller.getGui().getshowingChatWith().equals(contact)) {
 			Controller.getGui().showChatsWith(contact);
 		}
 		else {
@@ -92,10 +92,11 @@ public class TCPController {
 	/** Starts a chat with remote user on given ip*/
 	public static void startChatWith(InetAddress ip){
 		if (currChatConnection != null) {
-			LOGGER.warn("Startuing chat with " + ip + " but we are already chatting with " + currChatConnection.getIp());
+			LOGGER.warn("Starting chat with " + ip + " but we are already chatting with " + currChatConnection.getIp());
 		}
 		try {
 			currChatConnection = new TCPConnection(ip, TCP_LISTENING_PORT);
+			LOGGER.trace("TCPConnection established with " + ip + " on port " + currChatConnection.getPort());
 		} catch (IOException e) {
 			LOGGER.error("Could not start TCPConnection with " + ip + "on port " + TCP_LISTENING_PORT);
 			e.printStackTrace();
