@@ -205,7 +205,6 @@ public class ChatSystemGUI {
         // Get the ChatHistory instance with the otherUser
         ChatHistory chatHistory = new ChatHistory(otherUser.ip());
         List<ChatMessage> list = chatHistory.getChatHistory();
-        tableModel.addRow(new Object[]{"", ""});
         
 	    // Populate the table model with data from the chatHistory list
 	    for (ChatMessage chatMessage : list) {
@@ -240,6 +239,10 @@ public class ChatSystemGUI {
 	
 	    // Set the table model for the JTable
 	    chatsTable.setModel(tableModel);
+	    
+	    // Remove the white background of the chatsTable
+	    chatsTable.setOpaque(false);
+	    ((DefaultTableCellRenderer)chatsTable.getDefaultRenderer(Object.class)).setOpaque(false);
 	    
 	    // Push the messages from this user to the right of the table column
 		DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
