@@ -341,4 +341,8 @@ public class ChatSystemGUI {
 		// Call to update the contactTable with the "new" contact
 		updateContactTable();
 	}
+	
+	public void changedUsername(String oldUsername, String newUsername) {
+		JOptionPane.showMessageDialog(frame, oldUsername + " changed username to " + newUsername);
+	}
 }
