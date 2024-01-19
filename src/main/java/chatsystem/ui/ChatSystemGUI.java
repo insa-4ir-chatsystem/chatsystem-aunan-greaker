@@ -77,6 +77,21 @@ public class ChatSystemGUI {
                         // Update the 'Chat' table to the selected username
                         ContactList contList = ContactList.getInstance(); 
                         Contact selectedContact = contList.getContact(contactUsername);
+                        
+                		if (contactUsername.contains(" - New Messages (")) {
+                			// Remove new messages notification
+                			int lastNewMessages = contactUsername.lastIndexOf(" - New Messages (");
+                			String newUsername = contactUsername.substring(0, lastNewMessages);
+                			ContactList.getInstance().removeContact(selectedContact);
+                			selectedContact = new Contact(newUsername, selectedContact.ip());
+                			try {
+								ContactList.getInstance().addContact(selectedContact);
+							} catch (ContactAlreadyExists e1) {
+								LOGGER.error("Contact Already Exists error when clicking contact in contactTable containing new messages notification: " + e1);
+							}
+                			updateContactTable();
+                		}
+                		
                 		showChatsWith(selectedContact);
                     }
                 }
