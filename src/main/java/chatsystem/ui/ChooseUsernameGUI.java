@@ -57,6 +57,7 @@ public class ChooseUsernameGUI {
 				// If we are already online, set new username
 				else {
 					Controller.changeUsernameHandler(myUsername);
+					frame.dispose();
 				}          	            
 	        }
 	    });

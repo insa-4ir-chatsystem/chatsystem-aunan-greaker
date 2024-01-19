@@ -90,7 +90,7 @@ public class UDPController {
 		LOGGER.debug("Checking if username '" + username + "' is available...");
 		if (Controller.isOnline()) {
 			LOGGER.trace("We are online, checking if username is in contact list...");
-			return ContactList.getInstance().getAllUsernames().contains(username);
+			return !ContactList.getInstance().getAllUsernames().contains(username);
 		}
 
 		// We are not online
