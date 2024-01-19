@@ -233,9 +233,11 @@ public class ChatSystemGUI {
 	    chatsTable.setModel(tableModel);
 	    
 	    // Push the messages from this user to the right of the table column
-	    DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
-        rightRenderer.setHorizontalAlignment(JLabel.RIGHT);
-        chatsTable.getColumnModel().getColumn(1).setCellRenderer(rightRenderer);
+	    if (!list.isEmpty()) {
+		    DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
+	        rightRenderer.setHorizontalAlignment(JLabel.RIGHT);
+	        chatsTable.getColumnModel().getColumn(1).setCellRenderer(rightRenderer);
+	    }
 	        
 	    // Make the entire table non-editable
 	    chatsTable.setEnabled(false);
