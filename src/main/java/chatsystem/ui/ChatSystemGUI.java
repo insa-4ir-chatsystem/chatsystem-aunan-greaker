@@ -99,7 +99,7 @@ public class ChatSystemGUI {
         });    
         
         // Set the preferred size of the 'Chat' table in the GUI, and remove grid lines of table
-        chatsTable.setPreferredScrollableViewportSize(new Dimension(880, 500));
+        chatsTable.setPreferredScrollableViewportSize(new Dimension(1000, 500));
         chatsTable.setShowGrid(false);
         chatsTable.setIntercellSpacing(new Dimension(0, 0));
  
@@ -162,7 +162,7 @@ public class ChatSystemGUI {
         frame.add(newChatPanel, BorderLayout.SOUTH);
         frame.setTitle("ChatSystem - " + Controller.getMyUsername());
         frame.pack();
-        frame.setPreferredSize(new Dimension(1200, 600));
+        frame.setMinimumSize(new Dimension(1500, 600));
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
@@ -279,7 +279,10 @@ public class ChatSystemGUI {
 	    chatsTable.setModel(tableModel);
 	    chatsTable.getColumnModel().getColumn(0).setMinWidth(400);
 	    chatsTable.getColumnModel().getColumn(1).setMinWidth(400);
-	    chatsTable.getColumnModel().getColumn(2).setMaxWidth(30);
+	    chatsTable.getColumnModel().getColumn(2).setMinWidth(100);
+	    chatsTable.getColumnModel().getColumn(0).setMaxWidth(400);
+	    chatsTable.getColumnModel().getColumn(1).setMaxWidth(400);
+	    chatsTable.getColumnModel().getColumn(2).setMaxWidth(100);
 	    
 	    // Push the messages from this user to the right of the table column
 		DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
