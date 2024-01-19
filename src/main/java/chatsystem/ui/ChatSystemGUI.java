@@ -372,4 +372,11 @@ public class ChatSystemGUI {
 			showChatsWith(showingChatWith);
 		}
 	}
+	
+	public void setFrameTitle(String username) {
+		frame.setTitle("ChatSystem - " + username);
+		
+		// Update the frame
+		SwingUtilities.updateComponentTreeUI(frame);
+	}
 }

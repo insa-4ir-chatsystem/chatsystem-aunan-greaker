@@ -105,6 +105,7 @@ public class Controller {
 	/** Handler for changing username*/
 	public static void changeUsernameHandler(String username) {
 		setMyUsername(username);
+		gui.setFrameTitle(username);
 		UDPController.announceUsernameChange(username);
 	}
 
