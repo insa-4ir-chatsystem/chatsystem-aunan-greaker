@@ -366,10 +366,10 @@ public class ChatSystemGUI {
 	}
 	
 	public void changedUsername(String oldUsername, String newUsername) {
-		JOptionPane.showMessageDialog(frame, oldUsername + " changed username to " + newUsername);
 		if (showingChatWith.username().equals(oldUsername)) {
 			showingChatWith = new Contact(newUsername, showingChatWith.ip());
 			showChatsWith(showingChatWith);
 		}
+		JOptionPane.showMessageDialog(frame, oldUsername + " changed username to " + newUsername);
 	}
 }
