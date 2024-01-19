@@ -1,4 +1,4 @@
-package chatsystem.network;
+package chatsystem.network.udp;
 
 import java.io.IOException;
 import java.net.*;
@@ -16,7 +16,7 @@ public class UDPSender {
 	 private static final Logger LOGGER = LogManager.getLogger(UDPSender.class);
 	
     /** Sends a UDP message on the given address and port. */
-    public static void send(InetAddress addr, int port, String message) throws IOException {
+    public static void send(InetAddress addr, int port, String message) throws IOException, NullPointerException {
         DatagramSocket socket = new DatagramSocket(); // Will create a socket on an available port
         socket.setBroadcast(true);
         byte[] buff = message.getBytes();
@@ -27,19 +27,23 @@ public class UDPSender {
 	
 	// Sends the message buf on all local broadcast addresses found in the getAllLocalBroadcastAddresses function of this class
 	public static void sendBroadcast(int port, String msg) throws IOException {
-		// TODO
 		ArrayList<InetAddress> broadcastAddresses = getAllBroadcastAddresses();
         for (InetAddress broadAddr : broadcastAddresses) {
-        	//LOGGER.info("Found these broadcasts addresses: " + broadAddr);
         	send(broadAddr, port, msg);
         }
 	}
 	
 	// Gets the local broadcast addresses from all interfaceAddresses in all the networkInterfaces, and adds them to an arraylist that is returned at the end of the function
-	public static ArrayList<InetAddress> getAllBroadcastAddresses() throws SocketException {
+	public static ArrayList<InetAddress> getAllBroadcastAddresses() {
 		
     	ArrayList<InetAddress> AllBroadcastIp = new ArrayList<>();
-        Enumeration<NetworkInterface> networkInterfaces = NetworkInterface.getNetworkInterfaces();
+        Enumeration<NetworkInterface> networkInterfaces;
+        try {
+            networkInterfaces = NetworkInterface.getNetworkInterfaces();
+        } catch (SocketException e) {
+            LOGGER.error("Unable to get network interfaces " + e.getMessage(), e);
+            return null;
+        }
         while (networkInterfaces.hasMoreElements()) {
             NetworkInterface ni = (NetworkInterface) networkInterfaces.nextElement();
             List<InterfaceAddress> nias = ni.getInterfaceAddresses();

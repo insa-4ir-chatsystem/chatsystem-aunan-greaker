@@ -49,4 +49,24 @@ public class ContactListTests {
 			// expected outcome
 		}
 	}
+
+	@Test
+	void contactRemovalTest() throws ContactAlreadyExists, UnknownHostException {
+		ContactList contacts = ContactList.getInstance();
+		Contact contact1 = new Contact("Idalia", InetAddress.getLocalHost());
+		Contact contact2 = new Contact("Katti", InetAddress.getLocalHost());
+
+		contacts.addContact(contact1);
+		contacts.addContact(contact2);
+		assert(contacts.hasContact(contact1));
+		assert(contacts.hasContact(contact2));
+
+		contacts.removeContact(contact1);
+		assert(!contacts.hasContact(contact1));
+		assert(contacts.hasContact(contact2));
+
+		contacts.removeContact(contact2);
+		assert(!contacts.hasContact(contact1));
+		assert(!contacts.hasContact(contact2));
+	}
 }

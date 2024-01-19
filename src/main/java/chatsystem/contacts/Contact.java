@@ -16,4 +16,9 @@ public record Contact(String username, InetAddress ip) {
 			return false;
 		}
     }
+
+	@Override
+	public String toString() {
+		return username + " (" + ip + ")";
+	}
 }

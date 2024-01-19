@@ -1,8 +1,7 @@
 package chatsystem;
 
-import chatsystem.controller.Controller;
-import chatsystem.network.UDPSender;
-import chatsystem.ui.View;
+import chatsystem.network.udp.UDPSender;
+import chatsystem.ui.ChooseUsernameGUI;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -15,12 +14,11 @@ public class Main {
     private static final Logger LOGGER = LogManager.getLogger(Main.class);
 	
     public static void main(String[] args) throws InterruptedException, UnknownHostException {    	
-    	LOGGER.trace("Current IP " + UDPSender.getAllCurrentIp());
-        Configurator.setRootLevel(Level.INFO);
+        Configurator.setRootLevel(Level.TRACE);
+    	LOGGER.debug("Found these NIC addresses: " + UDPSender.getAllCurrentIp());
+        LOGGER.debug("Found these broadcast addresses: " + UDPSender.getAllBroadcastAddresses());
         LOGGER.info("Starting ChatSystem application");
 
-        View.initialize();
-        Controller.loginHandler();
-		
+        ChooseUsernameGUI.initialize();
     }
 }
