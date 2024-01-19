@@ -183,7 +183,7 @@ public class ChatSystemGUI {
         frame.add(contactsPanel, BorderLayout.WEST);
         
         // Update the frame
-		SwingUtilities.updateComponentTreeUI(frame);
+		SwingUtilities.updateComponentTreeUI(contactsPanel);
 		
     }
 	
