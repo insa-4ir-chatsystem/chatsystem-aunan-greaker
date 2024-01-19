@@ -78,6 +78,21 @@ public class ContactList {
             LOGGER.warn("Tried to remove a contact that is not in the list: " + contact);
         }
     }
+    
+    public synchronized void replaceContact(Contact oldContact, Contact newContact) {
+        if (hasContact(oldContact)) {
+        	for (int i = 0; i < contacts.size(); i++) {
+        		if (contacts.get(i).equals(oldContact)) {
+        			contacts.set(i, newContact);
+        			// TODO observer replace contact
+        		}
+        	}
+            LOGGER.trace("Contact replaced in the list: " + oldContact + " -> " + newContact);
+        }
+        else {
+            LOGGER.warn("Tried to replace a contact that is not in the list: " + oldContact);
+        }
+    }
 
     public synchronized boolean hasContact(Contact contact) {
     	return contacts.contains(contact);
