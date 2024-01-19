@@ -99,7 +99,7 @@ public class ChatSystemGUI {
         });    
         
         // Set the preferred size of the 'Chat' table in the GUI, and remove grid lines of table
-        chatsTable.setPreferredScrollableViewportSize(new Dimension(880, 500));
+        chatsTable.setPreferredScrollableViewportSize(new Dimension(1000, 500));
         chatsTable.setShowGrid(false);
         chatsTable.setIntercellSpacing(new Dimension(0, 0));
  
@@ -162,7 +162,7 @@ public class ChatSystemGUI {
         frame.add(newChatPanel, BorderLayout.SOUTH);
         frame.setTitle("ChatSystem - " + Controller.getMyUsername());
         frame.pack();
-        frame.setPreferredSize(new Dimension(1200, 600));
+        frame.setMinimumSize(new Dimension(1250, 600));
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
@@ -225,7 +225,7 @@ public class ChatSystemGUI {
 		showingChatWith = otherUser;
 		
     	// Create a table model with one column for contactNames and no data initially
-        DefaultTableModel tableModel = new DefaultTableModel( new Object[]{otherUser.username(), Controller.getMyUsername()}, 0);
+        DefaultTableModel tableModel = new DefaultTableModel( new Object[]{otherUser.username(), Controller.getMyUsername(), "Sent"}, 0);
 
         // Get the ChatHistory instance with the otherUser
         ChatHistory chatHistory = new ChatHistory(otherUser.ip());
@@ -235,40 +235,60 @@ public class ChatSystemGUI {
 	    for (ChatMessage chatMessage : list) {
 	        InetAddress from = chatMessage.from();
 	        String msg = chatMessage.msg();
+	        String time = chatMessage.timeStamp();
 	        
 	        // Message size controll, to stop table text overflow in a single table line
 	        List<String> msgs = new ArrayList<String>();
 	        
-	        while (msg.length() > 70) {
-	        	for (int i = 70; i >= 0; i--) {
-	        		if (Character.toString(msg.charAt(i)).equals(" ")) {
-	        			msgs.add(msg.substring(0, i));
-	        			msg = msg.substring(i + 1);
-	        			msgs.add(msg);
-	        			i = -1;
-	        		}
-	        	}
-	        }
+		    while (msg.length() > 50) {
+		        for (int i = 50; i >= 0; i--) {
+		        	if (Character.toString(msg.charAt(i)).equals(" ")) {
+		        		msgs.add(msg.substring(0, i));
+		        		msg = msg.substring(i + 1);
+		        		i = -1;
+		        	}
+		        }
+		    }
 	        msgs.add(msg);
 	
+	        // Timestamp is only printed at the first message
+	        Boolean firstMsg = true;
 	        for (String messagePiece : msgs) {
 	        	// Add a new row to the table model
 		        if (from.equals(otherUser.ip())) {
-		            tableModel.addRow(new Object[]{messagePiece, ""});
+		        	if(firstMsg) {
+		        		tableModel.addRow(new Object[]{messagePiece, "", time});
+		        	}
+		        	else {
+		        		tableModel.addRow(new Object[]{messagePiece, "", ""});
+		        	}
 		        }
 		        else {
-		            tableModel.addRow(new Object[]{"", messagePiece});
+		        	if(firstMsg) {
+		        		tableModel.addRow(new Object[]{"", messagePiece, time});
+		        	}
+		        	else {
+		        		tableModel.addRow(new Object[]{"", messagePiece, ""});
+		        	}
 		        }
+		        firstMsg = false;
 	        }
 	    }      
 	
-	    // Set the table model for the JTable
+	    // Set the table model for the JTable, and set the size of the table columns
 	    chatsTable.setModel(tableModel);
+	    chatsTable.getColumnModel().getColumn(0).setMinWidth(400);
+	    chatsTable.getColumnModel().getColumn(1).setMinWidth(400);
+	    chatsTable.getColumnModel().getColumn(2).setMinWidth(200);
+	    chatsTable.getColumnModel().getColumn(0).setMaxWidth(400);
+	    chatsTable.getColumnModel().getColumn(1).setMaxWidth(400);
+	    chatsTable.getColumnModel().getColumn(2).setMaxWidth(200);
 	    
 	    // Push the messages from this user to the right of the table column
 		DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
 	    rightRenderer.setHorizontalAlignment(JLabel.RIGHT);
         chatsTable.getColumnModel().getColumn(1).setCellRenderer(rightRenderer);
+        chatsTable.getColumnModel().getColumn(2).setCellRenderer(rightRenderer);
 	        
 	    // Make the entire table non-editable
 	    chatsTable.setEnabled(false);
