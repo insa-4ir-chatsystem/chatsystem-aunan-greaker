@@ -241,7 +241,6 @@ public class ChatSystemGUI {
 		        		if (Character.toString(msg.charAt(i)).equals(" ")) {
 		        			msgs.add(msg.substring(0, i));
 		        			msg = msg.substring(i + 1);
-		        			msgs.add(msg);
 		        			i = -1;
 		        		}
 		        	}
