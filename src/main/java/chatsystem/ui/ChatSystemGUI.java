@@ -235,20 +235,16 @@ public class ChatSystemGUI {
 	        // Message size controll, to stop table text overflow in a single table line
 	        List<String> msgs = new ArrayList<String>();
 	        
-	        if (msg.length() > 50) {
-		        while (msg.length() > 50) {
-		        	for (int i = 50; i >= 0; i--) {
-		        		if (Character.toString(msg.charAt(i)).equals(" ")) {
-		        			msgs.add(msg.substring(0, i));
-		        			msg = msg.substring(i + 1);
-		        			i = -1;
-		        		}
+		    while (msg.length() > 50) {
+		        for (int i = 50; i >= 0; i--) {
+		        	if (Character.toString(msg.charAt(i)).equals(" ")) {
+		        		msgs.add(msg.substring(0, i));
+		        		msg = msg.substring(i + 1);
+		        		i = -1;
 		        	}
 		        }
-	        }
-	        else {
-	        	msgs.add(msg);
-	        }
+		    }
+	        msgs.add(msg);
 	
 	        // Timestamp is only printed at the first message
 	        Boolean firstMsg = true;
