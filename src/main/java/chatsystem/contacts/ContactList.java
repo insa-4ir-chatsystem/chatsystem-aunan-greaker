@@ -115,6 +115,14 @@ public class ContactList {
         return new ArrayList<>(this.contacts);
     }
 
+    public synchronized List<String> getAllUsernames() {
+        List<String> usernames = new ArrayList<>();
+        for (Contact contact : contacts) {
+            usernames.add(contact.username());
+        }
+        return usernames;
+    }
+
     public synchronized String toString() {
         return this.contacts.toString();
     }
