@@ -70,7 +70,11 @@ public class ChooseUsernameGUI {
         frame.setTitle("Choose Username for ChatSystem");
         frame.pack();
         frame.setVisible(true);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+		// If we are not online, close the application when the window is closed
+		if (!Controller.isOnline()) {
+			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		}
 	}
 	
 	public static String getUsername() {
