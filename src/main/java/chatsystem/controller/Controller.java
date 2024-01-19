@@ -74,6 +74,9 @@ public class Controller {
 
 			@Override
 			public void usernameChanged(String newUsername, String oldUsername) {
+				// Notify user that a contact has changed username
+				gui.changedUsername(oldUsername, newUsername);
+
 				// What to do when a contact changes username
 				try {
     				gui.updateContactTable();
@@ -81,9 +84,6 @@ public class Controller {
 				} catch (NullPointerException | NoClassDefFoundError e) {
 					LOGGER.warn("Could not update view because GUI has not been initilized!");
 				}
-
-				// Notify user that a contact has changed username
-				gui.changedUsername(oldUsername, newUsername);
 			}
 		});
 

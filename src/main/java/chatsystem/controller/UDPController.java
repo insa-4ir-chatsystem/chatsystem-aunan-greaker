@@ -89,9 +89,11 @@ public class UDPController {
     public static Boolean usernameAvailableHandler(String username) {
 		LOGGER.debug("Checking if username '" + username + "' is available...");
 		if (Controller.isOnline()) {
-			LOGGER.error("Could not check if username was available because we are already online as " + Controller.getMyUsername());
-			return false;
+			LOGGER.trace("We are online, checking if username is in contact list...");
+			return !ContactList.getInstance().getAllUsernames().contains(username);
 		}
+
+		// We are not online
     	try {
             UDPListener server = new UDPListener(BROADCAST_PORT);
             server.addObserver(msg -> {UDPController.contactDiscoveryMessageHandler(msg);});

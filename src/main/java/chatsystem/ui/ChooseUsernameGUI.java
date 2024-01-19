@@ -42,20 +42,23 @@ public class ChooseUsernameGUI {
             public void actionPerformed(ActionEvent e) {
 				LOGGER.trace("Login button pressed");
             	String myUsername = usernameField.getText();
-				// If we are already online, we must logout before checking if a username is available or logging in again
-				if (Controller.isOnline()) {
-					Controller.logoutHandler();
-				}
 
 				// Check if the username is available
-				if (UDPController.usernameAvailableHandler(myUsername) && !myUsername.equals("")) {
+				if (!UDPController.usernameAvailableHandler(myUsername) && !myUsername.equals("")) {
+					JOptionPane.showMessageDialog(frame, "This username is not available, please choose a different one");
+					return;
+				}
+				// If we are not online, login
+				if (!Controller.isOnline() ) {
 					LOGGER.debug("Username '"+ myUsername + "' was available, logging in...");
 					frame.dispose();
 					Controller.loginHandler(myUsername);
-				} else {
-					JOptionPane.showMessageDialog(frame, "This username is not available, please choose a different one");	            	            
-					Controller.changeUsernameHandler(myUsername);
 				}
+				// If we are already online, set new username
+				else {
+					Controller.changeUsernameHandler(myUsername);
+					frame.dispose();
+				}          	            
 	        }
 	    });
 	    
@@ -67,7 +70,11 @@ public class ChooseUsernameGUI {
         frame.setTitle("Choose Username for ChatSystem");
         frame.pack();
         frame.setVisible(true);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+		// If we are not online, close the application when the window is closed
+		if (!Controller.isOnline()) {
+			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		}
 	}
 	
 	public static String getUsername() {
