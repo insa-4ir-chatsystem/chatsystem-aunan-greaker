@@ -247,7 +247,7 @@ public class ChatSystemGUI {
 	    // Push the messages from this user to the right of the table column
 		DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
 	    rightRenderer.setHorizontalAlignment(JLabel.RIGHT);
-	    chatsTable.getColumnModel().getColumn(1).setCellRenderer(rightRenderer);
+        chatsTable.getColumnModel().getColumn(1).setCellRenderer(rightRenderer);
 	        
 	    // Make the entire table non-editable
 	    chatsTable.setEnabled(false);
@@ -263,6 +263,10 @@ public class ChatSystemGUI {
 	        
 	    // Update the frame
 		LOGGER.trace("Running updateComponentTreeUI()...");
-	    SwingUtilities.updateComponentTreeUI(frame);
+		try {
+			SwingUtilities.updateComponentTreeUI(frame);
+		} catch (NullPointerException e) {
+			// TODO: handle exception
+		}
     }
 }
