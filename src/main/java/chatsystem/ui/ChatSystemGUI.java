@@ -179,7 +179,7 @@ public class ChatSystemGUI {
         frame.add(newChatPanel, BorderLayout.SOUTH);
         frame.setTitle("ChatSystem - " + Controller.getMyUsername());
         frame.pack();
-        frame.setMinimumSize(new Dimension(1250, 600));
+        frame.setMinimumSize(new Dimension(1300, 600));
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
@@ -371,5 +371,12 @@ public class ChatSystemGUI {
 			showChatsWith(showingChatWith);
 		}
 		JOptionPane.showMessageDialog(frame, oldUsername + " changed username to " + newUsername);
+	}
+	
+	public void setFrameTitle(String username) {
+		frame.setTitle("ChatSystem - " + username);
+		
+		// Update the frame
+		SwingUtilities.updateComponentTreeUI(frame);
 	}
 }
