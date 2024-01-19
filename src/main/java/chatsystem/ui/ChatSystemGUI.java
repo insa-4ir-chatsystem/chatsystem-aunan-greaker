@@ -220,7 +220,7 @@ public class ChatSystemGUI {
 		showingChatWith = otherUser;
 		
     	// Create a table model with one column for contactNames and no data initially
-        DefaultTableModel tableModel = new DefaultTableModel( new Object[]{otherUser.username(), Controller.getMyUsername()}, 0);
+        DefaultTableModel tableModel = new DefaultTableModel( new Object[]{otherUser.username(), Controller.getMyUsername(), "Sent"}, 0);
 
         // Get the ChatHistory instance with the otherUser
         ChatHistory chatHistory = new ChatHistory(otherUser.ip());
@@ -230,13 +230,14 @@ public class ChatSystemGUI {
 	    for (ChatMessage chatMessage : list) {
 	        InetAddress from = chatMessage.from();
 	        String msg = chatMessage.msg();
+	        String time = chatMessage.timeStamp();
 	        
 	        // Message size controll, to stop table text overflow in a single table line
 	        List<String> msgs = new ArrayList<String>();
 	        
-	        if (msg.length() > 60) {
-		        while (msg.length() > 60) {
-		        	for (int i = 60; i >= 0; i--) {
+	        if (msg.length() > 50) {
+		        while (msg.length() > 50) {
+		        	for (int i = 50; i >= 0; i--) {
 		        		if (Character.toString(msg.charAt(i)).equals(" ")) {
 		        			msgs.add(msg.substring(0, i));
 		        			msg = msg.substring(i + 1);
@@ -250,19 +251,35 @@ public class ChatSystemGUI {
 	        	msgs.add(msg);
 	        }
 	
+	        // Timestamp is only printed at the first message
+	        Boolean firstMsg = true;
 	        for (String messagePiece : msgs) {
 	        	// Add a new row to the table model
 		        if (from.equals(otherUser.ip())) {
-		            tableModel.addRow(new Object[]{messagePiece, ""});
+		        	if(firstMsg) {
+		        		tableModel.addRow(new Object[]{messagePiece, "", time});
+		        	}
+		        	else {
+		        		tableModel.addRow(new Object[]{messagePiece, "", ""});
+		        	}
 		        }
 		        else {
-		            tableModel.addRow(new Object[]{"", messagePiece});
+		        	if(firstMsg) {
+		        		tableModel.addRow(new Object[]{"", messagePiece, time});
+		        	}
+		        	else {
+		        		tableModel.addRow(new Object[]{"", messagePiece, ""});
+		        	}
 		        }
+		        firstMsg = false;
 	        }
 	    }      
 	
-	    // Set the table model for the JTable
+	    // Set the table model for the JTable, and set the size of the table columns
 	    chatsTable.setModel(tableModel);
+	    chatsTable.getColumnModel().getColumn(0).setMinWidth(400);
+	    chatsTable.getColumnModel().getColumn(1).setMinWidth(400);
+	    chatsTable.getColumnModel().getColumn(2).setMaxWidth(30);
 	    
 	    // Push the messages from this user to the right of the table column
 		DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
