@@ -44,6 +44,7 @@ public class UDPController {
 				if (Controller.getGui() != null
 					&& Controller.getGui().getshowingChatWith() != null
 					&& Controller.getGui().getshowingChatWith().equals(contactToRemove)) {
+						
 					Controller.getGui().disableSendButton();
 				}
 

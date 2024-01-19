@@ -79,13 +79,11 @@ public class TCPController {
 		}
 		else {
 			// Notify user that a new message has been received
-			Contact fromContact = ContactList.getInstance().getContact(from);
-			Controller.getGui().newUnreadMessage(fromContact);
+			Controller.getGui().newUnreadMessage(contact);
 		}
 	}
 	
-	/** Starts a chat with remote user on given ip
-	 * @throws IOException */
+	/** Starts a chat with remote user on given ip*/
 	private static TCPConnection startChatWith(InetAddress ip) throws IOException{
 		TCPConnection chatConnection = new TCPConnection(ip, TCP_LISTENING_PORT);
 		LOGGER.trace("TCPConnection established with " + ip + " on port " + chatConnection.getPort());
