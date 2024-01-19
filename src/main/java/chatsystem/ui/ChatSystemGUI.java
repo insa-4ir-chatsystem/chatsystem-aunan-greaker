@@ -240,10 +240,6 @@ public class ChatSystemGUI {
 	    // Set the table model for the JTable
 	    chatsTable.setModel(tableModel);
 	    
-	    // Remove the white background of the chatsTable
-	    chatsTable.setOpaque(false);
-	    ((DefaultTableCellRenderer)chatsTable.getDefaultRenderer(Object.class)).setOpaque(false);
-	    
 	    // Push the messages from this user to the right of the table column
 		DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
 	    rightRenderer.setHorizontalAlignment(JLabel.RIGHT);
@@ -256,7 +252,12 @@ public class ChatSystemGUI {
 	    // Add chatsTable to the scrollPaneChats, scrollPaneChats to the chatHistoryPanel, and chatHistoryPanel to the CENTER of the frame (and remove any old version of the chatHistoryPanel if found)
 	    LOGGER.trace("Adding contactTable to the scrollPaneContacts...");
 		chatHistoryPanel.removeAll();
+		
 	    JScrollPane scrollPaneChats = new JScrollPane(chatsTable);
+	    // Remove the white background of the ScrollPane
+	    scrollPaneChats.setOpaque(false);
+	    scrollPaneChats.getViewport().setOpaque(false);
+	    
 	    chatHistoryPanel.add(scrollPaneChats);
 	    frame.remove(chatHistoryPanel);
 	    frame.add(chatHistoryPanel, BorderLayout.CENTER);
