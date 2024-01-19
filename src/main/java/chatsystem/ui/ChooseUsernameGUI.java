@@ -3,8 +3,6 @@ import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -12,20 +10,12 @@ import javax.swing.border.EmptyBorder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import chatsystem.contacts.ContactList;
 import chatsystem.controller.Controller;
 import chatsystem.controller.UDPController;
-import chatsystem.contacts.Contact;
 
 public class ChooseUsernameGUI {
 	private static final Logger LOGGER = LogManager.getLogger(ChooseUsernameGUI.class);
 	private static JTextField usernameField = new JTextField(20);
-	
-	public static boolean UsernameIsAvailable(String username) throws UnknownHostException {
-		ContactList contactList = ContactList.getInstance();
-		Contact newContact = new Contact(username, InetAddress.getLocalHost());
-        return !contactList.hasContact(newContact);
-	}
 	
 	public static void initialize() {
 		LOGGER.trace("Initializing ChooseUsernameGUI...");

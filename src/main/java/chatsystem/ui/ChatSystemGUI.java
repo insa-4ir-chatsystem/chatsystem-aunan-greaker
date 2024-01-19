@@ -39,8 +39,6 @@ public class ChatSystemGUI {
 	private JTable chatsTable;
 	private JButton sendButton = new JButton("Send");
 	
-	// Private variables to keep track of who the user is chatting with, and the corresponding TCPConnection
-    // Disse vurde kanskje være i controlleren? De må vel også være lister siden man kan chatte med flere samtidig
 	private static Contact showingChatWith;
 	private static final Logger LOGGER = LogManager.getLogger(ChatSystemGUI.class);
 
