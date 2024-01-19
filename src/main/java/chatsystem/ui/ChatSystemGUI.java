@@ -266,7 +266,7 @@ public class ChatSystemGUI {
 		try {
 			SwingUtilities.updateComponentTreeUI(frame);
 		} catch (NullPointerException e) {
-			// TODO: handle exception
+			LOGGER.warn(e.getMessage());
 		}
     }
 }
