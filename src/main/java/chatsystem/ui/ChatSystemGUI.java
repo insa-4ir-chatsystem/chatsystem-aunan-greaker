@@ -288,6 +288,7 @@ public class ChatSystemGUI {
 		DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
 	    rightRenderer.setHorizontalAlignment(JLabel.RIGHT);
         chatsTable.getColumnModel().getColumn(1).setCellRenderer(rightRenderer);
+        chatsTable.getColumnModel().getColumn(2).setCellRenderer(rightRenderer);
 	        
 	    // Make the entire table non-editable
 	    chatsTable.setEnabled(false);
