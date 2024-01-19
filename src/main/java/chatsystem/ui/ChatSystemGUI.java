@@ -182,7 +182,7 @@ public class ChatSystemGUI {
 		List<Contact> contactList = ContactList.getInstance().getAllContacts();
 	
 		// Populate the table model with data from the contactList
-		for (int i = 0; i < contactList.size(); i++) {
+		for (int i = contactList.size(); i >= 0; i--) {
 			String contactName = contactList.get(i).username();
 	
 			// Add a new row to the table model
