@@ -162,7 +162,7 @@ public class ChatSystemGUI {
         frame.add(newChatPanel, BorderLayout.SOUTH);
         frame.setTitle("ChatSystem - " + Controller.getMyUsername());
         frame.pack();
-        frame.setMinimumSize(new Dimension(1200, 600));
+        frame.setMinimumSize(new Dimension(1250, 600));
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
