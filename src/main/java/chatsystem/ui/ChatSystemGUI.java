@@ -44,7 +44,7 @@ public class ChatSystemGUI {
 	private static final Logger LOGGER = LogManager.getLogger(ChatSystemGUI.class);
 
 	public ChatSystemGUI() {
-			initialize();
+		initialize();
 	}
 
 	public void disableSendButton() {
@@ -140,7 +140,7 @@ public class ChatSystemGUI {
         });
         frame.add(contactsPanel, BorderLayout.WEST);
         frame.add(newChatPanel, BorderLayout.SOUTH);
-        frame.setTitle("ChatSystem");
+        frame.setTitle("ChatSystem - " + Controller.getMyUsername());
         frame.pack();
         frame.setPreferredSize(new Dimension(1200, 600));
         frame.setVisible(true);
@@ -200,7 +200,7 @@ public class ChatSystemGUI {
 		showingChatWith = otherUser;
 		
     	// Create a table model with one column for contactNames and no data initially
-        DefaultTableModel tableModel = new DefaultTableModel( new Object[]{otherUser.username(), "Me"}, 0);
+        DefaultTableModel tableModel = new DefaultTableModel( new Object[]{otherUser.username(), Controller.getMyUsername()}, 0);
 
         // Get the ChatHistory instance with the otherUser
         ChatHistory chatHistory = new ChatHistory(otherUser.ip());
@@ -241,7 +241,6 @@ public class ChatSystemGUI {
 	    chatsTable.setModel(tableModel);
 	    
 	    if (!list.isEmpty()) {
-	    	LOGGER.error("ChatHistory list is empty: " + list.isEmpty());
 	    	// Push the messages from this user to the right of the table column
 		    DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
 	        rightRenderer.setHorizontalAlignment(JLabel.RIGHT);
