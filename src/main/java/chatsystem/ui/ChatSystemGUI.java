@@ -183,7 +183,7 @@ public class ChatSystemGUI {
         frame.add(contactsPanel, BorderLayout.WEST);
         
         // Update the frame
-		SwingUtilities.updateComponentTreeUI(frame);
+		SwingUtilities.updateComponentTreeUI(contactsPanel);
 		
     }
 	
@@ -264,10 +264,6 @@ public class ChatSystemGUI {
 	        
 	    // Update the frame
 		LOGGER.trace("Running updateComponentTreeUI()...");
-		try {
-			SwingUtilities.updateComponentTreeUI(frame);
-		} catch (NullPointerException e) {
-			LOGGER.warn(e.getMessage());
-		}
+		SwingUtilities.updateComponentTreeUI(chatHistoryPanel);
     }
 }
