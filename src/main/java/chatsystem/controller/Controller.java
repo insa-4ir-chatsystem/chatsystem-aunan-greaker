@@ -2,8 +2,6 @@ package chatsystem.controller;
 
 import java.io.IOException;
 
-import javax.swing.SwingUtilities;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -56,9 +54,7 @@ public class Controller {
 			public void newContactAdded(Contact contact) {  
 				// Update Contact table in GUI
 				try {
-					SwingUtilities.invokeLater(() -> {
-    					gui.updateContactTable();
-					});
+    				gui.updateContactTable();
 					LOGGER.trace("Updated contact table in GUI");
 				} catch (NullPointerException | NoClassDefFoundError e) {
 					LOGGER.warn("Could not update view because GUI has not been initilized!");
@@ -69,13 +65,25 @@ public class Controller {
 			public void contactRemoved(Contact contact) {
 				// Update Contact table in GUI
 				try {
-					SwingUtilities.invokeLater(() -> {
-    					gui.updateContactTable();
-					});
+    				gui.updateContactTable();
 					LOGGER.trace("Updated contact table in GUI");
 				} catch (NullPointerException | NoClassDefFoundError e) {
 					LOGGER.warn("Could not update view because GUI has not been initilized!");
 				}
+			}
+
+			@Override
+			public void usernameChanged(String newUsername, String oldUsername) {
+				// What to do when a contact changes username
+				try {
+    				gui.updateContactTable();
+					LOGGER.trace("Updated contact table in GUI");
+				} catch (NullPointerException | NoClassDefFoundError e) {
+					LOGGER.warn("Could not update view because GUI has not been initilized!");
+				}
+
+				// Notify user that a contact has changed username
+				gui.changedUsername(oldUsername, newUsername);
 			}
 		});
 

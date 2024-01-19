@@ -12,10 +12,8 @@ import java.util.ArrayList;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import chatsystem.controller.DatabaseController;
 
 public class ChatHistory {
-	private InetAddress self;
 	private InetAddress other;
 	private String tblName;
 	private List<ChatMessage> chatHistory = new ArrayList<ChatMessage>();
@@ -23,13 +21,6 @@ public class ChatHistory {
 	private static final Logger LOGGER = LogManager.getLogger(ChatHistory.class);
 	
 	public ChatHistory(InetAddress other) {
-		try {
-			self = InetAddress.getLocalHost();
-		} catch (UnknownHostException e) {
-			LOGGER.error("Could not get the local host address: " + e);
-			e.printStackTrace();
-		}
-		
 		this.other = other;
 		tblName = "Chat" + other.getHostAddress();
 		tblName = tblName.replaceAll("\\.", "");

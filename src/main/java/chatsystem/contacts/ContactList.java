@@ -84,7 +84,9 @@ public class ContactList {
         	for (int i = 0; i < contacts.size(); i++) {
         		if (contacts.get(i).equals(oldContact)) {
         			contacts.set(i, newContact);
-        			// TODO observer replace contact
+                    for (Observer obs : observers) {
+                        obs.usernameChanged(newContact.username(), oldContact.username());
+                    }
         		}
         	}
             LOGGER.trace("Contact replaced in the list: " + oldContact + " -> " + newContact);

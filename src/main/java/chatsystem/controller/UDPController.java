@@ -20,6 +20,7 @@ public class UDPController {
 	public static final int BROADCAST_PORT = 7471; // The port on which all javaChatProgram instances must listen for Broadcast.
 	public static final String ANNOUNCE_REQUEST_MSG = "All online users announce yourselves.";
 	public static final String LOGOUT_MSG = "I am logging out.";
+	public static final String ANNOUNCE_CHANGED_USERNAME_PREFIX = "I have changed my username to: ";
 	private static UDPListener udpListener;
 
     public static void contactDiscoveryMessageHandler(UDPMessage message) {
@@ -44,7 +45,7 @@ public class UDPController {
 				if (Controller.getGui() != null
 					&& Controller.getGui().getshowingChatWith() != null
 					&& Controller.getGui().getshowingChatWith().equals(contactToRemove)) {
-						
+
 					Controller.getGui().disableSendButton();
 				}
 
@@ -52,6 +53,16 @@ public class UDPController {
 				break;
 			/**	Somebody connecting to the chat */
 			default:
+				/**	Checks if this is a change of username case */
+				if (message.text().startsWith(ANNOUNCE_CHANGED_USERNAME_PREFIX)) {
+					/**	Updates contact username */
+					String newUsername = message.text().substring(ANNOUNCE_CHANGED_USERNAME_PREFIX.length());
+					Contact oldContact = ContactList.getInstance().getContact(message.source());
+					Contact newContact = new Contact(newUsername, oldContact.ip());
+					ContactList.getInstance().replaceContact(oldContact, newContact);
+				}
+				/**	Case of new user logging in */
+				else {
 				Contact newContact = new Contact(message.text(), message.source());
 				try {
 					ContactList.getInstance().addContact(newContact);
@@ -61,6 +72,7 @@ public class UDPController {
 					LOGGER.error("Received duplicated contact: " + newContact);
 				}
 				break;
+				}
 		}
     }
     
