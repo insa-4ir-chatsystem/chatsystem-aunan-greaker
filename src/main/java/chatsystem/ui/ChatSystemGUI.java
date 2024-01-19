@@ -241,7 +241,6 @@ public class ChatSystemGUI {
 	    // Set the table model for the JTable
 	    chatsTable.setModel(tableModel);
 	    
-		LOGGER.trace("ChatsTable is is null? : " + (chatsTable == null));
 	    // Push the messages from this user to the right of the table column
 		DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
 	    rightRenderer.setHorizontalAlignment(JLabel.RIGHT);
@@ -261,6 +260,10 @@ public class ChatSystemGUI {
 	        
 	    // Update the frame
 		LOGGER.trace("Running updateComponentTreeUI()...");
-	    SwingUtilities.updateComponentTreeUI(frame);
+		try {
+			SwingUtilities.updateComponentTreeUI(frame);
+		} catch (NullPointerException e) {
+			// TODO: handle exception
+		}
     }
 }
