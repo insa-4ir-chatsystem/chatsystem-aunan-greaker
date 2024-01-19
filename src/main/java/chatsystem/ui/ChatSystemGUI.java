@@ -177,7 +177,12 @@ public class ChatSystemGUI {
 		LOGGER.debug("Updating contactTable...");
 
 		// Get the existing table model
-		DefaultTableModel tableModel = new DefaultTableModel(new Object[]{"Contacts"}, 0);
+		DefaultTableModel tableModel = new DefaultTableModel(new Object[]{"Contacts"}, 0) {
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				return false;
+			}
+		};
 	
 		List<Contact> contactList = ContactList.getInstance().getAllContacts();
 	
