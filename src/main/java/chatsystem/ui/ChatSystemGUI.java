@@ -34,13 +34,14 @@ public class ChatSystemGUI {
 	private JFrame frame = new JFrame();
 	private JPanel contactsPanel;
 	private JPanel chatHistoryPanel;
+	private JPanel closeChatPanel;
 	private JPanel newChatPanel;
 	private JTable contactTable;
 	private JTable chatsTable;
+	private JButton closeChatButton = new JButton("X");
 	private JButton sendButton = new JButton("Send");
 	
 	// Private variables to keep track of who the user is chatting with, and the corresponding TCPConnection
-    // Disse vurde kanskje være i controlleren? De må vel også være lister siden man kan chatte med flere samtidig
 	private static Contact showingChatWith;
 	private static final Logger LOGGER = LogManager.getLogger(ChatSystemGUI.class);
 
@@ -56,6 +57,7 @@ public class ChatSystemGUI {
 		LOGGER.trace("Initializing ChatSystemGUI...");
 		contactsPanel = new JPanel();
 		chatHistoryPanel = new JPanel();
+		closeChatPanel = new JPanel();
 		newChatPanel = new JPanel();
 		contactTable = new JTable();
 		chatsTable = new JTable();
@@ -102,6 +104,21 @@ public class ChatSystemGUI {
         chatsTable.setPreferredScrollableViewportSize(new Dimension(1000, 500));
         chatsTable.setShowGrid(false);
         chatsTable.setIntercellSpacing(new Dimension(0, 0));
+        
+        // Set the ActionListener for the closeChatButton and add the closeChatButton to the closeChatPanel
+        closeChatButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                showingChatWith = null;
+                frame.remove(chatHistoryPanel);
+                frame.remove(closeChatPanel);
+                
+                // Update the frame
+                SwingUtilities.updateComponentTreeUI(frame);
+                
+                // Remove selection focus when closing chat
+                contactTable.getSelectionModel().clearSelection();
+	        }   
+        });
  
         // Create the 'Change Username' button
         JButton changeUserNameButton = new JButton("Change Username");
@@ -301,6 +318,12 @@ public class ChatSystemGUI {
 	    chatHistoryPanel.add(scrollPaneChats);
 	    frame.remove(chatHistoryPanel);
 	    frame.add(chatHistoryPanel, BorderLayout.CENTER);
+	    
+	    // Add the closeChatPanel to the frame
+	    closeChatPanel = new JPanel();
+	    closeChatPanel.add(closeChatButton);
+	    frame.remove(closeChatPanel);
+	    frame.add(closeChatPanel, BorderLayout.EAST);
 	        
 	    // Update the frame
 		LOGGER.trace("Running updateComponentTreeUI()...");
