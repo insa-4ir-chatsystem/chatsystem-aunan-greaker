@@ -45,14 +45,14 @@ public class UDPController {
 					Controller.getGui().disableSendButton();
 				}
 
-				LOGGER.info(contactToRemove + " logged out.");
+				LOGGER.info(contactToRemove + " is now offline.");
 				break;
 			/**	Somebody connecting to the chat */
 			default:
 				Contact newContact = new Contact(message.text(), message.source());
 				try {
 					ContactList.getInstance().addContact(newContact);
-					LOGGER.info(newContact + " logged in.");
+					LOGGER.info(newContact + " is online.");
 					LOGGER.debug("ContactList: " + ContactList.getInstance().toString());
 				} catch (ContactAlreadyExists e) {
 					LOGGER.error("Received duplicated contact: " + newContact);
