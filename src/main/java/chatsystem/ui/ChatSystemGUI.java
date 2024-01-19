@@ -242,6 +242,7 @@ public class ChatSystemGUI {
 	    
 	    // Push the messages from this user to the right of the table column
 	    if (!list.isEmpty()) {
+			LOGGER.trace("Pushing messages from this user to the right of the table column...");
 		    DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
 	        rightRenderer.setHorizontalAlignment(JLabel.RIGHT);
 	        chatsTable.getColumnModel().getColumn(1).setCellRenderer(rightRenderer);
@@ -252,13 +253,15 @@ public class ChatSystemGUI {
 	    chatsTable.setFocusable(false);
 	        
 	    // Add chatsTable to the scrollPaneChats, scrollPaneChats to the chatHistoryPanel, and chatHistoryPanel to the CENTER of the frame (and remove any old version of the chatHistoryPanel if found)
-	    chatHistoryPanel.removeAll();
+	    LOGGER.trace("Adding contactTable to the scrollPaneContacts...");
+		chatHistoryPanel.removeAll();
 	    JScrollPane scrollPaneChats = new JScrollPane(chatsTable);
 	    chatHistoryPanel.add(scrollPaneChats);
 	    frame.remove(chatHistoryPanel);
 	    frame.add(chatHistoryPanel, BorderLayout.CENTER);
 	        
 	    // Update the frame
+		LOGGER.trace("Running updateComponentTreeUI()...");
 	    SwingUtilities.updateComponentTreeUI(frame);
     }
 }
