@@ -21,6 +21,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import chatsystem.contacts.Contact;
+import chatsystem.contacts.ContactAlreadyExists;
 import chatsystem.contacts.ContactList;
 import chatsystem.controller.Controller;
 import chatsystem.controller.DatabaseController;
@@ -256,12 +257,7 @@ public class ChatSystemGUI {
 	    // Add chatsTable to the scrollPaneChats, scrollPaneChats to the chatHistoryPanel, and chatHistoryPanel to the CENTER of the frame (and remove any old version of the chatHistoryPanel if found)
 	    LOGGER.trace("Adding contactTable to the scrollPaneContacts...");
 		chatHistoryPanel.removeAll();
-		
 	    JScrollPane scrollPaneChats = new JScrollPane(chatsTable);
-	    // Remove the white background of the ScrollPane
-	    scrollPaneChats.setOpaque(false);
-	    scrollPaneChats.getViewport().setOpaque(false);
-	    
 	    chatHistoryPanel.add(scrollPaneChats);
 	    frame.remove(chatHistoryPanel);
 	    frame.add(chatHistoryPanel, BorderLayout.CENTER);
@@ -270,4 +266,37 @@ public class ChatSystemGUI {
 		LOGGER.trace("Running updateComponentTreeUI()...");
 		SwingUtilities.updateComponentTreeUI(chatHistoryPanel);
     }
+	
+	public void newUnreadMessage(Contact fromContact) {
+		LOGGER.trace("New unread message indicated in contactTable...");
+
+		// Remove fromContact from the contactList to make space for the new messages version of this contact
+		ContactList.getInstance().removeContact(fromContact);
+		Contact contactNewMessages = new Contact("Naming Error", fromContact.ip());
+		
+		if (fromContact.username().contains(" - New Messages (")) {
+			// Get the previous number of unread messages with this user
+			int lastLeftParantheses = fromContact.username().lastIndexOf("(");
+			int lastRightParantheses = fromContact.username().lastIndexOf(")");
+			int msgs = Integer.valueOf(fromContact.username().substring(lastLeftParantheses + 1, lastRightParantheses - 1));
+			msgs++;
+			
+			// Set the new username, indicating the new number of unread messages
+			contactNewMessages = new Contact(fromContact.username().substring(0, lastLeftParantheses) + msgs + ")", fromContact.ip());
+		}
+		else {
+			// If no previous new messages, set new message counter to 1
+			contactNewMessages = new Contact(fromContact.username() + " - New Messages (1)", fromContact.ip());
+		}
+		
+		// Add newly modified contact indicating new messages
+		try {
+			ContactList.getInstance().addContact(contactNewMessages);
+		} catch (ContactAlreadyExists e) {
+			LOGGER.error("Contact Already Exists resulting in not adding new messages edit of contact to the contactlist: " + e);
+		}
+		
+		// Call to update the contactTable with the "new" contact
+		updateContactTable();
+	}
 }

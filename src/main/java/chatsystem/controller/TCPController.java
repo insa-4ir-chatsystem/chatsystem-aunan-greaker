@@ -78,8 +78,9 @@ public class TCPController {
 			Controller.getGui().showChatsWith(contact);
 		}
 		else {
-		// Notify user that a new message has been received
-		//TODO: Notify user
+			// Notify user that a new message has been received
+			Contact fromContact = ContactList.getInstance().getContact(from);
+			Controller.getGui().newUnreadMessage(fromContact);
 		}
 	}
 	
