@@ -278,11 +278,13 @@ public class ChatSystemGUI {
 			// Get the previous number of unread messages with this user
 			int lastLeftParantheses = fromContact.username().lastIndexOf("(");
 			int lastRightParantheses = fromContact.username().lastIndexOf(")");
-			int msgs = Integer.valueOf(fromContact.username().substring(lastLeftParantheses + 1, lastRightParantheses - 1));
+			int msgs = Integer.valueOf(fromContact.username().substring(lastLeftParantheses + 1, lastRightParantheses));
 			msgs++;
+			LOGGER.trace("New unread messages number: " + msgs + ", lastLeftParantheses: " + lastLeftParantheses + ", lastRightParantheses: " + lastRightParantheses);
 			
 			// Set the new username, indicating the new number of unread messages
-			contactNewMessages = new Contact(fromContact.username().substring(0, lastLeftParantheses) + msgs + ")", fromContact.ip());
+			String newUsername = fromContact.username().substring(0, lastLeftParantheses) + msgs + ")";
+			contactNewMessages = new Contact(newUsername, fromContact.ip());
 		}
 		else {
 			// If no previous new messages, set new message counter to 1
