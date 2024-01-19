@@ -283,7 +283,7 @@ public class ChatSystemGUI {
 			LOGGER.trace("New unread messages number: " + msgs + ", lastLeftParantheses: " + lastLeftParantheses + ", lastRightParantheses: " + lastRightParantheses);
 			
 			// Set the new username, indicating the new number of unread messages
-			String newUsername = fromContact.username().substring(0, lastLeftParantheses) + msgs + ")";
+			String newUsername = fromContact.username().substring(0, lastLeftParantheses + 1) + msgs + ")";
 			contactNewMessages = new Contact(newUsername, fromContact.ip());
 		}
 		else {
