@@ -234,17 +234,21 @@ public class ChatSystemGUI {
 	        // Message size controll, to stop table text overflow in a single table line
 	        List<String> msgs = new ArrayList<String>();
 	        
-	        while (msg.length() > 70) {
-	        	for (int i = 70; i >= 0; i--) {
-	        		if (Character.toString(msg.charAt(i)).equals(" ")) {
-	        			msgs.add(msg.substring(0, i));
-	        			msg = msg.substring(i + 1);
-	        			msgs.add(msg);
-	        			i = -1;
-	        		}
-	        	}
+	        if (msg.length() > 60) {
+		        while (msg.length() > 60) {
+		        	for (int i = 60; i >= 0; i--) {
+		        		if (Character.toString(msg.charAt(i)).equals(" ")) {
+		        			msgs.add(msg.substring(0, i));
+		        			msg = msg.substring(i + 1);
+		        			msgs.add(msg);
+		        			i = -1;
+		        		}
+		        	}
+		        }
 	        }
-	        msgs.add(msg);
+	        else {
+	        	msgs.add(msg);
+	        }
 	
 	        for (String messagePiece : msgs) {
 	        	// Add a new row to the table model
