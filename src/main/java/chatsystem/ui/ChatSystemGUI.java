@@ -27,7 +27,6 @@ import chatsystem.controller.DatabaseController;
 import chatsystem.controller.TCPController;
 import chatsystem.log.ChatHistory;
 import chatsystem.log.ChatMessage;
-import chatsystem.network.tcp.TCPConnection;
 
 public class ChatSystemGUI {
 
@@ -159,7 +158,7 @@ public class ChatSystemGUI {
 	}
 	
 	public void updateContactTable() {
-		LOGGER.trace("Updating contactTable...");
+		LOGGER.debug("Updating contactTable...");
 
 		// Get the existing table model
 		DefaultTableModel tableModel = new DefaultTableModel(new Object[]{"Contacts"}, 0);

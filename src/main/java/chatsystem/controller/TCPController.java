@@ -58,8 +58,7 @@ public class TCPController {
 				}
 				LOGGER.trace("TCPConnection with " + socket.getInetAddress() + " on port " + socket.getPort() + " closed");
 			} catch (IOException e) {
-				System.err.println("Could not establish TCPConnection with " + socket.getInetAddress());
-				e.printStackTrace();
+				LOGGER.error("Could not establish incoming TCPConnection with " + socket.getInetAddress() + " because " + e.getMessage());
 			}
 
 		});
@@ -96,6 +95,7 @@ public class TCPController {
 		TCPConnection chatConnection;
 		chatConnection = startChatWith(ip);
 		chatConnection.sendMessage(msg);
+		LOGGER.info("Sent message: '" + msg + "' to " + ContactList.getInstance().getContact(ip));
 		try {
 			chatConnection.closeConnection();
 		} catch (IOException e) {
