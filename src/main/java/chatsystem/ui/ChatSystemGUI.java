@@ -366,7 +366,7 @@ public class ChatSystemGUI {
 	}
 	
 	public void changedUsername(String oldUsername, String newUsername) {
-		if (showingChatWith.username().equals(oldUsername)) {
+		if (showingChatWith != null && showingChatWith.username().equals(oldUsername)) {
 			showingChatWith = new Contact(newUsername, showingChatWith.ip());
 			showChatsWith(showingChatWith);
 		}
