@@ -29,14 +29,17 @@ public class ContactList {
     	return INSTANCE;
     }
 
+    // Add an observer to the class 'observers' list
     public synchronized void addObserver(Observer obs) {
         this.observers.add(obs);
     }
 
+    // Remove an observer from the class 'observers' list
     public synchronized void removeObserver(Observer obs) {
         this.observers.remove(obs);
     }
 
+    // Get a contact from the 'contacts' list by their username
     public synchronized Contact getContact(String username) {
         for (Contact contact : contacts) {
             if (contact.username().equals(username)) {
@@ -46,6 +49,7 @@ public class ContactList {
         return null;
     }
 
+    // Get a contact from the 'contacts' list by their ip address
     public synchronized Contact getContact(InetAddress ip) {
         for (Contact contact : contacts) {
             if (contact.ip().equals(ip)) {
@@ -55,6 +59,7 @@ public class ContactList {
         return null;
     }
 
+    // Add a contact to the 'contacts' list
     public synchronized void addContact(Contact contact) throws ContactAlreadyExists {
         if (hasContact(contact)) {
             throw new ContactAlreadyExists(contact);
@@ -66,6 +71,7 @@ public class ContactList {
         }
     }
 
+    // Remove a contact to the 'contacts' list
     public synchronized void removeContact(Contact contact) {
         if (hasContact(contact)) {
             contacts.remove(contact);
@@ -79,6 +85,7 @@ public class ContactList {
         }
     }
     
+    // replace a contact to the 'contacts' list with another contact
     public synchronized void replaceContact(Contact oldContact, Contact newContact) {
         if (hasContact(oldContact)) {
         	for (int i = 0; i < contacts.size(); i++) {
@@ -96,10 +103,12 @@ public class ContactList {
         }
     }
 
+    // Checks if a contact is already in the 'contacts' list by checking if the contact has the same username as another contact in the list (see equals override in Contact.java)
     public synchronized boolean hasContact(Contact contact) {
     	return contacts.contains(contact);
     }
     
+    // Checks if a contact is already in the 'contacts' list by checking if the contact has the same ip as another contact in the list
     public synchronized boolean hasContactIP(Contact contact) {
     	List<Contact> allContacts = getAllContacts();
     	for (int i = 0; allContacts.size() > i; i++) {
@@ -110,11 +119,12 @@ public class ContactList {
     	return false;
     }
 
+    // Return defensive copy of the contacts to avoid anybody modifying it or doing unsynchronized access
     public synchronized List<Contact> getAllContacts() {
-        // return defensive copy of the contacts to avoid anybody modifying it or doing unsynchronized access
         return new ArrayList<>(this.contacts);
     }
 
+    // Return a list of all the usernames of all the contacts in the list
     public synchronized List<String> getAllUsernames() {
         List<String> usernames = new ArrayList<>();
         for (Contact contact : contacts) {

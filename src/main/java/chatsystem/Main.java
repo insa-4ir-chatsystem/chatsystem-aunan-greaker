@@ -19,6 +19,7 @@ public class Main {
         LOGGER.debug("Found these broadcast addresses: " + UDPSender.getAllBroadcastAddresses());
         LOGGER.info("Starting ChatSystem application");
 
+        // Initializes the program by opening the choose username GUI
         ChooseUsernameGUI.initialize();
     }
 }
