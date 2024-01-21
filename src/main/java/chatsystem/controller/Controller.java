@@ -45,7 +45,7 @@ public class Controller {
 			LOGGER.error("Can't login because we are already online as " + myUsername);
 			return;
 		}
-		
+
 		myUsername = availableUsername;
 
 		// Initilize the UDPListener
@@ -122,10 +122,15 @@ public class Controller {
 			LOGGER.error("Failed to send UDP broadcast: " + e.getMessage());
 		}
 		
-		gui.close();
 		TCPController.stopTCPListener();
 		UDPController.closeUDPListener();
 		ContactList.getInstance().clear();
 		isOnline = false;
+		gui.close();
+		gui = null;
+	}
+
+	public static void setGui(ChatSystemGUI gui) {
+		Controller.gui = gui;
 	}
 }

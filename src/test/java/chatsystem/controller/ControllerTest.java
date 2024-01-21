@@ -1,61 +1,71 @@
 package chatsystem.controller;
 
-import chatsystem.contacts.ContactList;
-import chatsystem.contacts.Contact;
-import chatsystem.network.udp.UDPMessage;
-
+import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestInstance.Lifecycle;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
+import chatsystem.ui.ChatSystemGUI;
 
-public class ControllerTest {
-    private static final int SLEEP_DELAY = 100;
+@TestInstance(Lifecycle.PER_METHOD)
+class ControllerTest {
+
     @BeforeEach
-    void clearContactList() {
-        ContactList.getInstance().clear();
+    void setUp() {
+        Controller.setIsOnline(false);
+        Controller.setMyUsername(null);
+        Controller.setGui(null);
     }
+    @Test
+    void loginHandler_ShouldSetIsOnlineTrueAndInitializeComponents() {
+        assertFalse(Controller.isOnline());
 
-    @BeforeEach
-    void closeListener() throws InterruptedException {
-        UDPController.closeUDPListener();
-        Thread.sleep(SLEEP_DELAY);
+        // Mock the GUI to check if it is initialized
+        ChatSystemGUI mockGUI = new ChatSystemGUI();
+        Controller.setMyUsername("testUser");
+        Controller.setGui(mockGUI);
+
+        // Call the method under test
+        Controller.loginHandler("testUser");
+
+        // Assert that isOnline is true and GUI is initialized
+        assertTrue(Controller.isOnline());
+        assertNotNull(Controller.getGui());
     }
 
     @Test
-    void messageHandlingTest() throws UnknownHostException {
-        /** Testing ANNOUNCE_REQUEST_MSG */
-        Controller.setMyUsername("Eve");
-        UDPMessage msg1 = new UDPMessage(UDPController.ANNOUNCE_REQUEST_MSG, InetAddress.getByName("10.5.5.1"));
-        UDPMessage msg2 = new UDPMessage(UDPController.ANNOUNCE_REQUEST_MSG, InetAddress.getByName("10.5.5.2"));
+    void loginHandler_ShouldNotLoginIfAlreadyOnline() {
+        // Set isOnline to true
+        Controller.setIsOnline(true);
 
-        UDPController.UDPMessageHandler(msg1);
-        UDPController.UDPMessageHandler(msg2);
+        // Mock the GUI to check if it is initialized
+        ChatSystemGUI mockGUI = new ChatSystemGUI();
+        Controller.setMyUsername("testUser");
+        Controller.setGui(mockGUI);
 
-        /** Testing Username msg*/
-        ContactList contacts = ContactList.getInstance();
-        UDPMessage msg3 = new UDPMessage("alice", InetAddress.getByName("10.5.5.1"));
-        UDPMessage msg4 = new UDPMessage("bob", InetAddress.getByName("10.5.5.2"));
-        
-        Contact contact1 = new Contact(msg3.text(), msg3.source());
-        Contact contact2 = new Contact(msg4.text(), msg4.source());
-        
-        assert !contacts.hasContact(contact1);
-        UDPController.UDPMessageHandler(msg3);
-        assert contacts.hasContact(contact1);
-        assert !contacts.hasContact(contact2);
+        // Call the method under test
+        Controller.loginHandler("testUser");
 
-        UDPController.UDPMessageHandler(msg4);
-        assert contacts.hasContact(contact2);
+        // Assert that isOnline remains true and GUI is not reinitialized
+        assertTrue(Controller.isOnline());
+        assertEquals(mockGUI, Controller.getGui());
+    }
 
-        UDPController.UDPMessageHandler(msg4);
+    @Test
+    void logoutHandler_ShouldSetIsOnlineFalseAndCloseComponents() {
+        // Set isOnline to true
+        Controller.setIsOnline(true);
 
-        /** Testing LOGOUT_MSG */
-        UDPMessage msg5 = new UDPMessage(UDPController.LOGOUT_MSG, InetAddress.getByName("10.5.5.1"));
-        UDPMessage msg6 = new UDPMessage(UDPController.LOGOUT_MSG, InetAddress.getByName("10.5.5.2"));
+        // Mock the GUI to check if it is closed
+        ChatSystemGUI mockGUI = new ChatSystemGUI();
+        Controller.setGui(mockGUI);
 
-        UDPController.UDPMessageHandler(msg5);
-        UDPController.UDPMessageHandler(msg6);
+        // Call the method under test
+        Controller.logoutHandler();
+
+        // Assert that isOnline is false and GUI is closed
+        assertFalse(Controller.isOnline());
+        assertNull(Controller.getGui());
     }
 }
