@@ -24,7 +24,7 @@ public class ChatHistory {
 	public ChatHistory(InetAddress other) {
 		this.other = other;
 		tblName = "Chat" + other.getHostAddress();
-		tblName = tblName.replaceAll("\\.", "");
+		tblName = tblName.replaceAll("\\.", "_");
 		
 		try {
 			// Connect to Database and check if the table already exists. If not, create new table.

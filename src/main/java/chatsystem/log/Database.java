@@ -34,6 +34,7 @@ public class Database {
 			try (Connection conn = DriverManager.getConnection(url)) {
 				Statement stmt = conn.createStatement();
 			    
+				// Create the table in the Database and close the connection
 			    String sqlite = "CREATE TABLE " + tableName + " (msgId text PRIMARY KEY, fromContact text NOT NULL, msg text NOT NULL, createdAt text NOT NULL);";
 			    stmt.execute(sqlite);
 			    conn.close();
@@ -49,6 +50,7 @@ public class Database {
 		try (Connection conn = DriverManager.getConnection(url)) {
 			Statement stmt = conn.createStatement();
 			  
+			// Set the format for the created_at value in the table
 			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
 			String sqlite = "INSERT INTO " + tableName + " VALUES ('" + java.util.UUID.randomUUID().toString() + "', '" + from + "', '" + msg + "', '" + (dtf.format(LocalDateTime.now())).toString() + "');";
 			stmt.executeUpdate(sqlite);

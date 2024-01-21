@@ -12,7 +12,7 @@ import org.apache.logging.log4j.Logger;
 
 /** Class containing all methods for sending UDP packets, and getting local broadcast addresses */
 public class UDPSender {	
-	 private static final Logger LOGGER = LogManager.getLogger(UDPSender.class);
+	private static final Logger LOGGER = LogManager.getLogger(UDPSender.class);
 	
     /** Sends a UDP message on the given address and port. */
     public static void send(InetAddress addr, int port, String message) throws IOException, NullPointerException {
