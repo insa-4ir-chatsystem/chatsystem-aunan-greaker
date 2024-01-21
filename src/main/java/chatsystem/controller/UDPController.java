@@ -135,7 +135,7 @@ public class UDPController {
     }
 
 	/**	Initializes the UDPListener */
-    public static void initilizeUDPListener() {
+    public static void initializeUDPListener() {
 		try {
 			udpListener = new UDPListener(BROADCAST_PORT);
 			udpListener.addObserver(msg -> {UDPController.UDPMessageHandler(msg);});

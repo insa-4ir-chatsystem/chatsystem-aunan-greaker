@@ -49,7 +49,7 @@ public class Controller {
 		myUsername = availableUsername;
 
 		// Initilize the UDPListener
-		UDPController.initilizeUDPListener();
+		UDPController.initializeUDPListener();
 		
 		// Initilize the ContactList Observer
 		ContactList.getInstance().addObserver(new ContactList.Observer() {
