@@ -5,3 +5,4 @@ target/
 .classpath
 *.db
 dependency-reduced-pom.xml
+database
