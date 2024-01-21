@@ -6,7 +6,7 @@
 
     <groupId>org.insa.aungre</groupId>
     <artifactId>chatsystem</artifactId>
-    <version>0.1-SNAPSHOT</version>
+    <version>v1.0.0</version>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
