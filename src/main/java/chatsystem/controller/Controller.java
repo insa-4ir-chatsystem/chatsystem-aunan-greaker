@@ -126,7 +126,11 @@ public class Controller {
 		UDPController.closeUDPListener();
 		ContactList.getInstance().clear();
 		isOnline = false;
-		gui.close();
+		try {
+			gui.close();
+		} catch (NullPointerException e) {
+			LOGGER.warn("Could not close GUI because it has not been initilized!");
+		}
 		gui = null;
 	}
 
