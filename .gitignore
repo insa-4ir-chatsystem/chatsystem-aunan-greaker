@@ -1,6 +1,8 @@
 target/
 .settings/
+.vscode/
 .project
 .classpath
 *.db
 dependency-reduced-pom.xml
+database
