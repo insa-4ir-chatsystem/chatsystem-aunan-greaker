@@ -39,7 +39,7 @@ public class Database {
 			    conn.close();
 			}
 			catch (SQLException e) {
-				LOGGER.error("SQLException when attempting to add message to table in Database in addToTable: " + e);
+				LOGGER.error("SQLException when attempting to create new table in Database in newTable: " + e);
 			}
 		}
 	}
@@ -60,15 +60,11 @@ public class Database {
 	}
 	
 	/** Get table from the local Database as a ResultSet*/
-	public synchronized ResultSet getTable(String tableName) {  
-		try (Connection conn = DriverManager.getConnection(url)) {
-			Statement stmt = conn.createStatement();
-			String sqlite = "SELECT msgId, fromContact, msg, createdAt FROM " + tableName + ";";
-			return stmt.executeQuery(sqlite);
-		} catch (SQLException e) {
-			LOGGER.error("SQLException when attempting to remove table from Database in removeTable: " + e);
-		}
-		return null;
+	public synchronized ResultSet getTable(String tableName) throws SQLException {  
+		Connection conn = DriverManager.getConnection(url);
+		Statement stmt = conn.createStatement();
+		String sqlite = "SELECT msgId, fromContact, msg, createdAt FROM " + tableName + ";";
+		return stmt.executeQuery(sqlite);
 	}
 	
 	/** Remove a table from the local Database*/
@@ -96,7 +92,7 @@ public class Database {
 		    // If the row of the first element in the ResultSet is more than 0, the table exists
 		    return rs.getRow() > 0;
 		} catch (SQLException e) {
-			LOGGER.error("SQLException when attempting to remove table from Database in removeTable: " + e);
+			LOGGER.error("SQLException when attempting to check if table already exists in Database in hasTable: " + e);
 		}
 		return false;
     }
