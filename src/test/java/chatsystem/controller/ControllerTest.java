@@ -30,8 +30,8 @@ public class ControllerTest {
         UDPMessage msg1 = new UDPMessage(UDPController.ANNOUNCE_REQUEST_MSG, InetAddress.getByName("10.5.5.1"));
         UDPMessage msg2 = new UDPMessage(UDPController.ANNOUNCE_REQUEST_MSG, InetAddress.getByName("10.5.5.2"));
 
-        UDPController.contactDiscoveryMessageHandler(msg1);
-        UDPController.contactDiscoveryMessageHandler(msg2);
+        UDPController.UDPMessageHandler(msg1);
+        UDPController.UDPMessageHandler(msg2);
 
         /** Testing Username msg*/
         ContactList contacts = ContactList.getInstance();
@@ -42,20 +42,20 @@ public class ControllerTest {
         Contact contact2 = new Contact(msg4.text(), msg4.source());
         
         assert !contacts.hasContact(contact1);
-        UDPController.contactDiscoveryMessageHandler(msg3);
+        UDPController.UDPMessageHandler(msg3);
         assert contacts.hasContact(contact1);
         assert !contacts.hasContact(contact2);
 
-        UDPController.contactDiscoveryMessageHandler(msg4);
+        UDPController.UDPMessageHandler(msg4);
         assert contacts.hasContact(contact2);
 
-        UDPController.contactDiscoveryMessageHandler(msg4);
+        UDPController.UDPMessageHandler(msg4);
 
         /** Testing LOGOUT_MSG */
         UDPMessage msg5 = new UDPMessage(UDPController.LOGOUT_MSG, InetAddress.getByName("10.5.5.1"));
         UDPMessage msg6 = new UDPMessage(UDPController.LOGOUT_MSG, InetAddress.getByName("10.5.5.2"));
 
-        UDPController.contactDiscoveryMessageHandler(msg5);
-        UDPController.contactDiscoveryMessageHandler(msg6);
+        UDPController.UDPMessageHandler(msg5);
+        UDPController.UDPMessageHandler(msg6);
     }
 }

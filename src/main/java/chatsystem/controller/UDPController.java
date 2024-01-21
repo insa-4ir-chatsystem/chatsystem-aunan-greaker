@@ -14,6 +14,7 @@ import java.net.SocketException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+/**	UDPController class containing all UDP related control methods */
 public class UDPController {
 
     private static final Logger LOGGER = LogManager.getLogger(UDPController.class);
@@ -23,11 +24,12 @@ public class UDPController {
 	public static final String ANNOUNCE_CHANGED_USERNAME_PREFIX = "I have changed my username to: ";
 	private static UDPListener udpListener;
 
-    public static void contactDiscoveryMessageHandler(UDPMessage message) {
+	/**	Handles all incoming UDP messages */
+    public static void UDPMessageHandler(UDPMessage message) {
 		switch (message.text()) {
 			case ANNOUNCE_REQUEST_MSG:
 				try {
-					/** Broadcast our username on the network */
+					//Broadcast our username on the network
 					UDPSender.send(message.source(), BROADCAST_PORT, Controller.getMyUsername());
 					LOGGER.debug("Announced ourself to: " + message.source() + ":" + BROADCAST_PORT);
 				} catch (IOException e) {
@@ -37,11 +39,11 @@ public class UDPController {
 				}
 				break;
 			case LOGOUT_MSG:
-				/**	Removes contact from contact list */
+				//Removes contact from contact list
 				Contact contactToRemove = ContactList.getInstance().getContact(message.source());
 				ContactList.getInstance().removeContact(contactToRemove);
 
-				/**	Disables sendbutton if contact logges off */
+				//Disables sendbutton if contact logges off while chatting with him
 				if (Controller.getGui() != null
 					&& Controller.getGui().getshowingChatWith() != null
 					&& Controller.getGui().getshowingChatWith().equals(contactToRemove)) {
@@ -51,9 +53,10 @@ public class UDPController {
 
 				LOGGER.info(contactToRemove + " is now offline.");
 				break;
-			/**	Somebody connecting to the chat */
+
+			//Somebody connecting to the chat
 			default:
-				/**	Checks if this is a change of username case */
+				//Checks if this is a change of username case
 				if (message.text().startsWith(ANNOUNCE_CHANGED_USERNAME_PREFIX)) {
 					/**	Updates contact username */
 					String newUsername = message.text().substring(ANNOUNCE_CHANGED_USERNAME_PREFIX.length());
@@ -61,7 +64,7 @@ public class UDPController {
 					Contact newContact = new Contact(newUsername, oldContact.ip());
 					ContactList.getInstance().replaceContact(oldContact, newContact);
 				}
-				/**	Case of new user logging in */
+				//Case of new user logging in
 				else {
 				Contact newContact = new Contact(message.text(), message.source());
 				try {
@@ -76,6 +79,7 @@ public class UDPController {
 		}
     }
     
+	/**	Announces to the network that the user has changed its username */
     public static void announceUsernameChange(String username) {
     	try {
 			// Sends its new username on the network so others can replace the old username with the new one
@@ -86,6 +90,7 @@ public class UDPController {
 		}
     }
     
+	/**	Checks if the username is available on the network */
     public static Boolean usernameAvailableHandler(String username) {
 		LOGGER.debug("Checking if username '" + username + "' is available...");
 		if (Controller.isOnline()) {
@@ -93,10 +98,10 @@ public class UDPController {
 			return !ContactList.getInstance().getAllUsernames().contains(username);
 		}
 
-		// We are not online
+		// Case when are not online
     	try {
             UDPListener server = new UDPListener(BROADCAST_PORT);
-            server.addObserver(msg -> {UDPController.contactDiscoveryMessageHandler(msg);});
+            server.addObserver(msg -> {UDPController.UDPMessageHandler(msg);});
             server.start();
             
             Controller.setMyUsername(username);  // Gets the chosen username
@@ -129,16 +134,18 @@ public class UDPController {
     	return false;
     }
 
+	/**	Initializes the UDPListener */
     public static void initilizeUDPListener() {
 		try {
 			udpListener = new UDPListener(BROADCAST_PORT);
-			udpListener.addObserver(msg -> {UDPController.contactDiscoveryMessageHandler(msg);});
+			udpListener.addObserver(msg -> {UDPController.UDPMessageHandler(msg);});
 			udpListener.start();
 		} catch (SocketException e) {
 			LOGGER.fatal("Could not start UDP listener: " + e.getMessage());
 		}	
 	}
 
+	/**	Closes the UDPListener */
 	public static void closeUDPListener() {
 		try {
 			udpListener.close();

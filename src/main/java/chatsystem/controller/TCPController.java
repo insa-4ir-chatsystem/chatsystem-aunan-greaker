@@ -32,6 +32,7 @@ public class TCPController {
 		}
 	}
 
+	/** Stops the TCPListener */
 	public static void stopTCPListener() {
 		try {
 			theTCPListener.close();
@@ -65,6 +66,7 @@ public class TCPController {
 		handlerThread.start();
 	}
 
+	/**	Method to be called when a new message is received*/
 	public static void messageReceivedHandler(String msg, InetAddress from) {
 		LOGGER.trace("Received message: " + msg);
 		// Store the incoming message in the local chat history
@@ -90,6 +92,7 @@ public class TCPController {
 		return chatConnection;
 	}
 
+	/**	Method to be called when user wants to send a message to a remote user*/
 	public static void sendMessageHandler(InetAddress ip, String msg) throws IOException {
 		TCPConnection chatConnection;
 		chatConnection = startChatWith(ip);

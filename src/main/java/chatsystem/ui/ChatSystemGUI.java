@@ -53,6 +53,7 @@ public class ChatSystemGUI {
 		sendButton.setEnabled(false);
 	}
 	
+	/**	Method to initialize the GUI*/
 	public void initialize() {
 		LOGGER.trace("Initializing ChatSystemGUI...");
 		contactsPanel = new JPanel();
@@ -184,12 +185,13 @@ public class ChatSystemGUI {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
-	// Method to close the GUI
+	/**	Method to close the GUI*/
 	public void close() {
 		frame.dispose();
 		LOGGER.trace("Closed ChatSystemGUI");
 	}
 	
+	/**	Method to update the 'Contacts' table in the GUI*/
 	public void updateContactTable() {
 		LOGGER.debug("Updating contactTable...");
 
@@ -233,6 +235,7 @@ public class ChatSystemGUI {
 		return showingChatWith;
 	}
 
+	/**	Method to update the 'Chat' table in the GUI*/
 	public void showChatsWith(Contact otherUser) {
 		LOGGER.trace("Updating chatsTable for " + otherUser.username());
 		// Enable send button
@@ -330,6 +333,7 @@ public class ChatSystemGUI {
 		SwingUtilities.updateComponentTreeUI(chatHistoryPanel);
     }
 	
+	/**	Method to indicate that a new unread message has been received*/
 	public void newUnreadMessage(Contact fromContact) {
 		LOGGER.trace("New unread message indicated in contactTable...");
 
@@ -365,6 +369,7 @@ public class ChatSystemGUI {
 		updateContactTable();
 	}
 	
+	/**	Method to indicate that a contact has changed username*/
 	public void changedUsername(String oldUsername, String newUsername) {
 		if (showingChatWith != null && showingChatWith.username().equals(oldUsername)) {
 			showingChatWith = new Contact(newUsername, showingChatWith.ip());

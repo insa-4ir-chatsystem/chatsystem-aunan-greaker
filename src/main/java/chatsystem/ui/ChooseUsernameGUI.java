@@ -17,6 +17,7 @@ public class ChooseUsernameGUI {
 	private static final Logger LOGGER = LogManager.getLogger(ChooseUsernameGUI.class);
 	private static JTextField usernameField = new JTextField(20);
 	
+	/**	Initializes the ChooseUsernameGUI */
 	public static void initialize() {
 		LOGGER.trace("Initializing ChooseUsernameGUI...");
 		final JFrame frame = new JFrame();

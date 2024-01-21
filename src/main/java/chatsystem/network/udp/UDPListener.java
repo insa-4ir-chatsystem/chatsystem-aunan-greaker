@@ -1,12 +1,3 @@
-/*
- * Class that represent an UDP listening socket.
- * UdpListener takes in the port to listen on and a timeoutMS that indicates how long to listen for.
- * Additionally UdpListen can be called without a timeout to run indefinitely.
- * Packet coming into the socket are added to a recievedPacketsStack.
- * The stack can be poped or peeked using popPacketStack or peekPacketStack.
- * 
- * */
-
 package chatsystem.network.udp;
 
 import java.io.IOException;
@@ -21,6 +12,7 @@ import org.apache.logging.log4j.Logger;
 import java.util.ArrayList;
 import java.util.List;
 
+/** Class representing a UDP socket that listens for new UDPMessages */
 public class UDPListener extends Thread {
     private static final Logger LOGGER = LogManager.getLogger(UDPListener.class);
 	private final DatagramSocket SOCKET;
@@ -32,10 +24,12 @@ public class UDPListener extends Thread {
         void handle(UDPMessage message);
     }
 	
+	/**	Constructor for socket running indefinitely */
 	public UDPListener(int port) throws SocketException {
 		SOCKET = new DatagramSocket(port);
 	}
 	
+	/**	Constructor for socket running for a limited time */
 	public UDPListener(int port, int timeoutMS) throws SocketException {
 		SOCKET = new DatagramSocket(port);
 		SOCKET.setSoTimeout(timeoutMS);
@@ -46,6 +40,7 @@ public class UDPListener extends Thread {
         this.observers.add(obs);
     }
 
+	/** Closes the socket */
 	public void close() {
 		SOCKET.close();
 	}

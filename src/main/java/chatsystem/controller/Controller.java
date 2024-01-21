@@ -38,13 +38,16 @@ public class Controller {
     }
 
 
+	/** Handles logging in with the given username. The method assumes the username is available*/
 	public static void loginHandler(String availableUsername) {
 		LOGGER.trace("Running loginHandler()...");
 		if (isOnline) {
 			LOGGER.error("Can't login because we are already online as " + myUsername);
 			return;
 		}
+		
 		myUsername = availableUsername;
+
 		// Initilize the UDPListener
 		UDPController.initilizeUDPListener();
 		
