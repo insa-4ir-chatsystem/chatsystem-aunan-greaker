@@ -61,6 +61,12 @@ public class UDPController {
 					/**	Updates contact username */
 					String newUsername = message.text().substring(ANNOUNCE_CHANGED_USERNAME_PREFIX.length());
 					Contact oldContact = ContactList.getInstance().getContact(message.source());
+					
+					// Keep the new messages notifications when changing username
+					if (oldContact.username().contains(" - New Messages (")) {
+						int notificationMessage = oldContact.username().lastIndexOf(" - New Messages (");
+						newUsername = newUsername + oldContact.username().substring(notificationMessage);
+					}
 					Contact newContact = new Contact(newUsername, oldContact.ip());
 					ContactList.getInstance().replaceContact(oldContact, newContact);
 				}
