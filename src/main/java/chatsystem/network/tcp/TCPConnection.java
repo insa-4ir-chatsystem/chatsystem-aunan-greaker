@@ -7,7 +7,7 @@ import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
 
-/* Class representing an active TCP connection*/
+/** Class representing an active TCP connection*/
 public class TCPConnection {
 
 	private Socket clientSocket;

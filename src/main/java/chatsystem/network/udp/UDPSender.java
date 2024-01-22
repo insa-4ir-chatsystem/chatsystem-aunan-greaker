@@ -12,8 +12,7 @@ import org.apache.logging.log4j.Logger;
 
 /** Class containing all methods for sending UDP packets, and getting local broadcast addresses */
 public class UDPSender {	
-	
-	 private static final Logger LOGGER = LogManager.getLogger(UDPSender.class);
+	private static final Logger LOGGER = LogManager.getLogger(UDPSender.class);
 	
     /** Sends a UDP message on the given address and port. */
     public static void send(InetAddress addr, int port, String message) throws IOException, NullPointerException {
@@ -25,7 +24,7 @@ public class UDPSender {
         socket.close();
     }
 	
-	// Sends the message buf on all local broadcast addresses found in the getAllLocalBroadcastAddresses function of this class
+	/** Sends the message on all broadcast addresses found on the system*/
 	public static void sendBroadcast(int port, String msg) throws IOException {
 		ArrayList<InetAddress> broadcastAddresses = getAllBroadcastAddresses();
         for (InetAddress broadAddr : broadcastAddresses) {
@@ -33,7 +32,7 @@ public class UDPSender {
         }
 	}
 	
-	// Gets the local broadcast addresses from all interfaceAddresses in all the networkInterfaces, and adds them to an arraylist that is returned at the end of the function
+	/** Gets the broadcast addresses from all networks the system is connected to*/
 	public static ArrayList<InetAddress> getAllBroadcastAddresses() {
 		
     	ArrayList<InetAddress> AllBroadcastIp = new ArrayList<>();
@@ -61,7 +60,7 @@ public class UDPSender {
       return AllBroadcastIp;
 	}
 	
-	// Returns a list with the IPv4s on all NICs
+	/** Returns all current IPv4 addresses the system has */
 	public static ArrayList<InetAddress> getAllCurrentIp() {
         try {
         	ArrayList<InetAddress> AllCurrentIp = new ArrayList<>();

@@ -5,7 +5,7 @@ import java.net.InetAddress;
 /** Represents a contact in the application. **/
 public record Contact(String username, InetAddress ip) {
 	
-	// For two contacts to be considered equal, their usernames are the same.
+	// For two contacts to be considered equal, their usernames are equal to one another
 	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof Contact) {
@@ -17,6 +17,7 @@ public record Contact(String username, InetAddress ip) {
 		}
     }
 
+	// Contact.toString() should have this format: username (ip)
 	@Override
 	public String toString() {
 		return username + " (" + ip + ")";

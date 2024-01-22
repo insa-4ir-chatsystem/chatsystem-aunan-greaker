@@ -2,25 +2,27 @@
 
 ## Overview
 
-The Chat System Project is designed to connect users through a chat system, focusing on various phases of development. The primary goals include:
+The Chat System Project is a comprehensive peer-to-peer messaging platform that enables users to connect seamlessly and engage in real-time conversations. This release builds upon the initial contact discovery phase and introduces powerful messaging features, creating a user-friendly chat system.
 
-- Connecting and contact discovery phase
-- Peer-to-peer messaging
-- Implementation of a user-friendly chat system interface
-- History of messages handling
-
-For the initial release, the project concentrates on the connecting and contact discovery phase.
-
-## Features in the First Release
+## Features in this Release
 
 1. **Log-in and Username Selection:**
-   - Users can log in and choose their usernames.
+   - Users can log in and choose their unique usernames.
 
 2. **Username Availability:**
-   - Verification ensures the chosen username is available on the network.
+   - Verify the availability of chosen usernames on the network.
 
 3. **Contact List Management:**
-   - Initial creation of the contact list, including the user and others online during log-in.
+   - Dynamic contact list updates, reflecting online users.
+
+4. **Peer-to-Peer Messaging:**
+   - Users can send and receive messages in real-time.
+
+5. **User-Friendly Interface:**
+   - Intuitive and aesthetically pleasing GUI for a seamless user experience.
+
+6. **Message History:**
+   - History of messages handled efficiently, allowing users to review past conversations.
 
 ## Prerequisites
 
@@ -28,17 +30,10 @@ Before running the program, ensure you have [Maven](https://maven.apache.org/) i
 
 ## How to Run
 
-### Windows
+### Windows & Linux
 
-1. Open the terminal window (cmd).
+1. Open the terminal window (cmd or bash).
 2. Navigate to the project root directory.
-3. Run `mvn clean package`.
-4. Once tests pass and compilation is complete, run `java -jar target/ChatSystem-jar-with-dependencies.jar`.
-
-### Linux
-
-1. Open the terminal window (bash).
-2. Navigate to the project root directory.
-3. Run `mvn package` and `mvn exec:java -Dexec.mainClass="chatsystem.Main"`.
+3. Run `mvn clean package` and `mvn exec:java -Dexec.mainClass="chatsystem.Main"`.
 
 This will start the program on your computer.

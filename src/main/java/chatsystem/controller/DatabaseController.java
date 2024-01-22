@@ -14,6 +14,7 @@ public class DatabaseController {
 	
 	private static final Logger LOGGER = LogManager.getLogger(DatabaseController.class);
 
+	/** Method to be called when a new message is received. Adds the message to the chat history of the sender*/
 	public static void addMsgHandler(Contact chattingWith, String msg) {
 		try {
 			ChatHistory chatHistory = new ChatHistory(chattingWith.ip());

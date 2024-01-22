@@ -34,13 +34,14 @@ public class ChatSystemGUI {
 	private JFrame frame = new JFrame();
 	private JPanel contactsPanel;
 	private JPanel chatHistoryPanel;
+	private JPanel closeChatPanel;
 	private JPanel newChatPanel;
 	private JTable contactTable;
 	private JTable chatsTable;
+	private JButton closeChatButton = new JButton("X");
 	private JButton sendButton = new JButton("Send");
 	
 	// Private variables to keep track of who the user is chatting with, and the corresponding TCPConnection
-    // Disse vurde kanskje være i controlleren? De må vel også være lister siden man kan chatte med flere samtidig
 	private static Contact showingChatWith;
 	private static final Logger LOGGER = LogManager.getLogger(ChatSystemGUI.class);
 
@@ -52,10 +53,12 @@ public class ChatSystemGUI {
 		sendButton.setEnabled(false);
 	}
 	
+	/**	Method to initialize the GUI*/
 	public void initialize() {
 		LOGGER.trace("Initializing ChatSystemGUI...");
 		contactsPanel = new JPanel();
 		chatHistoryPanel = new JPanel();
+		closeChatPanel = new JPanel();
 		newChatPanel = new JPanel();
 		contactTable = new JTable();
 		chatsTable = new JTable();
@@ -102,6 +105,21 @@ public class ChatSystemGUI {
         chatsTable.setPreferredScrollableViewportSize(new Dimension(1000, 500));
         chatsTable.setShowGrid(false);
         chatsTable.setIntercellSpacing(new Dimension(0, 0));
+        
+        // Set the ActionListener for the closeChatButton and add the closeChatButton to the closeChatPanel
+        closeChatButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                showingChatWith = null;
+                frame.remove(chatHistoryPanel);
+                frame.remove(closeChatPanel);
+                
+                // Update the frame
+                SwingUtilities.updateComponentTreeUI(frame);
+                
+                // Remove selection focus when closing chat
+                contactTable.getSelectionModel().clearSelection();
+	        }   
+        });
  
         // Create the 'Change Username' button
         JButton changeUserNameButton = new JButton("Change Username");
@@ -162,17 +180,18 @@ public class ChatSystemGUI {
         frame.add(newChatPanel, BorderLayout.SOUTH);
         frame.setTitle("ChatSystem - " + Controller.getMyUsername());
         frame.pack();
-        frame.setMinimumSize(new Dimension(1250, 600));
+        frame.setMinimumSize(new Dimension(1300, 600));
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
-	// Method to close the GUI
+	/**	Method to close the GUI*/
 	public void close() {
 		frame.dispose();
 		LOGGER.trace("Closed ChatSystemGUI");
 	}
 	
+	/**	Method to update the 'Contacts' table in the GUI*/
 	public void updateContactTable() {
 		LOGGER.debug("Updating contactTable...");
 
@@ -216,6 +235,7 @@ public class ChatSystemGUI {
 		return showingChatWith;
 	}
 
+	/**	Method to update the 'Chat' table in the GUI*/
 	public void showChatsWith(Contact otherUser) {
 		LOGGER.trace("Updating chatsTable for " + otherUser.username());
 		// Enable send button
@@ -301,12 +321,19 @@ public class ChatSystemGUI {
 	    chatHistoryPanel.add(scrollPaneChats);
 	    frame.remove(chatHistoryPanel);
 	    frame.add(chatHistoryPanel, BorderLayout.CENTER);
+	    
+	    // Add the closeChatPanel to the frame
+	    closeChatPanel = new JPanel();
+	    closeChatPanel.add(closeChatButton);
+	    frame.remove(closeChatPanel);
+	    frame.add(closeChatPanel, BorderLayout.EAST);
 	        
 	    // Update the frame
 		LOGGER.trace("Running updateComponentTreeUI()...");
 		SwingUtilities.updateComponentTreeUI(chatHistoryPanel);
     }
 	
+	/**	Method to indicate that a new unread message has been received*/
 	public void newUnreadMessage(Contact fromContact) {
 		LOGGER.trace("New unread message indicated in contactTable...");
 
@@ -340,5 +367,23 @@ public class ChatSystemGUI {
 		
 		// Call to update the contactTable with the "new" contact
 		updateContactTable();
+	}
+	
+	/**	Method to indicate that a contact has changed username*/
+	public void changedUsername(String oldUsername, String newUsername) {
+		// Update the current chatsTable if it is showing the chat with the user changing their username 
+		if (showingChatWith != null && showingChatWith.username().equals(oldUsername)) {
+			showingChatWith = new Contact(newUsername, showingChatWith.ip());
+			showChatsWith(showingChatWith);
+		}
+		JOptionPane.showMessageDialog(frame, oldUsername + " changed username to " + newUsername);
+	}
+	
+	public void setFrameTitle(String username) {
+		frame.setTitle("ChatSystem - " + username);
+		
+		// Update the frame
+		SwingUtilities.updateComponentTreeUI(frame);
+		SwingUtilities.updateComponentTreeUI(closeChatButton);
 	}
 }

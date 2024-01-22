@@ -17,7 +17,7 @@ public class TCPListener extends Thread {
 	private final List<Observer> observers = new ArrayList<>();
 	
 	public interface Observer {
-		// handleNewConnection should start a thread to support multiple connections at once
+		/**	Method to be called when a new connection comes in */
 		void handleNewConnection(Socket socket);
     }
 	
@@ -25,11 +25,12 @@ public class TCPListener extends Thread {
 		this.port = port;
 	}
 
-	// Closes ServerSocket
+	/** Closes the ServerSocket*/
 	public void close() throws IOException {
     	serverSocket.close();
     }
     
+	/**	Adds observer to list of observers*/
     public void addObserver(Observer obs) {
     	// Synchronized to avoid concurrent access
         synchronized (this.observers) {
@@ -42,8 +43,7 @@ public class TCPListener extends Thread {
     	try {
 			serverSocket = new ServerSocket(port);
 		} catch (IOException e) {
-			LOGGER.error("Failed to start TCPListener on port: " + port);
-			e.printStackTrace();
+			LOGGER.fatal("Failed to start TCPListener on port: " + port + " because: " + e.getMessage());
 			System.exit(1);
 		}
     	// To be running as long as we are online
@@ -61,8 +61,7 @@ public class TCPListener extends Thread {
 				if (serverSocket.isClosed()) {
 					// ServerSocket closed, no need to print stack trace
 				} else {
-					LOGGER.error("Failed to accept incoming connection");
-					e.printStackTrace();
+					LOGGER.error("Failed to accept incoming connection because: " + e.getMessage());
 				}
 			}
     	}

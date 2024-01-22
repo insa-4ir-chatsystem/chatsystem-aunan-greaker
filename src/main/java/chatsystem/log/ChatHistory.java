@@ -12,29 +12,22 @@ import java.util.ArrayList;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import chatsystem.controller.DatabaseController;
-
+/** Class representing a table in SQLite Database*/
 public class ChatHistory {
-	private InetAddress self;
 	private InetAddress other;
 	private String tblName;
 	private List<ChatMessage> chatHistory = new ArrayList<ChatMessage>();
 	
 	private static final Logger LOGGER = LogManager.getLogger(ChatHistory.class);
-	
-	public ChatHistory(InetAddress other) {
-		try {
-			self = InetAddress.getLocalHost();
-		} catch (UnknownHostException e) {
-			LOGGER.error("Could not get the local host address: " + e);
-			e.printStackTrace();
-		}
 		
+	/** Public class constructor*/
+	public ChatHistory(InetAddress other) {
 		this.other = other;
 		tblName = "Chat" + other.getHostAddress();
-		tblName = tblName.replaceAll("\\.", "");
+		tblName = tblName.replaceAll("\\.", "_");
 		
 		try {
+			// Connect to Database and check if the table already exists. If not, create new table.
 			Database db = Database.getInstance();
 			if (!db.hasTable(tblName)) {
 				db.newTable(tblName);
@@ -53,28 +46,26 @@ public class ChatHistory {
 	        }
 	        
         } catch (SQLException e) {
-        	LOGGER.error("Could not get the table from the Database: " + e.getMessage());
+        	LOGGER.error("Could not get the table from the Database in ChatHistory constructor: " + e.getMessage());
         } catch (TableAlreadyExists e) {
 			LOGGER.error("Table already exist error in ChatHistory construction: " + e.getMessage());
 		} catch (UnknownHostException e) {
-			LOGGER.error("Could not convert 'fromContact' value to InetAddress: " + e.getMessage());
+			LOGGER.error("Could not convert 'fromContact' value to InetAddress in ChatHistory construction: " + e.getMessage());
 		}
 	}
 	
+	/** Add message to local table in Database and ChatHistory instance*/
 	public void addMessage(InetAddress from, String msg) {
 		// Add message to the table in the Database
-        try {
-        	Database db = Database.getInstance();
-			db.addToTable(tblName, from.getHostAddress(), msg);
-		} catch (SQLException e) {
-			LOGGER.error("Could not add msg to database: " + e.getMessage());
-		}
+        Database db = Database.getInstance();
+		db.addToTable(tblName, from.getHostAddress(), msg);
         
         // Add message to the chatHistory list of this instance of the class
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
         chatHistory.add(new ChatMessage("new", other, msg, (dtf.format(LocalDateTime.now())).toString()));
 	}
 	
+	/** Get a list of all the ChatMessage's in this ChatHistory*/
 	public List<ChatMessage> getChatHistory() {
 		return chatHistory;
 	}
