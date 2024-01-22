@@ -30,16 +30,9 @@ Before running the program, ensure you have [Maven](https://maven.apache.org/) i
 
 ## How to Run
 
-### Windows
+### Windows & Linux
 
-1. Open the terminal window (cmd).
-2. Navigate to the project root directory.
-3. Run `mvn clean package`.
-4. Once tests pass and compilation is complete, run `java -jar target/chatsystem-v1.0.0.jar`.
-
-### Linux
-
-1. Open the terminal window (bash).
+1. Open the terminal window (cmd or bash).
 2. Navigate to the project root directory.
 3. Run `mvn clean package` and `mvn exec:java -Dexec.mainClass="chatsystem.Main"`.
 

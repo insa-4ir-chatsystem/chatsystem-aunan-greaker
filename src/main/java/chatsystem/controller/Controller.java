@@ -110,6 +110,7 @@ public class Controller {
 		setMyUsername(username);
 		gui.setFrameTitle(username);
 		UDPController.announceUsernameChange(username);
+		LOGGER.info("Changed username to: " + username);
 	}
 
     /** Logs the user out of the chatsystem*/
@@ -132,6 +133,7 @@ public class Controller {
 			LOGGER.warn("Could not close GUI because it has not been initilized!");
 		}
 		gui = null;
+		LOGGER.info("Logged out");
 	}
 
 	public static void setGui(ChatSystemGUI gui) {
