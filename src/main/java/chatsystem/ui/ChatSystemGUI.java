@@ -376,7 +376,13 @@ public class ChatSystemGUI {
 			showingChatWith = new Contact(newUsername, showingChatWith.ip());
 			showChatsWith(showingChatWith);
 		}
-		JOptionPane.showMessageDialog(frame, oldUsername + " changed username to " + newUsername);
+
+		Thread msgBox = new Thread() {
+			public void run() {
+				JOptionPane.showMessageDialog(frame, oldUsername + " changed username to " + newUsername);
+			}
+		};
+		msgBox.start();
 	}
 	
 	public void setFrameTitle(String username) {
