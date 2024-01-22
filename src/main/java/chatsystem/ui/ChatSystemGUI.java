@@ -383,5 +383,6 @@ public class ChatSystemGUI {
 		
 		// Update the frame
 		SwingUtilities.updateComponentTreeUI(frame);
+		SwingUtilities.updateComponentTreeUI(closeChatPanel);
 	}
 }
