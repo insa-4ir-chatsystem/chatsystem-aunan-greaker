@@ -371,12 +371,6 @@ public class ChatSystemGUI {
 	
 	/**	Method to indicate that a contact has changed username*/
 	public void changedUsername(String oldUsername, String newUsername) {
-		// Keep the new messages notifications when changing username
-		if (oldUsername.contains(" - New Messages (")) {
-			int notificationMessage = oldUsername.lastIndexOf(" - New Messages (");
-			newUsername = newUsername + oldUsername.substring(notificationMessage);
-		}
-		
 		// Update the current chatsTable if it is showing the chat with the user changing their username 
 		if (showingChatWith != null && showingChatWith.username().equals(oldUsername)) {
 			showingChatWith = new Contact(newUsername, showingChatWith.ip());
