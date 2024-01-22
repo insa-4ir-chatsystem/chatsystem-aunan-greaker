@@ -15,9 +15,6 @@ class ChatHistoryTest {
 
 	@Test
 	void testChatHistory() throws SQLException {
-		//Database db = Database.getInstance();
-		//db.clear();
-		
 		try {
 			InetAddress test = InetAddress.getLocalHost();
 		
