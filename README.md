@@ -1,26 +1,39 @@
-# ~~Burn~~ Replace with your own after reading
+# Chat System Project
 
-This private repository is created for you so that your teachers have access to it.
+## Overview
 
-## Identify yourself
+The Chat System Project is a comprehensive peer-to-peer messaging platform that enables users to connect seamlessly and engage in real-time conversations. This release builds upon the initial contact discovery phase and introduces powerful messaging features, creating a user-friendly chat system.
 
-Before anything, **complete the `metadata.yml` with your own information.** 
+## Features in this Release
 
-This is the file that we will use to identify the teacher responsible for the repository and assign the grades to the participating students.
+1. **Log-in and Username Selection:**
+   - Users can log in and choose their unique usernames.
 
-## Take ownership
+2. **Username Availability:**
+   - Verify the availability of chosen usernames on the network.
 
-As long as you make sure to keep the `metadata.yml` file at the root of this repository, you are free to do anything. Our suggestion would be to have it organized into something like the following:
+3. **Contact List Management:**
+   - Dynamic contact list updates, reflecting online users.
 
-    .gitignore
-    metadata.yml
-    pom.xml
-    README.md
-    src/
-      main/
-      test/
-    doc/
-      uml/
-      report.pdf
+4. **Peer-to-Peer Messaging:**
+   - Users can send and receive messages in real-time.
 
-In particular, you will soon have to replace this README with something that describes your own project.
+5. **User-Friendly Interface:**
+   - Intuitive and aesthetically pleasing GUI for a seamless user experience.
+
+6. **Message History:**
+   - History of messages handled efficiently, allowing users to review past conversations.
+
+## Prerequisites
+
+Before running the program, ensure you have [Maven](https://maven.apache.org/) installed on your machine.
+
+## How to Run
+
+### Windows & Linux
+
+1. Open the terminal window (cmd or bash).
+2. Navigate to the project root directory.
+3. Run `mvn clean package` and `mvn exec:java -Dexec.mainClass="chatsystem.Main"`.
+
+This will start the program on your computer.
